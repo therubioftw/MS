@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manufacturer Portal — prototype</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --panel:#ffffff; --ink:#14181f; --ink-2:#4a5261; --ink-3:#7c8496;
+    --line:#e2e5ea; --line-2:#eef0f3;
+    --accent:#1f5fd0; --accent-soft:#eaf1fd;
+    --ok:#1a7f52; --ok-soft:#e8f5ee;
+    --warn:#b4690e; --warn-soft:#fdf3e4;
+    --stop:#c0392f; --stop-soft:#fdecea;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+
+  /* ---------- chrome ---------- */
+  header.top{display:flex;align-items:center;gap:28px;padding:0 20px;height:52px;
+    background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+  .brand{font-weight:650;letter-spacing:-.01em}
+  .brand span{color:var(--ink-3);font-weight:450}
+  nav{display:flex;gap:2px;margin-left:auto}
+  nav button{border:0;background:none;font:inherit;color:var(--ink-2);padding:7px 13px;border-radius:6px;cursor:pointer}
+  nav button:hover{background:var(--line-2)}
+  nav button.on{background:var(--ink);color:#fff}
+  nav button:disabled{color:#b7bdc9;cursor:default}
+  nav button:disabled:hover{background:none}
+  .who{display:flex;align-items:center;gap:8px;padding-left:18px;border-left:1px solid var(--line);color:var(--ink-3);font-size:13px}
+  .av{width:26px;height:26px;border-radius:50%;background:#dfe4ec;color:var(--ink-2);
+    display:grid;place-items:center;font-size:11px;font-weight:600}
+
+  main{max-width:1360px;margin:0 auto;padding:22px 20px 60px}
+  .view{display:none} .view.on{display:block}
+
+  h1{font-size:19px;margin:0 0 2px;letter-spacing:-.01em}
+  .sub{color:var(--ink-3);font-size:13px;margin-bottom:18px}
+
+  /* ---------- inbox ---------- */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:9px}
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);
+    font-weight:600;padding:11px 14px;border-bottom:1px solid var(--line)}
+  td{padding:12px 14px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+  tbody tr:last-child td{border-bottom:0}
+  tr.click{cursor:pointer} tr.click:hover td{background:#fafbfc}
+  .aged{color:var(--stop);font-weight:600}
+  .muted{color:var(--ink-3)}
+
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;
+    padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .p-ok{background:var(--ok-soft);color:var(--ok)}
+  .p-warn{background:var(--warn-soft);color:var(--warn)}
+  .p-stop{background:var(--stop-soft);color:var(--stop)}
+  .p-idle{background:var(--line-2);color:var(--ink-2)}
+
+  /* ---------- quote header ---------- */
+  .qhead{display:flex;align-items:flex-start;gap:20px;margin-bottom:16px}
+  .back{border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:6px 11px;
+    font:inherit;color:var(--ink-2);cursor:pointer}
+  .back:hover{background:var(--line-2)}
+  .clock{margin-left:auto;text-align:right}
+  .clock .big{font:600 22px/1.1 var(--mono);letter-spacing:-.02em}
+  .clock .cap{font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:13px 15px}
+  .stat .k{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:600}
+  .stat .v{font-size:22px;font-weight:650;letter-spacing:-.02em;margin-top:3px}
+  .stat .v small{font-size:13px;font-weight:500;color:var(--ink-3);letter-spacing:0}
+
+  .banner{display:flex;gap:11px;align-items:flex-start;background:var(--warn-soft);
+    border:1px solid #f0dcb8;border-radius:9px;padding:12px 15px;margin-bottom:14px;font-size:13px}
+  .banner b{display:block;margin-bottom:2px}
+  .banner .src{color:var(--warn);opacity:.8;font-size:12px;margin-top:4px}
+
+  /* ---------- split ---------- */
+  .split{display:grid;grid-template-columns:1fr 430px;gap:14px;align-items:start}
+  @media (max-width:1080px){.split{grid-template-columns:1fr}}
+
+  .raw{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);word-break:break-all;line-height:1.6}
+  .raw s{color:var(--stop);opacity:.75}
+  .ann{background:#cdeafc;color:#0b3c56;padding:1px 5px;border-radius:3px;font-weight:600;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:12px}
+  td.n{font:600 12px var(--mono);color:var(--ink-3);width:34px}
+  td.money{text-align:right;font:500 13px var(--mono);white-space:nowrap;width:104px}
+  tr.sel td{background:var(--accent-soft) !important}
+  tr.gone td{opacity:.42}
+  tr.gone .raw{text-decoration:line-through}
+
+  /* ---------- detail ---------- */
+  .detail{position:sticky;top:74px}
+  .dbody{padding:16px}
+  .dhead{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+  .dhead h3{margin:0;font-size:14px}
+  .conf{margin-left:auto;font:600 12px var(--mono)}
+  .kv{display:grid;grid-template-columns:96px 1fr;gap:5px 12px;font-size:13px;margin:0 0 4px}
+  .kv dt{color:var(--ink-3)} .kv dd{margin:0}
+  .sec{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);
+    font-weight:600;margin:18px 0 8px}
+  .issue{display:flex;gap:9px;font-size:13px;padding:9px 11px;border-radius:7px;margin-bottom:7px;line-height:1.45}
+  .i-high{background:var(--stop-soft);color:#7d2820}
+  .i-med{background:var(--warn-soft);color:#7a4708}
+  .dot{width:6px;height:6px;border-radius:50%;margin-top:6px;flex:none}
+  .i-high .dot{background:var(--stop)} .i-med .dot{background:var(--warn)}
+
+  .reading{border:1px solid var(--line);border-radius:7px;padding:10px 12px;margin-bottom:7px}
+  .reading .bar{height:4px;background:var(--line-2);border-radius:3px;margin:7px 0 5px;overflow:hidden}
+  .reading .bar i{display:block;height:100%;background:var(--accent)}
+  .reading .lab{font-size:13px;font-weight:550}
+  .reading .dl{font-size:12px;color:var(--ink-3);font-family:var(--mono)}
+
+  ul.subs{margin:0;padding-left:17px;font-size:13px;color:var(--ink-2)}
+  ul.subs li{margin-bottom:3px}
+
+  .acts{display:flex;flex-direction:column;gap:7px;margin-top:16px}
+  .acts button{font:inherit;padding:9px 13px;border-radius:7px;border:1px solid var(--line);
+    background:var(--panel);color:var(--ink);cursor:pointer;text-align:left}
+  .acts button:hover{border-color:#c4cad4;background:#fafbfc}
+  .acts button:first-child{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:550}
+  .acts button:first-child:hover{background:#1a52b5}
+
+  .empty{padding:40px 20px;text-align:center;color:var(--ink-3);font-size:13px}
+
+  .footbar{display:flex;align-items:center;gap:14px;margin-top:14px;padding:14px 16px;
+    background:var(--panel);border:1px solid var(--line);border-radius:9px}
+  .footbar .tot{margin-left:auto;text-align:right}
+  .footbar .tot .k{font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+  .footbar .tot .v{font:650 20px/1.2 var(--mono);letter-spacing:-.02em}
+  .send{font:inherit;font-weight:600;padding:11px 20px;border-radius:8px;border:0;
+    background:var(--accent);color:#fff;cursor:pointer}
+  .send:disabled{background:#d3d8e0;color:#8b93a1;cursor:not-allowed}
+
+  .done{background:var(--ok-soft);border:1px solid #bfe3d0;border-radius:9px;padding:18px 20px;margin-top:14px}
+  .done h3{margin:0 0 6px;font-size:15px;color:var(--ok)}
+  .done p{margin:0;font-size:13px;color:#2c5f47}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">Materialspace <span>· Manufacturer Portal</span></div>
+  <nav>
+    <button data-go="inbox" class="on">Inbox</button>
+    <button data-go="quote">Quote Q-4471</button>
+    <button disabled title="Next">Pipeline</button>
+  </nav>
+  <div class="who"><div class="av">DM</div> Dana M. · Quoting desk</div>
+</header>
+
+<main>
+
+<!-- ============ INBOX ============ -->
+<section class="view on" id="v-inbox">
+  <h1>Inbox</h1>
+  <div class="sub">Requests waiting on a price. Sorted by how long the dealer has been waiting.</div>
+
+  <div class="stats" style="grid-template-columns:repeat(4,1fr)">
+    <div class="stat"><div class="k">Waiting</div><div class="v">7</div></div>
+    <div class="stat"><div class="k">Median response</div><div class="v">6 <small>days</small></div></div>
+    <div class="stat"><div class="k">Oldest</div><div class="v" style="color:var(--stop)">11 <small>days</small></div></div>
+    <div class="stat"><div class="k">Value in queue</div><div class="v">$412k</div></div>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead><tr>
+        <th>Quote</th><th>Dealer</th><th>Project</th><th>Units</th>
+        <th>Lines</th><th>Waiting</th><th>Status</th>
+      </tr></thead>
+      <tbody id="inbox-rows"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ QUOTE ============ -->
+<section class="view" id="v-quote">
+  <div class="qhead">
+    <button class="back" data-go="inbox">← Inbox</button>
+    <div>
+      <h1 id="q-title">—</h1>
+      <div class="sub" id="q-sub" style="margin:0">—</div>
+    </div>
+    <div class="clock">
+      <div class="big" id="q-clock">00:00</div>
+      <div class="cap">Open on this quote</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="k">Lines</div><div class="v" id="s-lines">—</div></div>
+    <div class="stat"><div class="k">Priced automatically</div><div class="v" id="s-auto">—</div></div>
+    <div class="stat"><div class="k">Need a decision</div><div class="v" id="s-exc">—</div></div>
+    <div class="stat"><div class="k">Dealer waiting</div><div class="v">2 <small>days</small></div></div>
+  </div>
+
+  <div class="banner" id="order-flag">
+    <div class="dot" style="background:var(--warn);margin-top:7px"></div>
+    <div>
+      <b>Two finish families on one order</b>
+      PET White 1S HG and Tafisa L582 both appear. Your order form takes one door style, finish and
+      construction type per order, so this would come back as a rejection after entry. Split it into two
+      orders before sending, or confirm with the dealer.
+      <div class="src">Rule source: Specifications Guide p.71 — “Door style, finish, and construction type must be unique per order.”</div>
+    </div>
+  </div>
+
+  <div class="split">
+    <div class="card">
+      <table>
+        <thead><tr>
+          <th></th><th>As received</th><th>Read as</th><th style="text-align:right">Line total</th><th>Status</th>
+        </tr></thead>
+        <tbody id="line-rows"></tbody>
+      </table>
+    </div>
+
+    <div class="card detail" id="detail">
+      <div class="empty">Select a line to see how it was read.</div>
+    </div>
+  </div>
+
+  <div class="footbar">
+    <span class="muted" id="foot-note">—</span>
+    <div class="tot">
+      <div class="k">Quote total <span class="muted" style="text-transform:none;letter-spacing:0">incl. 8.875% tax</span></div>
+      <div class="v" id="q-total">—</div>
+    </div>
+    <button class="send" id="send" disabled>Send price to dealer</button>
+  </div>
+
+  <div id="done-box"></div>
+</section>
+
+</main>
+
+<script>
+// Line items transcribed from the sample order document supplied with the exercise.
+// `raw` is the string exactly as received; `strike` and `note` record the dealer's hand markup.
+const ORDER = {
+  id: "Q-4471",
+  dealer: "Hudson Kitchen Supply",
+  project: "Vernon Court — Building B",
+  units: 21,
+  unitTypes: "2 unit types (14 + 7)",
+  received: "Sep 8, 09:12",
+  taxRate: 0.08875,
+  medianResponseDays: 6,
+  lines: [
+    {
+      n: 1,
+      raw: '14PC_PET WHITE 1S HG_W_36x15x24_TIP ON (T15) (BUILT IN)_U-1_$2705.9',
+      qty: 14, price: 2705.90, status: 'exception', kind: 'revision',
+      strike: 'PET WHITE 1S HG_W_36x15x24',
+      note: 'Tafisa L582 33.875 x 15 x 24',
+      parsed: { Finish: 'PET White 1S HG → Tafisa L582', Type: 'Wall cabinet', Dimensions: '36 → 33.875 × 15 × 24', Hardware: 'Tip-On (T15), built in', Quantity: '14 · 1 per unit' },
+      confidence: 0.86,
+      issues: [
+        { sev: 'high', text: 'Width 33.875" is not a stock size. Nearest stock is 33". Custom cut required.' },
+        { sev: 'high', text: 'Finish changed from PET White to Tafisa L582 — different material family, different price basis.' },
+        { sev: 'med', text: 'Line still carries $2,705.90 from the original spec. Stale.' }
+      ],
+      actions: ['Price as custom cut', 'Substitute stock 33"', 'Query dealer']
+    },
+    {
+      n: 2, raw: '7PC_TAFISA L582 ( K )_B_24x34.5x24_H-L_U-1_$1292.53',
+      qty: 7, price: 1292.53, status: 'ok', confidence: 0.99,
+      parsed: { Finish: 'Tafisa L582 (K)', Type: 'Base cabinet', Dimensions: '24 × 34.5 × 24', Hinge: 'Left', Quantity: '7 · 1 per unit' }
+    },
+    {
+      n: 3,
+      raw: '7PC_TAFISA L582 ( K )_B-FHD_24x34.5x24_H-L_ADA , BOT PANEL REMOVABLE,2 SIDE PANEL TILL TO FLOOR AND NOTCH FOR TK_U-1_$1426.56',
+      qty: 7, price: 1426.56, status: 'exception', kind: 'custom', confidence: 0.72,
+      parsed: { Finish: 'Tafisa L582 (K)', Type: 'Base, full height door', Dimensions: '24 × 34.5 × 24', Hinge: 'Left', Quantity: '7 · 1 per unit' },
+      subInstructions: ['ADA compliant', 'Bottom panel removable', '2 side panels run to floor', 'Notch for toe kick'],
+      issues: [
+        { sev: 'high', text: 'Four separate build instructions packed into one description field. None map to a catalog modification code.' },
+        { sev: 'med', text: 'Not priceable from the catalog. Needs an engineering quote.' }
+      ],
+      actions: ['Send to engineering', 'Price from a similar past job', 'Query dealer']
+    },
+    {
+      n: 4, raw: '7PC_TAFISA L582 ( K )_B_24x34.5x24_H-R_U-1_$1292.53',
+      qty: 7, price: 1292.53, status: 'ok', confidence: 0.99,
+      parsed: { Finish: 'Tafisa L582 (K)', Type: 'Base cabinet', Dimensions: '24 × 34.5 × 24', Hinge: 'Right', Quantity: '7 · 1 per unit' }
+    },
+    {
+      n: 5,
+      raw: '7PC_TAFISA L582 ( K )_PC_24x96x24_H-L_TOP DOOR 42"H_U-1_$2872.12',
+      qty: 7, price: 2872.12, status: 'exception', kind: 'ambiguous', note: 'F-L', confidence: 0.58,
+      parsed: { Finish: 'Tafisa L582 (K)', Type: 'Pantry / tall', Dimensions: '24 × 96 × 24', Hinge: 'Left', Detail: 'Top door 42" high', Quantity: '7 · 1 per unit' },
+      readings: [
+        { label: 'Finished Left — exposed left end panel', pct: 58, delta: '+$412.00' },
+        { label: 'Flip to Left hinge', pct: 34, delta: 'no change — line already reads H-L' },
+        { label: 'Something else', pct: 8, delta: '—' }
+      ],
+      issues: [{ sev: 'high', text: 'Handwritten "F-L" has no unambiguous reading. Best guess falls below the 85% auto-accept threshold.' }],
+      actions: ['Finished left', 'Hinge left', 'Query dealer']
+    },
+    {
+      n: 6, raw: '14PC_PET WHITE 1S HG_L-PANEL_3x34.5x24.875_U-1_$1284.84',
+      qty: 14, price: 1284.84, status: 'ok', confidence: 0.97,
+      parsed: { Finish: 'PET White 1S HG', Type: 'Left panel', Dimensions: '3 × 34.5 × 24.875', Quantity: '14 · 1 per unit' }
+    },
+    {
+      n: 7, raw: '7PC_PET WHITE 1S HG_L-PANEL_3x39.875x12.875_U-1_$502.86',
+      qty: 7, price: 502.86, status: 'ok', confidence: 0.97,
+      parsed: { Finish: 'PET White 1S HG', Type: 'Left panel', Dimensions: '3 × 39.875 × 12.875', Quantity: '7 · 1 per unit' }
+    },
+    {
+      n: 8, raw: '28PC_PET WHITE 1S HG_FILLER_6x30x0.75_U-1_$635.47',
+      qty: 28, price: 635.47, status: 'ok', confidence: 0.99,
+      parsed: { Finish: 'PET White 1S HG', Type: 'Filler', Dimensions: '6 × 30 × 0.75', Quantity: '28 · 2 per unit' }
+    },
+    {
+      n: 9, raw: '21PC_PET WHITE 1S HG_FILLER_3x39.875x0.75_U-1_$476.6',
+      qty: 21, price: 476.60, status: 'ok', confidence: 0.99,
+      parsed: { Finish: 'PET White 1S HG', Type: 'Filler', Dimensions: '3 × 39.875 × 0.75', Quantity: '21 · 3 per unit' }
+    },
+    {
+      n: 10, raw: '14PC_PET WHITE 1S HG_FILLER_6x39.875x0.75_U-1_$317.73',
+      qty: 14, price: 317.73, status: 'ok', confidence: 0.99,
+      parsed: { Finish: 'PET White 1S HG', Type: 'Filler', Dimensions: '6 × 39.875 × 0.75', Quantity: '14 · 1 per unit' }
+    },
+    {
+      n: 11, raw: '7PC_PET WHITE 1S HG_PANEL_18.75x91.5x0.75_U-1_$757.1',
+      qty: 7, price: 757.10, status: 'ok', confidence: 0.98,
+      parsed: { Finish: 'PET White 1S HG', Type: 'Panel', Dimensions: '18.75 × 91.5 × 0.75', Quantity: '7 · 1 per unit' }
+    },
+    {
+      n: 12, raw: '7PC_PET WHITE 1S HG_FILLER_3x72x0.75_U-1_$158.87',
+      qty: 7, price: 158.87, status: 'ok', confidence: 0.99,
+      parsed: { Finish: 'PET White 1S HG', Type: 'Filler', Dimensions: '3 × 72 × 0.75', Quantity: '7 · 1 per unit' }
+    },
+    {
+      n: 13, raw: '21PC_PET WHITE 1S HG_TK_4.5x96x0.75_U-1_$714.9',
+      qty: 21, price: 714.90, status: 'ok', confidence: 0.99,
+      parsed: { Finish: 'PET White 1S HG', Type: 'Toe kick', Dimensions: '4.5 × 96 × 0.75', Quantity: '21 · 3 per unit' }
+    },
+    {
+      n: 14, raw: '49PC_TAFISA L582 ( K )_FILLER_3x96x0.75_U-1_$824.45',
+      qty: 49, price: 824.45, status: 'ok', confidence: 0.99,
+      parsed: { Finish: 'Tafisa L582 (K)', Type: 'Filler', Dimensions: '3 × 96 × 0.75', Quantity: '49 · 7 per unit' }
+    },
+    {
+      n: 15, raw: '7PC_TAFISA L582 ( K )_PANEL_26x96x0.75_U-1_$663.49',
+      qty: 7, price: 663.49, status: 'exception', kind: 'deleted', strike: 'ALL', confidence: 0.95,
+      parsed: { Finish: 'Tafisa L582 (K)', Type: 'Panel', Dimensions: '26 × 96 × 0.75', Quantity: '7 · 1 per unit' },
+      issues: [{ sev: 'med', text: 'Entire line struck through. Read as a deletion — removing it drops $663.49 from the quote.' }],
+      actions: ['Confirm deletion', 'Keep line', 'Query dealer']
+    },
+    {
+      n: 16, raw: '14PC_TAFISA L582 ( K )_B-COLOUM_1.5x34.5x36_U-1_$1976.83',
+      qty: 14, price: 1976.83, status: 'exception', kind: 'revision', confidence: 0.79,
+      strike: 'B-COLOUM_1.5', note: 'Panel .75 b 34.5 b 36',
+      parsed: { Finish: 'Tafisa L582 (K)', Type: 'Base column → Panel', Dimensions: '0.75 × 34.5 × 36', Quantity: '14 · 1 per unit' },
+      issues: [
+        { sev: 'high', text: 'Product type changed, not just dimensions. A base column and a panel price off different tables.' },
+        { sev: 'med', text: 'Read "b" as "by". Source text also misspells COLUMN as COLOUM — matched on fuzzy lookup.' },
+        { sev: 'med', text: 'Line still carries $1,976.83 from the original spec. Stale.' }
+      ],
+      actions: ['Re-price as panel', 'Keep as column', 'Query dealer']
+    }
+  ]
+};
+</script>
+<script>
+// ---------- state ----------
+const state = { sel:null, resolved:{}, sent:false, t0:null, tick:null };
+
+const money = n => '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const el = id => document.getElementById(id);
+
+const INBOX = [
+  {id:'Q-4468', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 2',       units:48, lines:31, wait:11, st:'stop', lab:'4 need a decision'},
+  {id:'Q-4470', dealer:'Coastline Interiors',   proj:'The Winslow',            units:12, lines:14, wait:6,  st:'warn', lab:'2 need a decision'},
+  {id:'Q-4471', dealer:'Hudson Kitchen Supply', proj:'Vernon Court — Bldg B',  units:21, lines:16, wait:2,  st:'warn', lab:'5 need a decision', live:true},
+  {id:'Q-4472', dealer:'Brightwood Supply',     proj:'Elm & 4th',              units:9,  lines:8,  wait:2,  st:'ok',   lab:'Priced — ready to send'},
+  {id:'Q-4473', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 3',       units:60, lines:44, wait:1,  st:'idle', lab:'Reading document…'},
+  {id:'Q-4474', dealer:'Fairmount Kitchens',    proj:'Sutton Place',           units:6,  lines:11, wait:1,  st:'ok',   lab:'Priced — ready to send'},
+  {id:'Q-4475', dealer:'Coastline Interiors',   proj:'Harbor Row',             units:34, lines:27, wait:0,  st:'idle', lab:'Reading document…'}
+];
+
+// ---------- inbox ----------
+el('inbox-rows').innerHTML = INBOX.map(r => `
+  <tr class="${r.live?'click':''}" ${r.live?'data-open="1"':''}>
+    <td><b>${r.id}</b></td>
+    <td>${r.dealer}</td>
+    <td class="muted">${r.proj}</td>
+    <td>${r.units}</td>
+    <td>${r.lines}</td>
+    <td class="${r.wait>=6?'aged':''}">${r.wait===0?'today':r.wait+'d'}</td>
+    <td><span class="pill p-${r.st}">${r.lab}</span></td>
+  </tr>`).join('');
+
+document.querySelector('[data-open]').addEventListener('click', ()=> go('quote'));
+
+// ---------- nav ----------
+function go(v){
+  document.querySelectorAll('.view').forEach(s=>s.classList.remove('on'));
+  el('v-'+v).classList.add('on');
+  document.querySelectorAll('nav button[data-go]').forEach(b=>b.classList.toggle('on', b.dataset.go===v));
+  window.scrollTo(0,0);
+  if(v==='quote') startClock();
+}
+document.querySelectorAll('[data-go]').forEach(b=> b.addEventListener('click',()=>go(b.dataset.go)));
+
+function startClock(){
+  if(state.tick) return;
+  state.t0 = Date.now();
+  state.tick = setInterval(()=>{
+    const s = Math.floor((Date.now()-state.t0)/1000);
+    el('q-clock').textContent = String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  },1000);
+}
+
+// ---------- quote render ----------
+el('q-title').textContent = ORDER.id + ' · ' + ORDER.dealer;
+el('q-sub').textContent = `${ORDER.project} · ${ORDER.units} units, ${ORDER.unitTypes} · received ${ORDER.received}`;
+
+function statusOf(l){
+  const r = state.resolved[l.n];
+  if(l.status === 'ok') return {cls:'ok', lab:'Priced'};
+  if(!r) return {cls:'stop', lab:'Needs a decision'};
+  if(r === 'Confirm deletion') return {cls:'idle', lab:'Removed'};
+  if(r.startsWith('Query')) return {cls:'warn', lab:'Query sent'};
+  return {cls:'ok', lab:'Resolved'};
+}
+
+function rawHtml(l){
+  let s = l.raw;
+  if(l.strike === 'ALL') s = '<s>'+s+'</s>';
+  else if(l.strike) s = s.replace(l.strike, '<s>'+l.strike+'</s>');
+  if(l.note) s += ' <span class="ann">'+l.note+'</span>';
+  return s;
+}
+
+function renderLines(){
+  el('line-rows').innerHTML = ORDER.lines.map(l=>{
+    const st = statusOf(l);
+    const gone = state.resolved[l.n] === 'Confirm deletion';
+    return `<tr class="click ${state.sel===l.n?'sel':''} ${gone?'gone':''}" data-line="${l.n}">
+      <td class="n">${l.n}</td>
+      <td><div class="raw">${rawHtml(l)}</div></td>
+      <td style="font-size:13px">${l.parsed.Type}<div class="muted" style="font-size:12px">${l.parsed.Dimensions}</div></td>
+      <td class="money">${gone ? '—' : money(l.price)}</td>
+      <td><span class="pill p-${st.cls}">${st.lab}</span></td>
+    </tr>`;
+  }).join('');
+  document.querySelectorAll('[data-line]').forEach(tr=>
+    tr.addEventListener('click', ()=>{ state.sel = +tr.dataset.line; renderLines(); renderDetail(); }));
+  renderTotals();
+}
+
+function renderDetail(){
+  const l = ORDER.lines.find(x=>x.n===state.sel);
+  if(!l){ el('detail').innerHTML = '<div class="empty">Select a line to see how it was read.</div>'; return; }
+  const r = state.resolved[l.n];
+  const conf = Math.round(l.confidence*100);
+  const confColor = conf>=85 ? 'var(--ok)' : conf>=75 ? 'var(--warn)' : 'var(--stop)';
+
+  let h = `<div class="dhead">
+      <h3>Line ${l.n}</h3>
+      <span class="conf" style="color:${confColor}">${conf}% confident</span>
+    </div><div class="dbody">`;
+
+  h += '<div class="sec" style="margin-top:0">As received</div>';
+  h += `<div class="raw" style="background:#fafbfc;border:1px solid var(--line-2);border-radius:7px;padding:10px">${rawHtml(l)}</div>`;
+
+  h += '<div class="sec">Read as</div><dl class="kv">';
+  for(const [k,v] of Object.entries(l.parsed)) h += `<dt>${k}</dt><dd>${v}</dd>`;
+  h += '</dl>';
+
+  if(l.subInstructions){
+    h += '<div class="sec">Instructions found in the description field</div><ul class="subs">';
+    l.subInstructions.forEach(s=> h += `<li>${s}</li>`);
+    h += '</ul>';
+  }
+
+  if(l.readings){
+    h += '<div class="sec">Candidate readings for “' + l.note + '”</div>';
+    l.readings.forEach(rd=>{
+      h += `<div class="reading">
+        <div class="lab">${rd.label}</div>
+        <div class="bar"><i style="width:${rd.pct}%"></i></div>
+        <div class="dl">${rd.pct}% · ${rd.delta}</div>
+      </div>`;
+    });
+  }
+
+  if(l.issues){
+    h += '<div class="sec">Why it stopped</div>';
+    l.issues.forEach(i=> h += `<div class="issue i-${i.sev}"><span class="dot"></span><span>${i.text}</span></div>`);
+  }
+
+  if(l.actions){
+    if(r){
+      h += `<div class="sec">Resolved</div>
+        <div class="issue" style="background:var(--ok-soft);color:#1c5e40">
+          <span class="dot" style="background:var(--ok)"></span><span><b>${r}</b></span></div>
+        <div class="acts"><button data-act="__undo">Undo</button></div>`;
+    } else {
+      h += '<div class="sec">Resolve</div><div class="acts">';
+      l.actions.forEach(a=> h += `<button data-act="${a}">${a}</button>`);
+      h += '</div>';
+    }
+  } else {
+    h += `<div class="sec">Resolve</div>
+      <div class="issue" style="background:var(--ok-soft);color:#1c5e40">
+        <span class="dot" style="background:var(--ok)"></span>
+        <span>Matched to catalog and priced. No action needed.</span></div>`;
+  }
+
+  h += '</div>';
+  el('detail').innerHTML = h;
+
+  document.querySelectorAll('[data-act]').forEach(b=> b.addEventListener('click', ()=>{
+    if(b.dataset.act === '__undo') delete state.resolved[l.n];
+    else state.resolved[l.n] = b.dataset.act;
+    renderLines(); renderDetail();
+  }));
+}
+
+function renderTotals(){
+  const exc = ORDER.lines.filter(l=>l.status==='exception');
+  const open = exc.filter(l=>!state.resolved[l.n]).length;
+  const auto = ORDER.lines.length - exc.length;
+
+  el('s-lines').textContent = ORDER.lines.length;
+  el('s-auto').innerHTML = auto + ' <small>of ' + ORDER.lines.length + '</small>';
+  el('s-exc').innerHTML = open === 0
+    ? '<span style="color:var(--ok)">0</span>'
+    : '<span style="color:var(--stop)">'+open+'</span>';
+
+  const sub = ORDER.lines.reduce((a,l)=> a + (state.resolved[l.n]==='Confirm deletion' ? 0 : l.price), 0);
+  el('q-total').textContent = money(sub * (1+ORDER.taxRate));
+
+  el('send').disabled = open > 0 || state.sent;
+  el('foot-note').textContent = open > 0
+    ? open + (open===1 ? ' line still needs a decision.' : ' lines still need a decision.')
+    : 'Every line resolved. Ready to send.';
+}
+
+el('send').addEventListener('click', ()=>{
+  state.sent = true;
+  clearInterval(state.tick);
+  const s = Math.floor((Date.now()-state.t0)/1000);
+  const mins = Math.max(1, Math.round(s/60));
+  el('done-box').innerHTML = `<div class="done">
+    <h3>Price sent to ${ORDER.dealer}</h3>
+    <p>Turned around in about ${mins} minute${mins===1?'':'s'} of desk time. Median response on this
+    account is ${ORDER.medianResponseDays} days. Two queries went back to the dealer alongside the price
+    rather than holding the whole quote behind them.</p>
+  </div>`;
+  el('send').textContent = 'Sent';
+  renderTotals();
+  el('done-box').scrollIntoView({behavior:'smooth', block:'center'});
+});
+
+renderLines();
+</script>
+</body>
+</html>
