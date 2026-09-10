@@ -86,7 +86,9 @@
 <main>
 
 <h1>Building a product for manufacturers</h1>
-<p class="deck">How I would start, what I would learn first, and who wins what.</p>
+<p class="deck">How I would start, what I would learn first, and who wins what.
+<br><a href="index.html">The prototype is here</a> — start on the Workflow screen, which shows where its four
+screens sit in the manufacturer's day and what is deliberately not built.</p>
 
 <div class="lede">
   <p><strong>Where I landed.</strong> Manufacturers win accounts on speed-to-quote. They cannot quote
@@ -98,7 +100,55 @@
   one thing you cannot infer at any accuracy: what it costs.</p>
 </div>
 
-<h2><span class="num">01</span>What I would learn before building</h2>
+<h2><span class="num">01</span>What the manufacturer is trying to get</h2>
+<p>Four goals, in the order I think they would rank them. Each screen exists to serve one of these, and
+where a goal is only partly served I have said so.</p>
+
+<h3>1 · Return a price before the other three manufacturers quoting the same job</h3>
+<p>This is the whole game. The products are undifferentiated, so the account goes to whoever answers
+first and answers well. Everything else in this document is downstream of it.</p>
+<p><strong>Served by:</strong> the Inbox, which sorts by how long a dealer has been waiting rather than by
+when it arrived. And the Quote screen, where eleven of sixteen lines price without anyone touching them,
+and a single hard line can go out as an allowance instead of holding the other fifteen hostage.</p>
+
+<h3>2 · Be the manufacturer that is easy to deal with</h3>
+<p>The second half of the anchor, and the one I would argue is underrated. When the product is a commodity,
+the relationship <em>is</em> the product.</p>
+<p><strong>Served by:</strong> queries going back <em>alongside</em> the price rather than instead of it.
+Catching the two-finish violation before it becomes a rejection two days later. A committed lead time
+rather than “subject to capacity.”</p>
+<p><strong>Only partly.</strong> Most of what a dealer means by service happens after the order is placed —
+was it confirmed, did anything change, when does it ship. That stretch is on the workflow map and it is not
+built. The twenty-four hour sign-off window in their own p.71 process is the first thing I would add, because
+it is the first moment after the quote where a dealer feels either served or ignored.</p>
+
+<h3>3 · Know what is coming before it arrives</h3>
+<p>Their words: they hear nothing for a year, then a massive order lands and the factory cannot absorb it.</p>
+<p><strong>Served by:</strong> Pipeline, in aggregate, with no dealer named — because a factory schedule needs
+totals, not names.</p>
+
+<h3>4 · Have a catalog that is correct and current</h3>
+<p><strong>Served by:</strong> the Catalog change feed, where the manufacturer publishes changes rather than
+replacing a document, and each change carries a permanence and a scope.</p>
+
+<div class="box b-warn">
+  <b>What is deliberately not a goal here</b>
+  <p>Chasing deals. Selling more to the dealers they already have. Replacing their ERP. Each is a reasonable
+  thing for a manufacturer to want, and each would make this a different, worse product.</p>
+</div>
+
+<h3>What speed is worth — the shape of the arithmetic</h3>
+<p>Nobody has given me a real number, so this is a worked hypothetical, and every input is invented. The
+point is the shape, and the first thing I would do is replace each of these with something real.</p>
+<ul>
+  <li>Say a manufacturer quotes 400 projects a year, averaging $180k.</li>
+  <li>Say returning a price same-day instead of in six days moves win rate by <strong>two points</strong>.</li>
+  <li>That is eight more projects, or about <strong>$1.4M</strong> of revenue, against no additional selling cost.</li>
+</ul>
+<p>Two points is the number I would want to argue about, because everything hangs on it. It is also
+answerable — a manufacturer knows their win rate, and they know roughly how often they were late.</p>
+
+<h2><span class="num">02</span>What I would learn before building</h2>
 
 <h3>From your own data first — days, no access required</h3>
 <p>Three questions can be answered from what Materialspace already holds, before anyone takes a meeting.
@@ -138,7 +188,7 @@ answer "three days," the thesis is weaker than stated and the product should be 
   is wrong and the exercise should be re-framed before anything gets built.</p>
 </div>
 
-<h2><span class="num">02</span>Breaking it into steps</h2>
+<h2><span class="num">03</span>Breaking it into steps</h2>
 
 <div class="phase">
   <div class="hd"><b>Phase 0 — Show them their own catalog</b><span class="wk">~3 weeks</span></div>
@@ -179,7 +229,7 @@ answer "three days," the thesis is weaker than stated and the product should be 
   do before Phase 1 has a number attached to it.</p>
 </div>
 
-<h2><span class="num">03</span>Where I would start, and why</h2>
+<h2><span class="num">04</span>Where I would start, and why</h2>
 <p>Phase 0, with one manufacturer, on the messy lane.</p>
 <ul>
   <li><strong>It gates everything.</strong> Nothing prices without a price book and a multiplier. Every
@@ -202,7 +252,7 @@ answer "three days," the thesis is weaker than stated and the product should be 
   distribution engine in reason number two. The messy lane is what buys you the clean lane.</p>
 </div>
 
-<h2><span class="num">04</span>Who wins what</h2>
+<h2><span class="num">05</span>Who wins what</h2>
 
 <table>
   <thead><tr><th style="width:110px">Side</th><th>Wins</th><th>Gives up / risks</th></tr></thead>
@@ -242,7 +292,7 @@ answer "three days," the thesis is weaker than stated and the product should be 
   in the aggregate views is derived from them.</p>
 </div>
 
-<h2><span class="num">05</span>What could go wrong</h2>
+<h2><span class="num">06</span>What could go wrong</h2>
 
 <h3>Product</h3>
 <p><strong>Parse errors are silent.</strong> <code>W1818</code> and <code>W1858</code> are both plausible
@@ -253,6 +303,12 @@ percentage.</p>
 <p><strong>The confidence threshold is an economic question nobody has answered.</strong> It should be set
 from the cost of a wrong auto-accept against the cost of asking, per line type — not picked by whoever
 tunes the model.</p>
+<p><strong>Nothing in the prototype learns.</strong> Every correction a quoting desk makes is a labelled
+example of exactly the thing that was hard, and right now it evaporates. The difference between a demo and
+a system worth paying for is that the second time a dealer writes “F-L,” nobody has to be asked again — and
+that once one manufacturer has confirmed what an underscore means in their book, it is confirmed. I would
+build the correction loop in Phase 1, not after, because the volume of corrections is highest at the start
+and that is exactly when they are being thrown away.</p>
 
 <h3>Process</h3>
 <p><strong>The price book may not exist in any machine-readable form.</strong> The specifications guide is a
@@ -269,7 +325,7 @@ the business that exists.</p>
 <p><strong>Manufacturer ordering portals already exist.</strong> The differentiator is not the portal. It is
 that the dealer network is already there and the system takes an order in whatever form it turns up.</p>
 
-<h2><span class="num">06</span>Assumptions I took</h2>
+<h2><span class="num">07</span>Assumptions I took</h2>
 <ul>
   <li>The dollar figures on the sample order document are line totals, not per-unit prices.</li>
   <li>The handwritten “F-L” means finished-left, and “b” means “by”.</li>
@@ -279,6 +335,11 @@ that the dealer network is already there and the system takes an order in whatev
   existing capability rather than something to build.</li>
   <li>Dealer names, volumes, and every figure on the catalog screen are invented. The line items, the
   markup, the code grammar, and every page citation are not.</li>
+  <li>The win-rate arithmetic in section 01 is a worked hypothetical with invented inputs. It is there to
+  show the shape of the case, not to claim the number.</li>
+  <li>The roles on each screen — quoting desk, plant scheduling, sales operations — are my guess at how a
+  manufacturer of this size divides the work. At a smaller one it may be the same two people wearing
+  all three hats, which would change who the product is designed for.</li>
 </ul>
 
 <div class="foot">
