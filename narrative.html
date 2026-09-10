@@ -233,8 +233,12 @@ answer "three days," the thesis is weaker than stated and the product should be 
 
 <div class="phase">
   <div class="hd"><b>Phase 3 — Attributed pipeline, opt-in</b><span class="wk">later</span></div>
-  <p>Named projects, dealer by dealer, only where that dealer has opted in and only in exchange for
-  something concrete. Deliberately last, because it is the one piece that can cost you dealer trust.</p>
+  <p>Named projects, but only ever because a dealer asked for a committed ship week. Deliberately last,
+  because it is the one piece that can cost you dealer trust — and because it is worth little until Phase 1
+  has enough quote volume for a slot commitment to mean anything.</p>
+  <p>Expect it to be <em>sparse</em>. Most quotes will never generate a request, so the manufacturer should
+  never be sold this as pipeline they can rely on. It is a thin, late-stage, high-confidence overlay on top
+  of a complete aggregate picture — not a second version of the aggregate.</p>
 </div>
 
 <div class="phase no">
@@ -314,6 +318,35 @@ answer "three days," the thesis is weaker than stated and the product should be 
   data-sharing feature and becomes a lead-time request feature for dealers, with attribution as a
   byproduct. The prototype shows that screen from Hudson's side on the Pipeline view — if it is not
   convincing to a dealer, the layer should not ship.</p>
+  <p><strong>It also produces a better signal than the one it replaces.</strong> A dealer asking for a
+  committed ship week is telling you the job is real and close to award — a stronger predictor than “the
+  estimate was revised recently.” Sparser, and skewed toward late-stage jobs, but far higher quality.</p>
+</div>
+
+<h3>Two things this creates, and the trade-off I would name out loud</h3>
+
+<p><strong>The manufacturer now has an incentive to defer.</strong> The more dates they leave “subject to
+capacity,” the more dealers must request them, the more attributed pipeline they receive. The design rewards
+exactly the behaviour it is meant to fix. The counter-pressure is to show dealers how often each manufacturer
+commits versus defers — a manufacturer who never commits looks worse to the customers they are trying to win
+on service. That is a product answer to an incentive problem, and I would build it at the same time or not
+build the layer at all.</p>
+
+<p><strong>A dealer who is declined has disclosed for nothing.</strong> If sending the request reveals the
+project and the manufacturer then says there is no slot, the dealer has paid and received nothing. That
+happens twice and the feature is dead. So the detail is held until the manufacturer commits the week: they
+see the request against their own capacity, and the project resolves only on commitment. Decline and they
+keep the totals they already had.</p>
+
+<div class="box b-warn">
+  <b>That escrow rule is not free, and simple is a legitimate answer</b>
+  <p>Holding detail until commitment means the request becomes a state machine — pending, committed,
+  lapsed, withdrawn — plus a thirty-day hold enforced against a production schedule that moves. That is
+  real complexity for a Phase 3 feature that will fire rarely.</p>
+  <p>The simple version is defensible: disclose on send, and accept that a declined dealer gave something
+  up for nothing. If I had to ship this quarter I would probably do that, watch how often a request gets
+  declined, and add escrow only when the number justifies it. I would rather name the trade-off than
+  present the more elaborate design as though it were obviously correct.</p>
 </div>
 
 <h2><span class="num">06</span>What could go wrong</h2>

@@ -495,7 +495,8 @@
           <b>Project detail — only when the dealer asks for a date</b>
           You never request this. It arrives because the dealer wanted a committed ship week and holding a
           slot means the plant has to know which job it is for. Named project, units, and whether the
-          estimate is still live — on that job only.
+          estimate is still live — on that job only, and only once you commit the week. Decline and you
+          keep the totals you already had.
         </div>
         <p style="margin:11px 0 0;color:var(--ink-3)">Never shared, at either layer: who else the dealer
         is pricing, their margin, what they quote the builder, or any job they have not asked you to price.</p>
@@ -632,6 +633,10 @@
       <div class="getback">
         <b>What you get</b>
         Week 46 committed and held for 30 days, instead of “subject to capacity.”
+        <div style="margin-top:7px;padding-top:7px;border-top:1px solid #c3d6f5">
+          They see the request and their own capacity. <b style="display:inline">Nothing below resolves
+          unless they commit the week</b> — if they cannot, the request closes and nothing is disclosed.
+        </div>
       </div>
 
       <div class="cols">
@@ -868,7 +873,7 @@ function dealerChoice(msg, ok){
     volumes count toward their factory planning either way — as totals, with no name attached.`;
 }
 el('dlg-share').addEventListener('click',()=>{
-  dealerChoice('Request sent. Week 46 is held for you for 30 days.', true);
+  dealerChoice('Request sent. Smart committed week 46 — held for you for 30 days, and the project resolved on their side only at that point.', true);
   const v = PIPE.find(p=>p.proj==='Vernon Court — B'); if(v) v.opt = true; renderPipe();
 });
 el('dlg-agg').addEventListener('click',()=>{
