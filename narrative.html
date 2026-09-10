@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Building for manufacturers — approach</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --panel:#ffffff; --ink:#14181f; --ink-2:#454c59; --ink-3:#6b7280;
+    --line:#e2e5ea; --line-2:#eef0f3;
+    --accent:#1f5fd0; --accent-soft:#eaf1fd;
+    --ok:#15704a; --ok-soft:#e8f5ee;
+    --warn:#9c5a0b; --warn-soft:#fdf3e4;
+    --stop:#b23328; --stop-soft:#fdecea;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  header.top{display:flex;align-items:center;gap:28px;padding:0 20px;height:52px;
+    background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+  .brand{font-weight:650;letter-spacing:-.01em;font-size:14px}
+  .brand span{color:var(--ink-3);font-weight:450}
+  nav{display:flex;gap:2px;margin-left:auto}
+  nav a{text-decoration:none;font-size:14px;color:var(--ink-2);padding:7px 13px;border-radius:6px}
+  nav a:hover{background:var(--line-2)}
+  nav a.on{background:var(--ink);color:#fff}
+
+  main{max-width:820px;margin:0 auto;padding:34px 20px 90px}
+  h1{font-size:27px;line-height:1.25;letter-spacing:-.02em;margin:0 0 6px}
+  .deck{color:var(--ink-3);font-size:16px;margin:0 0 34px}
+  h2{font-size:19px;letter-spacing:-.015em;margin:44px 0 4px;padding-top:22px;border-top:1px solid var(--line)}
+  h2 .num{color:var(--ink-3);font:600 13px var(--mono);display:block;margin-bottom:6px;letter-spacing:.04em}
+  h3{font-size:15px;margin:26px 0 6px}
+  p{margin:0 0 14px}
+  ul{margin:0 0 14px;padding-left:20px} li{margin-bottom:7px}
+  strong{font-weight:640}
+  em{font-style:normal;background:#fdf3e4;padding:0 3px;border-radius:3px}
+  code{font-family:var(--mono);font-size:13px;background:var(--line-2);padding:1px 5px;border-radius:4px}
+  a{color:var(--accent)}
+
+  .lede{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:9px;padding:18px 20px;margin:0 0 30px}
+  .lede p:last-child{margin-bottom:0}
+
+  .phase{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:11px}
+  .phase .hd{display:flex;align-items:baseline;gap:10px;margin-bottom:7px;flex-wrap:wrap}
+  .phase .hd b{font-size:15px}
+  .phase .wk{font:600 11px var(--mono);color:var(--ink-3);background:var(--line-2);
+    padding:2px 8px;border-radius:5px;letter-spacing:.02em}
+  .phase p{margin:0 0 8px;font-size:14px}
+  .phase p:last-child{margin-bottom:0}
+  .phase .kill{font-size:13px;color:var(--stop);background:var(--stop-soft);
+    border-radius:6px;padding:8px 11px;margin-top:9px}
+  .phase.no{background:#fafbfc;border-style:dashed}
+
+  table{width:100%;border-collapse:collapse;background:var(--panel);
+    border:1px solid var(--line);border-radius:9px;overflow:hidden;margin:0 0 14px;font-size:14px}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);
+    font-weight:600;padding:10px 13px;border-bottom:1px solid var(--line);background:#fbfcfd}
+  td{padding:11px 13px;border-bottom:1px solid var(--line-2);vertical-align:top}
+  tbody tr:last-child td{border-bottom:0}
+
+  .box{border-radius:9px;padding:14px 16px;margin:0 0 14px;font-size:14px}
+  .box b{display:block;margin-bottom:3px}
+  .box p{margin:0 0 8px} .box p:last-child{margin:0}
+  .b-warn{background:var(--warn-soft);border:1px solid #f0dcb8;color:#6d4207}
+  .b-ok{background:var(--ok-soft);border:1px solid #bfe3d0;color:#1c5e40}
+  .b-stop{background:var(--stop-soft);border:1px solid #f3ceca;color:#7d2820}
+
+  .q{font-size:14px;padding-left:15px;border-left:2px solid var(--line);color:var(--ink-2);margin:0 0 9px}
+  .foot{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-3);font-size:13px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">Materialspace <span>· product exercise</span></div>
+  <nav>
+    <a href="index.html">Prototype</a>
+    <a href="narrative.html" class="on">Approach</a>
+  </nav>
+</header>
+
+<main>
+
+<h1>Building a product for manufacturers</h1>
+<p class="deck">How I would start, what I would learn first, and who wins what.</p>
+
+<div class="lede">
+  <p><strong>Where I landed.</strong> Manufacturers win accounts on speed-to-quote. They cannot quote
+  fast because the price is not available at the moment of quoting, and because anything non-standard
+  stops and waits for a person. Both of those are visible in the documents you sent, not inferred.</p>
+  <p>Materialspace already sits on one side of that exchange. The manufacturer product is the other
+  half of a loop you own half of. And the first move is not to build catalog ingestion — you have
+  that — but to hand the manufacturer authority over data you currently infer, in exchange for the
+  one thing you cannot infer at any accuracy: what it costs.</p>
+</div>
+
+<h2><span class="num">01</span>What I would learn before building</h2>
+
+<h3>From your own data first — days, no access required</h3>
+<p>Three questions can be answered from what Materialspace already holds, before anyone takes a meeting.
+I would not start interviews until these are done, because they change who I would talk to.</p>
+<ul>
+  <li><strong>Does estimate activity predict award?</strong> The pipeline screen rests entirely on the idea
+  that a dealer revising an estimate means the deal is still alive. Backtest it against won/lost outcomes
+  already in your dealer data. If revision activity does not predict award, that screen is wrong and I
+  want to know in week one.</li>
+  <li><strong>Which manufacturer overlaps most with your existing dealers?</strong> The beachhead should be
+  a query, not a judgment call. Whoever the most of your dealers already quote against is the one whose
+  onboarding immediately makes the platform better for customers you already have.</li>
+  <li><strong>How uncertain is what you already hold?</strong> You have derived catalog data nobody has ever
+  confirmed. Measuring how much of it is low-confidence tells you the size of the ask you are about to make.</li>
+</ul>
+
+<h3>From dealers — five to eight conversations</h3>
+<p class="q">Walk me through the last quote that came back wrong. Where exactly did it break?</p>
+<p class="q">Do you tell manufacturers they are competing on a job?</p>
+<p class="q">What would you need in return to let a manufacturer see that a job is live?</p>
+<p class="q">Would you rather have a firm price in two hours with one line as an allowance, or a complete
+price in three days?</p>
+<p>That last one is the decisive question. The entire brief rests on speed being what wins. If dealers
+answer "three days," the thesis is weaker than stated and the product should be aimed somewhere else.</p>
+
+<h3>From manufacturers — three to five, including the one you are courting</h3>
+<p class="q">How many hands touch a quote today, and what is your real median time to return one?</p>
+<p class="q">Where does the price book live, and how are per-dealer multipliers stored?</p>
+<p class="q">What share of inbound lines are non-standard?</p>
+<p class="q">How far ahead must you commit materials, and what does a surprise order actually cost you?</p>
+
+<div class="box b-stop">
+  <b>What would make me stop</b>
+  <p>If manufacturers will not connect a price book and multiplier structure, there is no product —
+  not a smaller product, none. Everything downstream assumes the ability to price.</p>
+  <p>If dealers say a complete price in three days beats a firm price in two hours, the speed anchor
+  is wrong and the exercise should be re-framed before anything gets built.</p>
+</div>
+
+<h2><span class="num">02</span>Breaking it into steps</h2>
+
+<div class="phase">
+  <div class="hd"><b>Phase 0 — Show them their own catalog</b><span class="wk">~3 weeks</span></div>
+  <p>Take what Materialspace already holds on one manufacturer and present it back to them. No upload,
+  no data entry, no new ingestion. They confirm the taxonomy, connect the price book and multiplier
+  structure, and start publishing changes.</p>
+  <p>This is a demo, not a request — which is what makes it a plausible first ask of a large manufacturer.
+  It also converts inferred data into confirmed data, which is the half of "catalog completeness and
+  accuracy" that no amount of parsing can reach.</p>
+  <div class="kill">Kill criterion: no price book connected by week three means no product. Find out then.</div>
+</div>
+
+<div class="phase">
+  <div class="hd"><b>Phase 1 — Quote inbox and exception resolution</b><span class="wk">~9 weeks</span></div>
+  <p>One manufacturer, every inbound channel — structured requests from Materialspace dealers and scanned
+  markups from everyone else. This is the value anchor and the bulk of the build.</p>
+  <p>Metric: median time to return a price, target same day. Secondary: share of lines priced without a
+  human touching them.</p>
+</div>
+
+<div class="phase">
+  <div class="hd"><b>Phase 2 — Aggregate demand</b><span class="wk">~6 weeks</span></div>
+  <p>Forward load by period, across all dealers, with no attribution. Only worth building once enough quote
+  volume runs through that manufacturer for the forecast to mean anything.</p>
+  <p>Metric: forecast accuracy against orders that actually land.</p>
+</div>
+
+<div class="phase">
+  <div class="hd"><b>Phase 3 — Attributed pipeline, opt-in</b><span class="wk">later</span></div>
+  <p>Named projects, dealer by dealer, only where that dealer has opted in and only in exchange for
+  something concrete. Deliberately last, because it is the one piece that can cost you dealer trust.</p>
+</div>
+
+<div class="phase no">
+  <div class="hd"><b>Explicitly not now</b></div>
+  <p>Monetization. Self-serve onboarding. A second manufacturer. Anything aimed at the manufacturer's
+  sales team rather than their factory. Each of these is a reasonable thing to want and a bad thing to
+  do before Phase 1 has a number attached to it.</p>
+</div>
+
+<h2><span class="num">03</span>Where I would start, and why</h2>
+<p>Phase 0, with one manufacturer, on the messy lane.</p>
+<ul>
+  <li><strong>It gates everything.</strong> Nothing prices without a price book and a multiplier. Every
+  screen in the prototype is downstream of that one connection.</li>
+  <li><strong>It is your own stated reason number one</strong> — and specifically the accuracy half of it,
+  which is structurally unavailable without the manufacturer.</li>
+  <li><strong>Only they can authorize it.</strong> Which makes it the natural first ask, and turns the
+  manufacturer into a participant rather than a subject.</li>
+  <li><strong>It is the cheapest thing to be wrong about.</strong> Three weeks, no UI to speak of, and a
+  real answer at the end.</li>
+</ul>
+
+<div class="box b-warn">
+  <b>Messy lane before clean lane</b>
+  <p>The obvious objection to the prototype is that Materialspace generates the estimate, so why build an
+  AI to read a document someone printed and scribbled on.</p>
+  <p>Because today almost none of a manufacturer's hundreds of dealers are on Materialspace. On day one
+  the value is handling <em>all</em> their inbound, whatever form it arrives in. Then the manufacturer starts
+  telling dealers "send it through Materialspace and you get same-day pricing" — and that is the
+  distribution engine in reason number two. The messy lane is what buys you the clean lane.</p>
+</div>
+
+<h2><span class="num">04</span>Who wins what</h2>
+
+<table>
+  <thead><tr><th style="width:110px">Side</th><th>Wins</th><th>Gives up / risks</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>Dealer</strong></td>
+      <td>Prices back same day instead of in a week. Fewer rejected orders. A committed lead time instead
+      of “subject to capacity.” One place to work rather than a mailbox.</td>
+      <td>Pipeline exposure — and their multiplier is negotiated on volume, so a visible forward book costs
+      them negotiating asymmetry. Longer term, fear that the manufacturer goes direct.</td>
+    </tr>
+    <tr>
+      <td><strong>Manufacturer</strong></td>
+      <td>Win rate, via the only thing that differentiates a commodity — speed and service. Lower cost per
+      quote. Forward load they can actually plan a factory against.</td>
+      <td>Their discount ladder becomes visible to a third party. Dependence on that third party for the
+      customer relationship. Ownership of catalog upkeep they currently get for free.</td>
+    </tr>
+    <tr>
+      <td><strong>Materialspace</strong></td>
+      <td>Catalog data that is confirmed rather than inferred. Both sides of the transaction. A reason for
+      manufacturers to push their own dealers onto the platform. An enterprise line to sell into.</td>
+      <td>Becomes the accountable party when a price is wrong. Sits between two parties whose interests
+      genuinely diverge, and has to keep choosing.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="box b-ok">
+  <b>The conflict, and how the design answers it</b>
+  <p>A factory schedule needs to know how many units land in week 47. It does not need to know whose job
+  they are. <strong>Attribution is what makes dealers refuse, and planning does not require it.</strong></p>
+  <p>So aggregate demand is the default and names nobody, attribution is a separate opt-in layer, and
+  un-opted projects still count toward the totals while staying masked. Planning ships. Sales waits.</p>
+  <p>The same boundary runs the other way: dealer-specific overlays — exclusive sizes, approved
+  modifications, negotiated tiers — are confidential between the manufacturer and that dealer, and nothing
+  in the aggregate views is derived from them.</p>
+</div>
+
+<h2><span class="num">05</span>What could go wrong</h2>
+
+<h3>Product</h3>
+<p><strong>Parse errors are silent.</strong> <code>W1818</code> and <code>W1858</code> are both plausible
+SKUs, so a wrong reading does not announce itself — it announces itself as a wrong cabinet in a
+hundred-unit building, months later. This is why the prototype shows confidence and refuses to recommend
+below a threshold, and why an audit trail from price back to source line matters more than accuracy
+percentage.</p>
+<p><strong>The confidence threshold is an economic question nobody has answered.</strong> It should be set
+from the cost of a wrong auto-accept against the cost of asking, per line type — not picked by whoever
+tunes the model.</p>
+
+<h3>Process</h3>
+<p><strong>The price book may not exist in any machine-readable form.</strong> The specifications guide is a
+print document. There is no reason to assume the price book is better, and some reason to assume it is a
+spreadsheet with a decade of local conventions in it.</p>
+<p><strong>The quoting desk is one or two people</strong> who have done it their way for twenty years, and
+whose value to their employer is partly that they are the only ones who know how. A tool that makes their
+job legible is not automatically welcome.</p>
+
+<h3>Market</h3>
+<p><strong>Dealers may read this as the first step to disintermediation</strong> — and they are your paying
+customers today. Getting the sequencing wrong here does not slow the manufacturer product down, it damages
+the business that exists.</p>
+<p><strong>Manufacturer ordering portals already exist.</strong> The differentiator is not the portal. It is
+that the dealer network is already there and the system takes an order in whatever form it turns up.</p>
+
+<h2><span class="num">06</span>Assumptions I took</h2>
+<ul>
+  <li>The dollar figures on the sample order document are line totals, not per-unit prices.</li>
+  <li>The handwritten “F-L” means finished-left, and “b” means “by”.</li>
+  <li>Revenue being fourth in your list of four reasons is deliberate — so early on this is cheap or free
+  to the manufacturer, and monetization follows rather than leads.</li>
+  <li>Materialspace already ingests manufacturer catalogs for the dealer side, so catalog parsing is an
+  existing capability rather than something to build.</li>
+  <li>Dealer names, volumes, and every figure on the catalog screen are invented. The line items, the
+  markup, the code grammar, and every page citation are not.</li>
+</ul>
+
+<div class="foot">
+  Prototype: <a href="index.html">therubioftw.github.io/MS</a> · prepared for the Materialspace product
+  exercise, September 2026.
+</div>
+
+</main>
+</body>
+</html>
