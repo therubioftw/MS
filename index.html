@@ -6,12 +6,12 @@
 <title>Manufacturer Portal — prototype</title>
 <style>
   :root{
-    --bg:#f6f7f9; --panel:#ffffff; --ink:#14181f; --ink-2:#4a5261; --ink-3:#7c8496;
+    --bg:#f6f7f9; --panel:#ffffff; --ink:#14181f; --ink-2:#454c59; --ink-3:#6b7280;
     --line:#e2e5ea; --line-2:#eef0f3;
     --accent:#1f5fd0; --accent-soft:#eaf1fd;
-    --ok:#1a7f52; --ok-soft:#e8f5ee;
-    --warn:#b4690e; --warn-soft:#fdf3e4;
-    --stop:#c0392f; --stop-soft:#fdecea;
+    --ok:#15704a; --ok-soft:#e8f5ee;
+    --warn:#9c5a0b; --warn-soft:#fdf3e4;
+    --stop:#b23328; --stop-soft:#fdecea;
     --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box}
@@ -28,21 +28,19 @@
   nav button{border:0;background:none;font:inherit;color:var(--ink-2);padding:7px 13px;border-radius:6px;cursor:pointer}
   nav button:hover{background:var(--line-2)}
   nav button.on{background:var(--ink);color:#fff}
-  nav button:disabled{color:#b7bdc9;cursor:default}
-  nav button:disabled:hover{background:none}
   .who{display:flex;align-items:center;gap:8px;padding-left:18px;border-left:1px solid var(--line);color:var(--ink-3);font-size:13px}
   .av{width:26px;height:26px;border-radius:50%;background:#dfe4ec;color:var(--ink-2);
     display:grid;place-items:center;font-size:11px;font-weight:600}
 
-  main{max-width:1360px;margin:0 auto;padding:22px 20px 60px}
+  main{max-width:1400px;margin:0 auto;padding:22px 20px 60px}
   .view{display:none} .view.on{display:block}
 
   h1{font-size:19px;margin:0 0 2px;letter-spacing:-.01em}
   .sub{color:var(--ink-3);font-size:13px;margin-bottom:18px}
 
-  /* ---------- inbox ---------- */
+  /* ---------- shared ---------- */
   .card{background:var(--panel);border:1px solid var(--line);border-radius:9px}
-  table{width:100%;border-collapse:collapse}
+  table{width:100%;border-collapse:collapse;table-layout:fixed}
   th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);
     font-weight:600;padding:11px 14px;border-bottom:1px solid var(--line)}
   td{padding:12px 14px;border-bottom:1px solid var(--line-2);vertical-align:middle}
@@ -50,6 +48,7 @@
   tr.click{cursor:pointer} tr.click:hover td{background:#fafbfc}
   .aged{color:var(--stop);font-weight:600}
   .muted{color:var(--ink-3)}
+  .nowrap{white-space:nowrap}
 
   .pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;
     padding:3px 9px;border-radius:20px;white-space:nowrap}
@@ -57,40 +56,49 @@
   .p-warn{background:var(--warn-soft);color:var(--warn)}
   .p-stop{background:var(--stop-soft);color:var(--stop)}
   .p-idle{background:var(--line-2);color:var(--ink-2)}
-
-  /* ---------- quote header ---------- */
-  .qhead{display:flex;align-items:flex-start;gap:20px;margin-bottom:16px}
-  .back{border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:6px 11px;
-    font:inherit;color:var(--ink-2);cursor:pointer}
-  .back:hover{background:var(--line-2)}
-  .clock{margin-left:auto;text-align:right}
-  .clock .big{font:600 22px/1.1 var(--mono);letter-spacing:-.02em}
-  .clock .cap{font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+  .p-live{background:var(--accent-soft);color:var(--accent)}
 
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
   .stat{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:13px 15px}
+  .stat.hero{border-color:#c3d6f5;background:linear-gradient(180deg,#f7faff,#fff)}
   .stat .k{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:600}
   .stat .v{font-size:22px;font-weight:650;letter-spacing:-.02em;margin-top:3px}
+  .stat.hero .v{font-size:28px;color:var(--accent)}
   .stat .v small{font-size:13px;font-weight:500;color:var(--ink-3);letter-spacing:0}
 
   .banner{display:flex;gap:11px;align-items:flex-start;background:var(--warn-soft);
     border:1px solid #f0dcb8;border-radius:9px;padding:12px 15px;margin-bottom:14px;font-size:13px}
   .banner b{display:block;margin-bottom:2px}
-  .banner .src{color:var(--warn);opacity:.8;font-size:12px;margin-top:4px}
+  .banner .src{color:var(--warn);font-size:12px;margin-top:5px;font-weight:500}
 
-  /* ---------- split ---------- */
-  .split{display:grid;grid-template-columns:1fr 430px;gap:14px;align-items:start}
-  @media (max-width:1080px){.split{grid-template-columns:1fr}}
+  /* ---------- quote ---------- */
+  .qhead{display:flex;align-items:flex-start;gap:20px;margin-bottom:16px}
+  .back{border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:6px 11px;
+    font:inherit;color:var(--ink-2);cursor:pointer}
+  .back:hover{background:var(--line-2)}
+  .clock{margin-left:auto;text-align:right;color:var(--ink-3)}
+  .clock .big{font:600 15px/1.2 var(--mono);color:var(--ink-2)}
+  .clock .cap{font-size:11px;text-transform:uppercase;letter-spacing:.05em}
 
-  .raw{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);word-break:break-all;line-height:1.6}
-  .raw s{color:var(--stop);opacity:.75}
-  .ann{background:#cdeafc;color:#0b3c56;padding:1px 5px;border-radius:3px;font-weight:600;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:12px}
-  td.n{font:600 12px var(--mono);color:var(--ink-3);width:34px}
-  td.money{text-align:right;font:500 13px var(--mono);white-space:nowrap;width:104px}
+  .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .seg{display:inline-flex;background:var(--line-2);border-radius:8px;padding:3px}
+  .seg button{border:0;background:none;font:inherit;font-size:13px;color:var(--ink-2);
+    padding:5px 12px;border-radius:6px;cursor:pointer}
+  .seg button.on{background:var(--panel);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+  .split{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:14px;align-items:start}
+  @media (max-width:1180px){.split{grid-template-columns:1fr}}
+
+  .raw{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);overflow-wrap:anywhere;line-height:1.65}
+  .raw s{color:var(--stop);text-decoration-thickness:2px}
+  .ann{background:#cdeafc;color:#08344a;padding:1px 5px;border-radius:3px;font-weight:600;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:12.5px}
+  td.n{font:600 12px var(--mono);color:var(--ink-3)}
+  td.money{text-align:right;font:500 13px var(--mono);white-space:nowrap}
   tr.sel td{background:var(--accent-soft) !important}
   tr.gone td{opacity:.42}
-  tr.gone .raw{text-decoration:line-through}
+  .readas{font-size:13px}
+  .readas .dim{font-size:12px;color:var(--ink-3);font-family:var(--mono);white-space:nowrap}
 
   /* ---------- detail ---------- */
   .detail{position:sticky;top:74px}
@@ -98,7 +106,7 @@
   .dhead{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
   .dhead h3{margin:0;font-size:14px}
   .conf{margin-left:auto;font:600 12px var(--mono)}
-  .kv{display:grid;grid-template-columns:96px 1fr;gap:5px 12px;font-size:13px;margin:0 0 4px}
+  .kv{display:grid;grid-template-columns:92px 1fr;gap:5px 12px;font-size:13px;margin:0 0 4px}
   .kv dt{color:var(--ink-3)} .kv dd{margin:0}
   .sec{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);
     font-weight:600;margin:18px 0 8px}
@@ -117,12 +125,13 @@
   ul.subs{margin:0;padding-left:17px;font-size:13px;color:var(--ink-2)}
   ul.subs li{margin-bottom:3px}
 
-  .acts{display:flex;flex-direction:column;gap:7px;margin-top:16px}
+  .nudge{font-size:12.5px;color:var(--ink-3);margin:12px 0 -4px;line-height:1.5}
+  .acts{display:flex;flex-direction:column;gap:7px;margin-top:14px}
   .acts button{font:inherit;padding:9px 13px;border-radius:7px;border:1px solid var(--line);
     background:var(--panel);color:var(--ink);cursor:pointer;text-align:left}
   .acts button:hover{border-color:#c4cad4;background:#fafbfc}
-  .acts button:first-child{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:550}
-  .acts button:first-child:hover{background:#1a52b5}
+  .acts button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:550}
+  .acts button.primary:hover{background:#1a52b5}
 
   .empty{padding:40px 20px;text-align:center;color:var(--ink-3);font-size:13px}
 
@@ -133,11 +142,44 @@
   .footbar .tot .v{font:650 20px/1.2 var(--mono);letter-spacing:-.02em}
   .send{font:inherit;font-weight:600;padding:11px 20px;border-radius:8px;border:0;
     background:var(--accent);color:#fff;cursor:pointer}
-  .send:disabled{background:#d3d8e0;color:#8b93a1;cursor:not-allowed}
+  .send:disabled{background:#d3d8e0;color:#7c8496;cursor:not-allowed}
 
   .done{background:var(--ok-soft);border:1px solid #bfe3d0;border-radius:9px;padding:18px 20px;margin-top:14px}
   .done h3{margin:0 0 6px;font-size:15px;color:var(--ok)}
   .done p{margin:0;font-size:13px;color:#2c5f47}
+
+  /* ---------- pipeline ---------- */
+  .grid2{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:14px;align-items:start}
+  @media (max-width:1180px){.grid2{grid-template-columns:1fr}}
+
+  .chart{padding:16px}
+  .chart h3{margin:0 0 3px;font-size:14px}
+  .chart .cap{font-size:12px;color:var(--ink-3);margin-bottom:18px}
+  .bars{display:flex;align-items:flex-end;gap:6px;height:170px;position:relative;
+    border-bottom:1px solid var(--line);padding-bottom:0}
+  .cap-line{position:absolute;left:0;right:0;border-top:2px dashed #c9a227;z-index:2}
+  .cap-tag{position:absolute;right:0;transform:translateY(-100%);font-size:11px;color:#8a6f13;
+    font-weight:600;background:var(--panel);padding:0 4px}
+  .wk{flex:1;height:100%;position:relative}
+  .wk .prob,.wk .conf{position:absolute;left:0;right:0}
+  .wk .prob{background:repeating-linear-gradient(45deg,#c9d8f2,#c9d8f2 4px,#dde7f8 4px,#dde7f8 8px);
+    border-radius:3px 3px 0 0}
+  .wk .conf{background:var(--accent);bottom:0}
+  .wklabs{display:flex;gap:6px;margin-top:6px}
+  .wklabs div{flex:1;text-align:center;font-size:10px;color:var(--ink-3);font-family:var(--mono)}
+  .legend{display:flex;gap:16px;margin-top:14px;font-size:12px;color:var(--ink-2)}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+
+  .callout{border:1px solid #f0dcb8;background:var(--warn-soft);border-radius:9px;padding:15px 16px}
+  .callout h3{margin:0 0 6px;font-size:14px;color:#7a4708}
+  .callout p{margin:0 0 8px;font-size:13px;color:#7a4708;line-height:1.5}
+  .callout p:last-child{margin-bottom:0}
+
+  .privacy{padding:15px 16px;font-size:12.5px;color:var(--ink-2);line-height:1.55}
+  .privacy h3{margin:0 0 7px;font-size:13px;color:var(--ink)}
+  .privacy .yes,.privacy .no{display:flex;gap:8px;margin-bottom:5px}
+  .privacy .mk{font-weight:700;flex:none;width:12px}
+  .privacy .yes .mk{color:var(--ok)} .privacy .no .mk{color:var(--stop)}
 </style>
 </head>
 <body>
@@ -147,7 +189,7 @@
   <nav>
     <button data-go="inbox" class="on">Inbox</button>
     <button data-go="quote">Quote Q-4471</button>
-    <button disabled title="Next">Pipeline</button>
+    <button data-go="pipeline">Pipeline</button>
   </nav>
   <div class="who"><div class="av">DM</div> Dana M. · Quoting desk</div>
 </header>
@@ -159,7 +201,7 @@
   <h1>Inbox</h1>
   <div class="sub">Requests waiting on a price. Sorted by how long the dealer has been waiting.</div>
 
-  <div class="stats" style="grid-template-columns:repeat(4,1fr)">
+  <div class="stats">
     <div class="stat"><div class="k">Waiting</div><div class="v">7</div></div>
     <div class="stat"><div class="k">Median response</div><div class="v">6 <small>days</small></div></div>
     <div class="stat"><div class="k">Oldest</div><div class="v" style="color:var(--stop)">11 <small>days</small></div></div>
@@ -168,6 +210,8 @@
 
   <div class="card">
     <table>
+      <colgroup><col style="width:90px"><col><col><col style="width:70px">
+        <col style="width:70px"><col style="width:90px"><col style="width:190px"></colgroup>
       <thead><tr>
         <th>Quote</th><th>Dealer</th><th>Project</th><th>Units</th>
         <th>Lines</th><th>Waiting</th><th>Status</th>
@@ -187,18 +231,19 @@
     </div>
     <div class="clock">
       <div class="big" id="q-clock">00:00</div>
-      <div class="cap">Open on this quote</div>
+      <div class="cap">Desk time on this quote</div>
     </div>
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="k">Lines</div><div class="v" id="s-lines">—</div></div>
-    <div class="stat"><div class="k">Priced automatically</div><div class="v" id="s-auto">—</div></div>
+    <div class="stat hero"><div class="k">Priced automatically</div>
+      <div class="v" id="s-auto">—</div></div>
     <div class="stat"><div class="k">Need a decision</div><div class="v" id="s-exc">—</div></div>
     <div class="stat"><div class="k">Dealer waiting</div><div class="v">2 <small>days</small></div></div>
+    <div class="stat"><div class="k">Median on this account</div><div class="v">6 <small>days</small></div></div>
   </div>
 
-  <div class="banner" id="order-flag">
+  <div class="banner">
     <div class="dot" style="background:var(--warn);margin-top:7px"></div>
     <div>
       <b>Two finish families on one order</b>
@@ -209,9 +254,18 @@
     </div>
   </div>
 
+  <div class="toolbar">
+    <div class="seg">
+      <button id="f-exc" class="on">Need a decision (<span id="f-exc-n">5</span>)</button>
+      <button id="f-all">All 16 lines</button>
+    </div>
+    <span class="muted" style="font-size:12.5px" id="filter-note">Showing only the lines the dealer changed or that couldn’t be priced.</span>
+  </div>
+
   <div class="split">
     <div class="card">
       <table>
+        <colgroup><col style="width:36px"><col style="width:44%"><col><col style="width:106px"><col style="width:140px"></colgroup>
         <thead><tr>
           <th></th><th>As received</th><th>Read as</th><th style="text-align:right">Line total</th><th>Status</th>
         </tr></thead>
@@ -236,11 +290,76 @@
   <div id="done-box"></div>
 </section>
 
+<!-- ============ PIPELINE ============ -->
+<section class="view" id="v-pipeline">
+  <h1>Pipeline &amp; factory load</h1>
+  <div class="sub">Projects you have priced, and whether they are still alive.</div>
+
+  <div class="stats">
+    <div class="stat"><div class="k">Open quoted value</div><div class="v">$3.12M</div></div>
+    <div class="stat hero"><div class="k">Still active</div><div class="v">5 <small>of 8</small></div></div>
+    <div class="stat"><div class="k">No signal 90+ days</div><div class="v" style="color:var(--stop)">2</div></div>
+    <div class="stat"><div class="k">Committed, next 12 wks</div><div class="v">$1.04M</div></div>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <div class="card chart" style="margin-bottom:14px">
+        <h3>Factory load, next 14 weeks</h3>
+        <div class="cap">Confirmed orders against pipeline weighted by how active each quote is.</div>
+        <div class="bars" id="bars"></div>
+        <div class="wklabs" id="wklabs"></div>
+        <div class="legend">
+          <span><i style="background:var(--accent)"></i>Confirmed orders</span>
+          <span><i style="background:repeating-linear-gradient(45deg,#c9d8f2,#c9d8f2 3px,#dde7f8 3px,#dde7f8 6px)"></i>Weighted pipeline</span>
+          <span><i style="background:#c9a227"></i>Plant capacity</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <table>
+          <colgroup><col><col style="width:150px"><col style="width:60px">
+            <col style="width:105px"><col style="width:120px"><col style="width:130px"></colgroup>
+          <thead><tr>
+            <th>Project</th><th>Dealer</th><th>Units</th>
+            <th style="text-align:right">Quoted value</th><th>Last signal</th><th>Status</th>
+          </tr></thead>
+          <tbody id="pipe-rows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="callout" style="margin-bottom:14px">
+        <h3>Ridgeline Commons is your exposure</h3>
+        <p>120 units, $1.41M, priced 239 days ago. The dealer has not touched the estimate since.
+        Either it died, or it is about to land.</p>
+        <p>If it lands, your own process needs materials purchased 12–14 business days before the
+        build date. That is roughly two weeks of notice on a $1.41M order.</p>
+        <p class="src" style="font-size:12px;font-weight:500">Timeline source: Specifications Guide p.71 — order process.</p>
+      </div>
+
+      <div class="card privacy">
+        <h3>What the dealer is sharing</h3>
+        <div class="yes"><span class="mk">✓</span><span>Whether the estimate is still being worked on, and when it last changed.</span></div>
+        <div class="yes"><span class="mk">✓</span><span>Unit count and scope, because they came from the request itself.</span></div>
+        <div class="no"><span class="mk">✕</span><span>Who else they are pricing against you.</span></div>
+        <div class="no"><span class="mk">✕</span><span>Their margin, or what they are quoting the builder.</span></div>
+        <div class="no"><span class="mk">✕</span><span>Any project they have not asked you to price.</span></div>
+        <p style="margin:11px 0 0;color:var(--ink-3)">Dealers turn this on per project. In exchange
+        they get a firm lead time on the quote instead of “subject to capacity.”</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <script>
-// Line items transcribed from the sample order document supplied with the exercise.
-// `raw` is the string exactly as received; `strike` and `note` record the dealer's hand markup.
+// ============================================================
+// Line items transcribed from the sample order document.
+// `raw` is the string as received; `strike` and `note` are the dealer's hand markup.
+// ============================================================
 const ORDER = {
   id: "Q-4471",
   dealer: "Hudson Kitchen Supply",
@@ -367,14 +486,15 @@ const ORDER = {
     }
   ]
 };
-</script>
-<script>
-// ---------- state ----------
-const state = { sel:null, resolved:{}, sent:false, t0:null, tick:null };
 
+const AUTO_ACCEPT = 0.85;
+
+// ---------- state ----------
+const state = { sel:null, resolved:{}, sent:false, t0:null, tick:null, filter:'exc' };
 const money = n => '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 const el = id => document.getElementById(id);
 
+// ---------- inbox ----------
 const INBOX = [
   {id:'Q-4468', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 2',       units:48, lines:31, wait:11, st:'stop', lab:'4 need a decision'},
   {id:'Q-4470', dealer:'Coastline Interiors',   proj:'The Winslow',            units:12, lines:14, wait:6,  st:'warn', lab:'2 need a decision'},
@@ -385,7 +505,6 @@ const INBOX = [
   {id:'Q-4475', dealer:'Coastline Interiors',   proj:'Harbor Row',             units:34, lines:27, wait:0,  st:'idle', lab:'Reading document…'}
 ];
 
-// ---------- inbox ----------
 el('inbox-rows').innerHTML = INBOX.map(r => `
   <tr class="${r.live?'click':''}" ${r.live?'data-open="1"':''}>
     <td><b>${r.id}</b></td>
@@ -396,8 +515,47 @@ el('inbox-rows').innerHTML = INBOX.map(r => `
     <td class="${r.wait>=6?'aged':''}">${r.wait===0?'today':r.wait+'d'}</td>
     <td><span class="pill p-${r.st}">${r.lab}</span></td>
   </tr>`).join('');
-
 document.querySelector('[data-open]').addEventListener('click', ()=> go('quote'));
+
+// ---------- pipeline ----------
+const PIPE = [
+  {proj:'Ridgeline Commons', dealer:'Meridian Cabinet Co.',  units:120, val:1410000, sig:'Quiet 239 days', st:'stop', lab:'No signal'},
+  {proj:'Brookfield Yards',  dealer:'Hudson Kitchen Supply', units:64,  val:602500,  sig:'Revised 11d ago', st:'live', lab:'Active'},
+  {proj:'Larkspur Phase 2',  dealer:'Meridian Cabinet Co.',  units:48,  val:412000,  sig:'Revised 6d ago',  st:'live', lab:'Active'},
+  {proj:'Harbor Row',        dealer:'Coastline Interiors',   units:34,  val:291000,  sig:'New today',       st:'live', lab:'Active'},
+  {proj:'Vernon Court — B',  dealer:'Hudson Kitchen Supply', units:21,  val:184200,  sig:'Revised today',   st:'live', lab:'Active'},
+  {proj:'The Winslow',       dealer:'Coastline Interiors',   units:12,  val:96400,   sig:'Quiet 94 days',   st:'warn', lab:'Cooling'},
+  {proj:'Elm & 4th',         dealer:'Brightwood Supply',     units:9,   val:71800,   sig:'Awarded — PO due', st:'ok',  lab:'Won'},
+  {proj:'Sutton Place',      dealer:'Fairmount Kitchens',    units:6,   val:48300,   sig:'Quiet 20 days',   st:'live', lab:'Active'}
+];
+
+el('pipe-rows').innerHTML = PIPE.map(p => `
+  <tr>
+    <td><b>${p.proj}</b></td>
+    <td class="muted">${p.dealer}</td>
+    <td>${p.units}</td>
+    <td class="money">$${(p.val/1000).toFixed(1)}k</td>
+    <td class="muted nowrap" style="font-size:12.5px">${p.sig}</td>
+    <td><span class="pill p-${p.st}">${p.lab}</span></td>
+  </tr>`).join('');
+
+// factory load: 14 weeks, confirmed vs weighted pipeline, against capacity
+const CAP = 100;
+const LOAD = [
+  {w:'W38', c:88, p:6},  {w:'W39', c:82, p:11}, {w:'W40', c:79, p:14},
+  {w:'W41', c:71, p:19}, {w:'W42', c:64, p:24}, {w:'W43', c:55, p:31},
+  {w:'W44', c:47, p:38}, {w:'W45', c:38, p:44}, {w:'W46', c:29, p:52},
+  {w:'W47', c:22, p:61}, {w:'W48', c:16, p:74}, {w:'W49', c:11, p:88},
+  {w:'W50', c:7,  p:96}, {w:'W51', c:4,  p:99}
+];
+const MAXY = 120;
+el('bars').innerHTML =
+  `<div class="cap-line" style="bottom:${CAP/MAXY*100}%"><span class="cap-tag">Plant capacity</span></div>` +
+  LOAD.map(d => `<div class="wk" title="${d.w}: ${d.c} confirmed + ${d.p} pipeline">
+      <div class="prob" style="bottom:${d.c/MAXY*100}%;height:${d.p/MAXY*100}%"></div>
+      <div class="conf" style="height:${d.c/MAXY*100}%"></div>
+    </div>`).join('');
+el('wklabs').innerHTML = LOAD.map(d=>`<div>${d.w.replace('W','')}</div>`).join('');
 
 // ---------- nav ----------
 function go(v){
@@ -418,9 +576,20 @@ function startClock(){
   },1000);
 }
 
-// ---------- quote render ----------
+// ---------- quote ----------
 el('q-title').textContent = ORDER.id + ' · ' + ORDER.dealer;
 el('q-sub').textContent = `${ORDER.project} · ${ORDER.units} units, ${ORDER.unitTypes} · received ${ORDER.received}`;
+
+el('f-exc').addEventListener('click', ()=>{ state.filter='exc'; syncFilter(); });
+el('f-all').addEventListener('click', ()=>{ state.filter='all'; syncFilter(); });
+function syncFilter(){
+  el('f-exc').classList.toggle('on', state.filter==='exc');
+  el('f-all').classList.toggle('on', state.filter==='all');
+  el('filter-note').textContent = state.filter==='exc'
+    ? 'Showing only the lines the dealer changed or that couldn’t be priced.'
+    : 'Showing every line, including the 11 that priced straight through.';
+  renderLines();
+}
 
 function statusOf(l){
   const r = state.resolved[l.n];
@@ -439,14 +608,18 @@ function rawHtml(l){
   return s;
 }
 
+function visibleLines(){
+  return state.filter==='exc' ? ORDER.lines.filter(l=>l.status==='exception') : ORDER.lines;
+}
+
 function renderLines(){
-  el('line-rows').innerHTML = ORDER.lines.map(l=>{
+  el('line-rows').innerHTML = visibleLines().map(l=>{
     const st = statusOf(l);
     const gone = state.resolved[l.n] === 'Confirm deletion';
     return `<tr class="click ${state.sel===l.n?'sel':''} ${gone?'gone':''}" data-line="${l.n}">
       <td class="n">${l.n}</td>
       <td><div class="raw">${rawHtml(l)}</div></td>
-      <td style="font-size:13px">${l.parsed.Type}<div class="muted" style="font-size:12px">${l.parsed.Dimensions}</div></td>
+      <td class="readas">${l.parsed.Type}<div class="dim">${l.parsed.Dimensions}</div></td>
       <td class="money">${gone ? '—' : money(l.price)}</td>
       <td><span class="pill p-${st.cls}">${st.lab}</span></td>
     </tr>`;
@@ -461,12 +634,11 @@ function renderDetail(){
   if(!l){ el('detail').innerHTML = '<div class="empty">Select a line to see how it was read.</div>'; return; }
   const r = state.resolved[l.n];
   const conf = Math.round(l.confidence*100);
-  const confColor = conf>=85 ? 'var(--ok)' : conf>=75 ? 'var(--warn)' : 'var(--stop)';
+  const confident = l.confidence >= AUTO_ACCEPT;
+  const confColor = confident ? 'var(--ok)' : conf>=75 ? 'var(--warn)' : 'var(--stop)';
 
-  let h = `<div class="dhead">
-      <h3>Line ${l.n}</h3>
-      <span class="conf" style="color:${confColor}">${conf}% confident</span>
-    </div><div class="dbody">`;
+  let h = `<div class="dhead"><h3>Line ${l.n}</h3>
+      <span class="conf" style="color:${confColor}">${conf}% confident</span></div><div class="dbody">`;
 
   h += '<div class="sec" style="margin-top:0">As received</div>';
   h += `<div class="raw" style="background:#fafbfc;border:1px solid var(--line-2);border-radius:7px;padding:10px">${rawHtml(l)}</div>`;
@@ -484,11 +656,9 @@ function renderDetail(){
   if(l.readings){
     h += '<div class="sec">Candidate readings for “' + l.note + '”</div>';
     l.readings.forEach(rd=>{
-      h += `<div class="reading">
-        <div class="lab">${rd.label}</div>
+      h += `<div class="reading"><div class="lab">${rd.label}</div>
         <div class="bar"><i style="width:${rd.pct}%"></i></div>
-        <div class="dl">${rd.pct}% · ${rd.delta}</div>
-      </div>`;
+        <div class="dl">${rd.pct}% · ${rd.delta}</div></div>`;
     });
   }
 
@@ -504,8 +674,13 @@ function renderDetail(){
           <span class="dot" style="background:var(--ok)"></span><span><b>${r}</b></span></div>
         <div class="acts"><button data-act="__undo">Undo</button></div>`;
     } else {
-      h += '<div class="sec">Resolve</div><div class="acts">';
-      l.actions.forEach(a=> h += `<button data-act="${a}">${a}</button>`);
+      h += '<div class="sec">Resolve</div>';
+      // Below the auto-accept threshold nothing is recommended — asking is the safe default.
+      const rec = confident ? l.actions[0] : (l.actions.find(a=>a.startsWith('Query')) || null);
+      if(!confident) h += `<div class="nudge">No reading clears the ${Math.round(AUTO_ACCEPT*100)}% threshold,
+        so nothing here is recommended. Asking costs one message and does not hold up the rest of the quote.</div>`;
+      h += '<div class="acts">';
+      l.actions.forEach(a=> h += `<button class="${a===rec?'primary':''}" data-act="${a}">${a}</button>`);
       h += '</div>';
     }
   } else {
@@ -530,11 +705,11 @@ function renderTotals(){
   const open = exc.filter(l=>!state.resolved[l.n]).length;
   const auto = ORDER.lines.length - exc.length;
 
-  el('s-lines').textContent = ORDER.lines.length;
-  el('s-auto').innerHTML = auto + ' <small>of ' + ORDER.lines.length + '</small>';
+  el('s-auto').innerHTML = auto + ' <small>of ' + ORDER.lines.length + ' lines</small>';
   el('s-exc').innerHTML = open === 0
     ? '<span style="color:var(--ok)">0</span>'
     : '<span style="color:var(--stop)">'+open+'</span>';
+  el('f-exc-n').textContent = open;
 
   const sub = ORDER.lines.reduce((a,l)=> a + (state.resolved[l.n]==='Confirm deletion' ? 0 : l.price), 0);
   el('q-total').textContent = money(sub * (1+ORDER.taxRate));
@@ -550,18 +725,19 @@ el('send').addEventListener('click', ()=>{
   clearInterval(state.tick);
   const s = Math.floor((Date.now()-state.t0)/1000);
   const mins = Math.max(1, Math.round(s/60));
+  const queries = Object.values(state.resolved).filter(v=>v.startsWith('Query')).length;
   el('done-box').innerHTML = `<div class="done">
     <h3>Price sent to ${ORDER.dealer}</h3>
-    <p>Turned around in about ${mins} minute${mins===1?'':'s'} of desk time. Median response on this
-    account is ${ORDER.medianResponseDays} days. Two queries went back to the dealer alongside the price
-    rather than holding the whole quote behind them.</p>
+    <p>About ${mins} minute${mins===1?'':'s'} of desk time. Median response on this account is
+    ${ORDER.medianResponseDays} days.${queries ? ' ' + queries + ' open question' + (queries===1?'':'s') +
+    ' went back alongside the price rather than holding the whole quote.' : ''}</p>
   </div>`;
   el('send').textContent = 'Sent';
   renderTotals();
   el('done-box').scrollIntoView({behavior:'smooth', block:'center'});
 });
 
-renderLines();
+syncFilter();
 </script>
 </body>
 </html>
