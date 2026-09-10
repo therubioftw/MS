@@ -204,6 +204,32 @@
   .rule{display:flex;gap:9px;font-size:13px;padding:8px 0;border-bottom:1px solid var(--line-2);line-height:1.45}
   .rule:last-child{border-bottom:0}
   .rule .pg{font:600 11px var(--mono);color:var(--ink-3);flex:none;padding-top:2px;width:38px}
+  /* workflow */
+  .daystrip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .slot{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:13px 15px}
+  .slot .when{font:600 11px var(--mono);color:var(--ink-3);letter-spacing:.03em}
+  .slot .what{font-size:14px;font-weight:600;margin:4px 0 3px}
+  .slot .who2{font-size:12px;color:var(--ink-3)}
+  .slot .scr{display:inline-block;font:600 11px var(--mono);background:var(--accent-soft);
+    color:var(--accent);padding:2px 7px;border-radius:5px;margin-top:7px}
+
+  .flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+  @media (max-width:1000px){.flow{grid-template-columns:1fr}.daystrip{grid-template-columns:1fr 1fr}}
+  .fcol h3{margin:0 0 3px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
+  .fcol .csub{font-size:12px;color:var(--ink-3);margin-bottom:10px}
+  .stage{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--line);
+    border-radius:8px;padding:11px 13px;margin-bottom:8px}
+  .stage.built{border-left-color:var(--accent)}
+  .stage.part{border-left-color:#c9a227}
+  .stage.no{border-style:dashed;border-left-style:solid;border-left-color:#d5d9e0;background:#fbfbfc}
+  .stage .st{font-size:13.5px;font-weight:600;margin-bottom:3px}
+  .stage .rl{font-size:11.5px;color:var(--ink-3)}
+  .stage .mk{display:inline-block;font:600 10.5px var(--mono);padding:2px 6px;border-radius:4px;margin-top:7px}
+  .stage.built .mk{background:var(--accent-soft);color:var(--accent)}
+  .stage.part .mk{background:#fdf3e4;color:#8a6f13}
+  .stage.no .mk{background:var(--line-2);color:var(--ink-3)}
+  .stage .cite{font:500 10.5px var(--mono);color:var(--ink-3);margin-top:5px}
+
   .tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap}
   .t-perm{background:#eceef2;color:#3d4658}
   .t-temp{background:#fdf3e4;color:var(--warn)}
@@ -221,20 +247,59 @@
 <header class="top">
   <div class="brand">Materialspace <span>· Manufacturer Portal</span></div>
   <nav>
-    <button data-go="inbox" class="on">Inbox</button>
+    <button data-go="workflow" class="on">Workflow</button>
+    <button data-go="inbox">Inbox</button>
     <button data-go="quote">Quote</button>
     <button data-go="pipeline">Pipeline</button>
     <button data-go="catalog">Catalog</button>
     <a href="narrative.html" style="text-decoration:none;font:inherit;color:var(--ink-2);
       padding:7px 13px;border-radius:6px;margin-left:8px;border-left:1px solid var(--line)">Approach ↗</a>
   </nav>
-  <div class="who"><div class="av">DM</div> Dana M. · Quoting desk</div>
+  <div class="who"><div class="av">MS</div> Every role, one process</div>
 </header>
 
 <main>
 
+<!-- ============ WORKFLOW ============ -->
+<section class="view on" id="v-workflow">
+  <h1>How the work actually runs</h1>
+  <div class="sub">Four screens sit inside a much longer process. This is the whole of it, and what is
+    deliberately not built yet.</div>
+
+  <div class="daystrip">
+    <div class="slot"><div class="when">08:00 · DAILY</div><div class="what">Triage what came in overnight</div>
+      <div class="who2">Quoting desk</div><div class="scr">Inbox</div></div>
+    <div class="slot"><div class="when">08:30–15:00 · DAILY</div><div class="what">Price, resolve, send</div>
+      <div class="who2">Quoting desk · engineering on customs</div><div class="scr">Quote</div></div>
+    <div class="slot"><div class="when">WEEKLY</div><div class="what">Publish catalog and price changes</div>
+      <div class="who2">Sales operations</div><div class="scr">Catalog</div></div>
+    <div class="slot"><div class="when">MONTHLY</div><div class="what">Review forward load with the plant</div>
+      <div class="who2">Plant scheduling</div><div class="scr">Pipeline</div></div>
+  </div>
+
+  <div class="banner" style="background:var(--accent-soft);border-color:#c3d6f5">
+    <div class="dot" style="background:var(--accent);margin-top:7px"></div>
+    <div>
+      <b>One of these is not like the others</b>
+      The quoting desk lives in this product every day. Sales operations touches it weekly, plant scheduling
+      monthly. That difference in cadence is why the quoting screens are the wedge and the other two are
+      support — and why the daily user is not the person who signs the contract.
+    </div>
+  </div>
+
+  <div class="flow" id="flow"></div>
+
+  <div class="sub" style="margin-top:16px">
+    <b style="color:var(--ink)">What is not built, and why.</b>
+    Order entry through delivery is a real part of the manufacturer's day and half of what a dealer means by
+    “service.” It is out of scope here on purpose — the quote loop is where accounts are won or lost, so it
+    goes first. The 24-hour sign-off window is the next thing I would build, because it is the first moment
+    after the quote where the dealer feels served or ignored.
+  </div>
+</section>
+
 <!-- ============ INBOX ============ -->
-<section class="view on" id="v-inbox">
+<section class="view" id="v-inbox">
   <h1>Inbox</h1>
   <div class="sub">Requests waiting on a price. Sorted by how long the dealer has been waiting.</div>
 
@@ -772,11 +837,53 @@ const RULES = [
 ];
 el('rule-rows').innerHTML = RULES.map(r=>`<div class="rule"><span class="pg">${r.pg}</span><span>${r.t}</span></div>`).join('');
 
+// ---------- workflow ----------
+const FLOW = [
+  {h:'Quote loop', s:'Where the account is won or lost.', rows:[
+    {st:'Request arrives', rl:'Dealer → quoting desk', mk:'Inbox', k:'built'},
+    {st:'Read and match to catalog', rl:'Quoting desk', mk:'Quote', k:'built'},
+    {st:'Resolve what stopped', rl:'Quoting desk · engineering on customs', mk:'Quote', k:'built'},
+    {st:'Send price', rl:'Quoting desk', mk:'Quote', k:'built', cite:'firm lines + allowances + open queries'},
+    {st:'Dealer revises, loop repeats', rl:'Dealer → quoting desk', mk:'Quote', k:'built'},
+    {st:'Awarded, or silence', rl:'—', mk:'Pipeline', k:'built', cite:'estimate activity as the signal'}
+  ]},
+  {h:'Order', s:'Their own process, p.71.', rows:[
+    {st:'Order submitted', rl:'Dealer', mk:'Not built', k:'no'},
+    {st:'Entered, confirmation sent', rl:'Order entry', mk:'Not built · phase 1b', k:'no'},
+    {st:'24-hour sign-off window', rl:'Dealer + order entry', mk:'Next thing I would build', k:'no',
+     cite:'p.71 · the first service moment after the quote'},
+    {st:'Scheduled at lead time', rl:'Plant scheduling', mk:'Pipeline · partial', k:'part'},
+    {st:'Materials purchased', rl:'Procurement', mk:'Pipeline · partial', k:'part',
+     cite:'p.71 · 12–14 business days before build'}
+  ]},
+  {h:'Fulfilment', s:'Where “service” is judged.', rows:[
+    {st:'Production begins', rl:'Plant', mk:'Not built', k:'no', cite:'p.71 · 7 days before build'},
+    {st:'Delivery scheduled', rl:'Logistics', mk:'Not built', k:'no', cite:'p.71 · 3–5 days before ship'},
+    {st:'Built, shipped, delivered', rl:'Plant · logistics', mk:'Not built', k:'no'},
+    {st:'Claims and damage', rl:'Customer service', mk:'Not built', k:'no', cite:'p.83'},
+    {st:'Catalog and price upkeep', rl:'Sales operations', mk:'Catalog', k:'built',
+     cite:'runs alongside all of the above'}
+  ]}
+];
+el('flow').innerHTML = FLOW.map(c=>`<div class="fcol"><h3>${c.h}</h3><div class="csub">${c.s}</div>`+
+  c.rows.map(r=>`<div class="stage ${r.k}"><div class="st">${r.st}</div>
+    <div class="rl">${r.rl}</div><span class="mk">${r.mk}</span>
+    ${r.cite?`<div class="cite">${r.cite}</div>`:''}</div>`).join('')+'</div>').join('');
+
 // ---------- nav ----------
+const WHO = {
+  workflow: ['MS','Every role, one process'],
+  inbox:    ['DM','Dana M. · Quoting desk'],
+  quote:    ['DM','Dana M. · Quoting desk'],
+  pipeline: ['MR','Marcus R. · Plant scheduling'],
+  catalog:  ['PN','Priya N. · Sales operations']
+};
 function go(v){
   document.querySelectorAll('.view').forEach(s=>s.classList.remove('on'));
   el('v-'+v).classList.add('on');
   document.querySelectorAll('nav button[data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===v));
+  const w = WHO[v];
+  if(w) document.querySelector('.who').innerHTML = `<div class="av">${w[0]}</div> ${w[1]}`;
   window.scrollTo(0,0);
   if(v==='quote') startClock();
 }
