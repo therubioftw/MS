@@ -43,6 +43,9 @@
   .lede{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
     border-radius:9px;padding:18px 20px;margin:0 0 30px}
   .lede p:last-child{margin-bottom:0}
+  .thesis{font-size:25px;line-height:1.35;font-weight:640;letter-spacing:-.02em;
+    color:var(--ink);margin:0 0 10px;padding:24px 0 0;border-top:2px solid var(--ink)}
+  .thesissub{color:var(--ink-3);font-size:14px;margin:0 0 32px}
 
   .phase{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:11px}
   .phase .hd{display:flex;align-items:baseline;gap:10px;margin-bottom:7px;flex-wrap:wrap}
@@ -87,8 +90,12 @@
 
 <h1>Building a product for manufacturers</h1>
 <p class="deck">How I would start, what I would learn first, and who wins what.
-<br><a href="index.html">The prototype is here</a> — start on the Workflow screen, which shows where its four
+<br><a href="index.html">The prototype is here</a> — start on the Workflow screen, which shows where its
 screens sit in the manufacturer's day and what is deliberately not built.</p>
+
+<p class="thesis">A manufacturer answers every quote request the same day,<br>whatever form it arrives in.</p>
+<p class="thesissub">That is the product. Everything below is either what makes it possible, what it earns
+you afterwards, or what I decided not to build.</p>
 
 <div class="lede">
   <p><strong>Where I landed.</strong> Manufacturers win accounts on speed-to-quote. They cannot quote
@@ -113,6 +120,11 @@ screens sit in the manufacturer's day and what is deliberately not built.</p>
   rather have a firm price in two hours with one line as an allowance, or a complete price in three days? Ask
   three manufacturers how many of their last twenty losses they believe were speed. If neither answer supports
   it, I would rather come back and tell you the premise is wrong than spend a quarter proving it.</p>
+  <p><strong>And if it is wrong, here is what I would build instead.</strong> The same quote screen, sold
+  differently: a quoting-desk efficiency tool pitched to a COO on headcount rather than to sales on win rate.
+  Pipeline work moves up, because factory planning becomes the larger prize once speed is off the table. The
+  catalog work does not move at all — it gates everything either way. Same first phase, different second one,
+  and a different buyer in the room.</p>
 </div>
 
 <h2><span class="num">01</span>What the manufacturer is trying to get</h2>
@@ -239,6 +251,19 @@ answer "three days," the thesis is weaker than stated and the product should be 
   <p>Expect it to be <em>sparse</em>. Most quotes will never generate a request, so the manufacturer should
   never be sold this as pipeline they can rely on. It is a thin, late-stage, high-confidence overlay on top
   of a complete aggregate picture — not a second version of the aggregate.</p>
+</div>
+
+<div class="box b-ok">
+  <b>The number that decides whether any of this was worth doing</b>
+  <p>Time-to-price tells you Phase 1 works. It does not tell you the strategy works. The strategy is that a
+  manufacturer, once they are on the platform, starts telling their own dealers to send requests through it —
+  because that is the lane where they answer same-day.</p>
+  <p>So the number I would put on the wall is <strong>dealers onboarded per manufacturer, per quarter</strong>.
+  If a manufacturer brings four of their hundred dealers in a quarter, this is a SaaS product with a nice ROI
+  story. If they bring forty, it is a distribution engine and the moat argument is real. Same product, and the
+  difference decides how much you should spend on it.</p>
+  <p>It is also the earliest honest read on reason two in your own list, and nothing else in this document
+  measures it.</p>
 </div>
 
 <div class="phase no">
