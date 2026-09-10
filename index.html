@@ -204,6 +204,16 @@
   .rule{display:flex;gap:9px;font-size:13px;padding:8px 0;border-bottom:1px solid var(--line-2);line-height:1.45}
   .rule:last-child{border-bottom:0}
   .rule .pg{font:600 11px var(--mono);color:var(--ink-3);flex:none;padding-top:2px;width:38px}
+  .tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap}
+  .t-perm{background:#eceef2;color:#3d4658}
+  .t-temp{background:#fdf3e4;color:var(--warn)}
+  .t-all{background:var(--line-2);color:var(--ink-2)}
+  .t-dealer{background:#f4eefb;color:#6b3fa0}
+  .pub{border:0;background:var(--accent);color:#fff;font:600 12px inherit;font-family:inherit;
+    padding:5px 11px;border-radius:6px;cursor:pointer}
+  .pub:hover{background:#1a52b5}
+  .meter{background:var(--line-2);border-radius:3px;height:6px;overflow:hidden;margin-top:6px}
+  .meter i{display:block;height:100%;background:var(--warn)}
 </style>
 </head>
 <body>
@@ -398,20 +408,39 @@
   <div class="sub">Your book, as the system currently reads it. You own what it says.</div>
 
   <div class="stats">
-    <div class="stat"><div class="k">SKUs derived</div><div class="v">1,240</div></div>
-    <div class="stat hero"><div class="k">Parsed confidently</div><div class="v">1,118 <small>of 1,240</small></div></div>
-    <div class="stat"><div class="k">Need your confirmation</div><div class="v" style="color:var(--warn)">122</div></div>
-    <div class="stat"><div class="k">Price book age</div><div class="v" style="color:var(--stop)">3 <small>years</small></div></div>
+    <div class="stat"><div class="k">SKUs in catalog</div><div class="v">1,240</div></div>
+    <div class="stat hero"><div class="k">Quoted value on data confirmed &lt;90d</div>
+      <div class="v" style="color:var(--warn)">62<small>%</small></div>
+      <div class="meter"><i style="width:62%"></i></div></div>
+    <div class="stat"><div class="k">Changes awaiting publication</div><div class="v" style="color:var(--stop)">2</div></div>
+    <div class="stat"><div class="k">Active dealer overlays</div><div class="v">11</div></div>
   </div>
 
   <div class="banner">
     <div class="dot" style="background:var(--warn);margin-top:7px"></div>
     <div>
-      <b>Source is the 2023 Specifications Guide, 88 pages</b>
-      Everything below was derived from that one PDF. It carries no prices — those come from a separate
-      price book and a per-dealer multiplier. Nothing here is priced until you connect that.
-      <div class="src">Uploaded Sep 2, 2026 · no newer edition supplied</div>
+      <b>We have read your book. We cannot price it.</b>
+      The 88-page Specifications Guide gives a complete product taxonomy and no prices at all — those live
+      in a separate price book, times a multiplier negotiated per dealer. The taxonomy below is derived from
+      that book plus what your dealers have actually ordered through us. What only you can supply is what
+      any of it costs, and what has changed since 2023.
+      <div class="src">Source: 2023 Specifications Guide, 88 pages · plus 90 days of dealer order traffic</div>
     </div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px">
+    <div style="padding:15px 16px 4px">
+      <h3 style="margin:0 0 3px;font-size:14px">Change feed</h3>
+      <div class="sub" style="margin-bottom:8px">A catalog is not a document you replace. It is a set of
+        changes you publish — some permanent, some temporary, some for one dealer only.</div>
+    </div>
+    <table>
+      <colgroup><col><col style="width:96px"><col style="width:170px"><col style="width:120px">
+        <col style="width:104px"><col style="width:128px"></colgroup>
+      <thead><tr><th>What changed</th><th>Type</th><th>Applies to</th><th>Effective</th>
+        <th style="text-align:right">Open quotes</th><th>Status</th></tr></thead>
+      <tbody id="chg-rows"></tbody>
+    </table>
   </div>
 
   <div class="grid2">
@@ -457,6 +486,17 @@
         <h3>Your dealers keep asking for a finish you do not make</h3>
         <p>Tafisa L582 came up in 22 requests from 7 dealers this quarter. It is not in your book.
         Either they are specifying around you, or there is a line here you are not selling.</p>
+        <p>Only Materialspace can see this. It is not in your catalog, and it is not in any one
+        dealer's orders — it is in the pattern across all of them.</p>
+      </div>
+
+      <div class="card privacy" style="margin-bottom:14px">
+        <h3>Overlays are confidential too</h3>
+        <p style="margin:0 0 8px;color:var(--ink-3)">Eleven of your dealers hold something non-standard —
+        an exclusive size, an approved modification, a negotiated tier.</p>
+        <p style="margin:0;color:var(--ink-3)">Each overlay is visible to you and to that dealer only.
+        Dealers never see each other's terms, and nothing in the aggregate views above is derived from them.
+        The same boundary that protects their pipeline protects your discount ladder.</p>
       </div>
 
       <div class="card" style="padding:16px">
@@ -676,9 +716,43 @@ el('bars').innerHTML = `<div class="cap-line" style="bottom:${CAP/MAXY*100}%"><s
 el('wklabs').innerHTML = LOAD.map(d=>`<div>${d.w}</div>`).join('');
 
 // ---------- catalog ----------
+const CHANGES = [
+  {what:'2026 price book — base cabinets +4.2%', det:'Supersedes the 2023 book across base and vanity lines',
+   perm:'Permanent', scope:'all', sc:'All dealers', eff:'Not set', q:7, live:false},
+  {what:'Cascade TFL discontinued', det:'Successor is Summit TFL · 14 SKUs affected',
+   perm:'Permanent', scope:'all', sc:'All dealers', eff:'Oct 1', q:2, live:false},
+  {what:'Willow paint unavailable', det:'Supplier outage · expected back week 44',
+   perm:'Temporary', scope:'all', sc:'All dealers', eff:'Now → W44', q:3, live:true},
+  {what:'Tafisa panel lead time 6 weeks', det:'Through week 48, then reassess',
+   perm:'Temporary', scope:'all', sc:'All dealers', eff:'Now → W48', q:4, live:true},
+  {what:'3" depth increments on 33" wall', det:'Standing exception approved 2024',
+   perm:'Permanent', scope:'dealer', sc:'Meridian Cabinet Co.', eff:'Standing', q:1, live:true},
+  {what:'Multiplier 0.42 for Q4', det:'Down from 0.45 against a volume commitment',
+   perm:'Temporary', scope:'dealer', sc:'Hudson Kitchen Supply', eff:'Now → Dec 31', q:2, live:true}
+];
+function renderChanges(){
+  el('chg-rows').innerHTML = CHANGES.map((c,i)=>`<tr>
+    <td><b>${c.what}</b><div class="muted" style="font-size:12px">${c.det}</div></td>
+    <td><span class="tag ${c.perm==='Permanent'?'t-perm':'t-temp'}">${c.perm}</span></td>
+    <td><span class="tag ${c.scope==='all'?'t-all':'t-dealer'}">${c.sc}</span></td>
+    <td class="muted nowrap" style="font-size:12.5px">${c.eff}</td>
+    <td class="money">${c.q}</td>
+    <td>${c.live
+      ? '<span class="pill p-ok">Live</span>'
+      : `<button class="pub" data-pub="${i}">Publish</button>`}</td></tr>`).join('');
+  document.querySelectorAll('[data-pub]').forEach(b=>b.addEventListener('click',()=>{
+    CHANGES[+b.dataset.pub].live = true;
+    renderChanges();
+    const pending = CHANGES.filter(c=>!c.live).length;
+    document.querySelectorAll('#v-catalog .stat')[2].querySelector('.v').innerHTML =
+      pending ? '<span style="color:var(--stop)">'+pending+'</span>' : '<span style="color:var(--ok)">0</span>';
+  }));
+}
+renderChanges();
+
 const GAPS = [
   {what:'Tafisa L582 finish', note:'not a finish you offer', req:22, dl:7},
-  {what:'33.875" wall cabinet width', note:'between stock 33" and 36"', req:14, dl:6},
+  {what:'33.875" wall cabinet width', note:'between stock 33" and 36" · Meridian already holds an exception for 3" increments', req:14, dl:6},
   {what:'Bottom panel removable (ADA)', note:'no modification code exists', req:11, dl:4},
   {what:'Notch for toe kick', note:'written as free text every time', req:9, dl:5},
   {what:'Side panels run to floor', note:'no modification code exists', req:8, dl:3}
