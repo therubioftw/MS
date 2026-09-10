@@ -204,6 +204,40 @@
   .rule{display:flex;gap:9px;font-size:13px;padding:8px 0;border-bottom:1px solid var(--line-2);line-height:1.45}
   .rule:last-child{border-bottom:0}
   .rule .pg{font:600 11px var(--mono);color:var(--ink-3);flex:none;padding-top:2px;width:38px}
+  /* dealer-side modal */
+  .scrim{position:fixed;inset:0;background:rgba(16,20,28,.55);z-index:60;
+    display:none;align-items:flex-start;justify-content:center;padding:44px 20px;overflow:auto}
+  .scrim.on{display:flex}
+  .dlg{background:var(--panel);border-radius:12px;max-width:660px;width:100%;
+    box-shadow:0 18px 50px rgba(0,0,0,.28);overflow:hidden}
+  .dlg .flip{background:#2c3444;color:#d7dde8;padding:9px 18px;font-size:12px;
+    display:flex;align-items:center;gap:9px}
+  .dlg .flip b{color:#fff}
+  .dlg .dhd{padding:18px 22px 4px;border-bottom:1px solid var(--line)}
+  .dlg .dhd .cust{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--ink-3);margin-bottom:12px}
+  .dlg .dhd h2{margin:0 0 5px;font-size:17px;letter-spacing:-.01em}
+  .dlg .dhd p{margin:0 0 16px;font-size:13.5px;color:var(--ink-2)}
+  .dlg .body{padding:18px 22px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+  @media (max-width:640px){.cols{grid-template-columns:1fr}}
+  .col{border:1px solid var(--line);border-radius:9px;padding:13px 14px}
+  .col.yes{border-color:#bfe3d0;background:var(--ok-soft)}
+  .col.no{border-color:#f3ceca;background:var(--stop-soft)}
+  .col h4{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+  .col.yes h4{color:var(--ok)} .col.no h4{color:var(--stop)}
+  .col ul{margin:0;padding-left:16px;font-size:13px;line-height:1.5}
+  .col.yes ul{color:#1c5e40} .col.no ul{color:#7d2820}
+  .col li{margin-bottom:5px}
+  .getback{background:var(--accent-soft);border:1px solid #c3d6f5;border-radius:9px;
+    padding:13px 15px;font-size:13.5px;color:#17408c;margin-bottom:14px}
+  .getback b{display:block;margin-bottom:3px}
+  .dlgacts{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+  .dlgacts button{font:inherit;font-size:13.5px;padding:9px 15px;border-radius:8px;
+    border:1px solid var(--line);background:var(--panel);cursor:pointer}
+  .dlgacts button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  .fineprint{font-size:12.5px;color:var(--ink-3);line-height:1.55}
+  .closex{margin-left:auto;background:none;border:0;color:#93a0b4;font-size:18px;cursor:pointer;line-height:1}
+
   /* workflow */
   .daystrip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
   .slot{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:13px 15px}
@@ -464,6 +498,7 @@
         </div>
         <p style="margin:11px 0 0;color:var(--ink-3)">Never shared, at either layer: who else the dealer
         is pricing, their margin, what they quote the builder, or any job they have not asked you to price.</p>
+        <button class="pub" id="see-dealer" style="margin-top:13px">See what the dealer is asked →</button>
       </div>
     </div>
   </div>
@@ -576,6 +611,54 @@
 </section>
 
 </main>
+
+<!-- ============ DEALER-SIDE MODAL ============ -->
+<div class="scrim" id="scrim">
+  <div class="dlg">
+    <div class="flip">
+      <span>↔</span> <b>The other side of the glass</b> — this is what Hudson sees in their own
+      Materialspace account. Not part of the manufacturer product.
+      <button class="closex" id="dlg-x">✕</button>
+    </div>
+    <div class="dhd">
+      <div class="cust"><div class="av" style="background:#dfe4ec">HK</div>
+        Hudson Kitchen Supply · Ronit A., estimating</div>
+      <h2>Smart Cabinetry would like project detail on Vernon Court — Building B</h2>
+      <p>They can already see the totals. They are asking to see this project by name.</p>
+    </div>
+    <div class="body">
+      <div class="cols">
+        <div class="col yes"><h4>They would see</h4><ul>
+          <li>Project name and unit count</li>
+          <li>The scope you asked them to price</li>
+          <li>Whether you are still working the estimate, and when it last changed</li>
+        </ul></div>
+        <div class="col no"><h4>They would never see</h4><ul>
+          <li>Who else you are pricing against them</li>
+          <li>Your margin, or what you quote the builder</li>
+          <li>Any project you have not asked them to price</li>
+          <li>Your other manufacturers’ terms</li>
+        </ul></div>
+      </div>
+
+      <div class="getback">
+        <b>What you get for it</b>
+        A committed ship week on this quote — currently <b style="display:inline">week 46</b> — instead of
+        “subject to capacity.” If they take the slot, it is held for you for 30 days.
+      </div>
+
+      <div class="dlgacts">
+        <button class="primary" id="dlg-share">Share for this project</button>
+        <button id="dlg-agg">Keep totals only</button>
+        <button id="dlg-never">Never ask on this project</button>
+      </div>
+
+      <p class="fineprint" id="dlg-note">Applies to this project only, and you can switch it off at any time.
+      Declining changes nothing else — not your pricing, not your multiplier, not your place in their queue.
+      Your totals continue to count toward their planning either way, without your name attached.</p>
+    </div>
+  </div>
+</div>
 
 <script>
 // ============================================================
@@ -770,6 +853,31 @@ function renderPipe(){
 }
 el('p-agg').addEventListener('click',()=>{state.pipe='agg';renderPipe();});
 el('p-det').addEventListener('click',()=>{state.pipe='det';renderPipe();});
+
+// dealer-side modal
+const scrim = el('scrim');
+el('see-dealer').addEventListener('click',()=>scrim.classList.add('on'));
+el('dlg-x').addEventListener('click',()=>scrim.classList.remove('on'));
+scrim.addEventListener('click',e=>{ if(e.target===scrim) scrim.classList.remove('on'); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') scrim.classList.remove('on'); });
+
+function dealerChoice(msg, ok){
+  el('dlg-note').innerHTML = `<span style="color:${ok?'var(--ok)':'var(--ink-2)'};font-weight:600">${msg}</span>
+    <br>Declining changes nothing else — not your pricing, not your multiplier, not your place in their queue.
+    Your totals continue to count toward their planning either way, without your name attached.`;
+}
+el('dlg-share').addEventListener('click',()=>{
+  dealerChoice('Shared. Smart Cabinetry can now see this project by name, and week 46 is held for 30 days.', true);
+  const v = PIPE.find(p=>p.proj==='Vernon Court — B'); if(v) v.opt = true; renderPipe();
+});
+el('dlg-agg').addEventListener('click',()=>{
+  dealerChoice('Kept to totals. Your units still count toward their factory planning, unattributed.', false);
+  const v = PIPE.find(p=>p.proj==='Vernon Court — B'); if(v) v.opt = false; renderPipe();
+});
+el('dlg-never').addEventListener('click',()=>{
+  dealerChoice('They will not ask again on this project.', false);
+  const v = PIPE.find(p=>p.proj==='Vernon Court — B'); if(v) v.opt = false; renderPipe();
+});
 
 const CAP=100, MAXY=120;
 const LOAD=[{w:38,c:88,p:6},{w:39,c:82,p:11},{w:40,c:79,p:14},{w:41,c:71,p:19},
