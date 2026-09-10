@@ -43,9 +43,11 @@
   .lede{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
     border-radius:9px;padding:18px 20px;margin:0 0 30px}
   .lede p:last-child{margin-bottom:0}
-  .thesis{font-size:25px;line-height:1.35;font-weight:640;letter-spacing:-.02em;
-    color:var(--ink);margin:0 0 10px;padding:24px 0 0;border-top:2px solid var(--ink)}
-  .thesissub{color:var(--ink-3);font-size:14px;margin:0 0 32px}
+  .eyebrow{font:600 12px var(--mono);text-transform:uppercase;letter-spacing:.08em;
+    color:var(--ink-3);margin:0 0 12px}
+  h1.thesis{font-size:29px;line-height:1.3;font-weight:640;letter-spacing:-.022em;
+    color:var(--ink);margin:0 0 12px;max-width:15em}
+  .thesissub{color:var(--ink-2);font-size:15px;margin:0 0 26px;max-width:34em}
 
   .phase{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:11px}
   .phase .hd{display:flex;align-items:baseline;gap:10px;margin-bottom:7px;flex-wrap:wrap}
@@ -88,14 +90,14 @@
 
 <main>
 
-<h1>Building a product for manufacturers</h1>
-<p class="deck">How I would start, what I would learn first, and who wins what.
-<br><a href="index.html">The prototype is here</a> — start on the Workflow screen, which shows where its
-screens sit in the manufacturer's day and what is deliberately not built.</p>
-
-<p class="thesis">A manufacturer answers every quote request the same day,<br>whatever form it arrives in.</p>
+<p class="eyebrow">Building a product for manufacturers</p>
+<h1 class="thesis">A manufacturer answers every quote request the same day, whatever form it arrives in.</h1>
 <p class="thesissub">That is the product. Everything below is either what makes it possible, what it earns
 you afterwards, or what I decided not to build.</p>
+
+<p class="deck">How I would start, what I would learn first, and who wins what.
+<a href="index.html">The prototype is here</a> — open the Workflow screen first; it shows where the screens
+sit in the manufacturer's day and what is deliberately not built.</p>
 
 <div class="lede">
   <p><strong>Where I landed.</strong> Manufacturers win accounts on speed-to-quote. They cannot quote

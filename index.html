@@ -242,8 +242,8 @@
   .daystrip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
   .slot{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:13px 15px}
   .slot .when{font:600 11px var(--mono);color:var(--ink-3);letter-spacing:.03em}
-  .slot .what{font-size:14px;font-weight:600;margin:4px 0 3px}
-  .slot .who2{font-size:12px;color:var(--ink-3)}
+  .slot .what{font-size:15.5px;font-weight:640;margin:5px 0 4px;letter-spacing:-.01em;line-height:1.35}
+  .slot .who2{font-size:12.5px;color:var(--ink-3)}
   .slot .scr{display:inline-block;font:600 11px var(--mono);background:var(--accent-soft);
     color:var(--accent);padding:2px 7px;border-radius:5px;margin-top:7px}
 
@@ -296,17 +296,11 @@
 
 <!-- ============ WORKFLOW ============ -->
 <section class="view on" id="v-workflow">
-  <h1>How the work actually runs</h1>
-  <div class="sub">Four screens sit inside a much longer process. This is the whole of it, and what is
-    deliberately not built yet.</div>
-
-  <div style="border-top:2px solid var(--ink);padding-top:16px;margin-bottom:20px">
-    <div style="font-size:20px;font-weight:640;letter-spacing:-.02em;line-height:1.35">
-      A manufacturer answers every quote request the same day, whatever form it arrives in.</div>
-    <div style="color:var(--ink-3);font-size:13px;margin-top:5px">
-      That is the product. Everything here is what makes it possible, what it earns afterwards,
-      or what I decided not to build.</div>
-  </div>
+  <h1 style="font-size:24px;line-height:1.3;max-width:20em;margin-bottom:7px">
+    A manufacturer answers every quote request the same day, whatever form it arrives in.</h1>
+  <div class="sub" style="font-size:14px;max-width:48em">That is the product. Everything below is what makes
+    it possible, what it earns afterwards, or what I decided not to build — five screens inside a
+    sixteen-stage process.</div>
 
   <div class="daystrip">
     <div class="slot"><div class="when">08:00 · DAILY</div><div class="what">Triage what came in overnight</div>
