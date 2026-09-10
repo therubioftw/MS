@@ -1,0 +1,10 @@
+# MaterialSpace source materials - not for publication
+*.pdf
+image.png
+gemini-code-*.md
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
