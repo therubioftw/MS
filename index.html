@@ -492,13 +492,14 @@
           A factory schedule does not need to know whose job it is.
         </div>
         <div class="layer opt">
-          <b>Project detail — dealer opts in, per project</b>
-          Named project, units, and whether the estimate is still being worked on.
-          In exchange the dealer gets a committed lead time on that quote instead of “subject to capacity.”
+          <b>Project detail — only when the dealer asks for a date</b>
+          You never request this. It arrives because the dealer wanted a committed ship week and holding a
+          slot means the plant has to know which job it is for. Named project, units, and whether the
+          estimate is still live — on that job only.
         </div>
         <p style="margin:11px 0 0;color:var(--ink-3)">Never shared, at either layer: who else the dealer
         is pricing, their margin, what they quote the builder, or any job they have not asked you to price.</p>
-        <button class="pub" id="see-dealer" style="margin-top:13px">See what the dealer is asked →</button>
+        <button class="pub" id="see-dealer" style="margin-top:13px">See how a dealer starts this →</button>
       </div>
     </div>
   </div>
@@ -623,17 +624,23 @@
     <div class="dhd">
       <div class="cust"><div class="av" style="background:#dfe4ec">HK</div>
         Hudson Kitchen Supply · Ronit A., estimating</div>
-      <h2>Smart Cabinetry would like project detail on Vernon Court — Building B</h2>
-      <p>They can already see the totals. They are asking to see this project by name.</p>
+      <h2>Request a firm ship date on Vernon Court — Building B</h2>
+      <p>Smart Cabinetry quoted week 46, subject to capacity. To hold that slot, their plant has to know
+      which job it is being held for.</p>
     </div>
     <div class="body">
+      <div class="getback">
+        <b>What you get</b>
+        Week 46 committed and held for 30 days, instead of “subject to capacity.”
+      </div>
+
       <div class="cols">
-        <div class="col yes"><h4>They would see</h4><ul>
+        <div class="col yes"><h4>Sending this shows them</h4><ul>
           <li>Project name and unit count</li>
-          <li>The scope you asked them to price</li>
-          <li>Whether you are still working the estimate, and when it last changed</li>
+          <li>The scope you already asked them to price</li>
+          <li>Whether you are still working the estimate</li>
         </ul></div>
-        <div class="col no"><h4>They would never see</h4><ul>
+        <div class="col no"><h4>It does not show them</h4><ul>
           <li>Who else you are pricing against them</li>
           <li>Your margin, or what you quote the builder</li>
           <li>Any project you have not asked them to price</li>
@@ -641,21 +648,15 @@
         </ul></div>
       </div>
 
-      <div class="getback">
-        <b>What you get for it</b>
-        A committed ship week on this quote — currently <b style="display:inline">week 46</b> — instead of
-        “subject to capacity.” If they take the slot, it is held for you for 30 days.
-      </div>
-
       <div class="dlgacts">
-        <button class="primary" id="dlg-share">Share for this project</button>
-        <button id="dlg-agg">Keep totals only</button>
-        <button id="dlg-never">Never ask on this project</button>
+        <button class="primary" id="dlg-share">Send request</button>
+        <button id="dlg-agg">Not now</button>
       </div>
 
-      <p class="fineprint" id="dlg-note">Applies to this project only, and you can switch it off at any time.
-      Declining changes nothing else — not your pricing, not your multiplier, not your place in their queue.
-      Your totals continue to count toward their planning either way, without your name attached.</p>
+      <p class="fineprint" id="dlg-note"><b style="color:var(--ink)">Materialspace never asks you to share
+      this.</b> It only goes out when you ask for a date, on the job you asked about, and you can withdraw it
+      at any time. Your volumes already count toward their factory planning either way — as totals, with no
+      name attached.</p>
     </div>
   </div>
 </div>
@@ -862,20 +863,16 @@ scrim.addEventListener('click',e=>{ if(e.target===scrim) scrim.classList.remove(
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') scrim.classList.remove('on'); });
 
 function dealerChoice(msg, ok){
-  el('dlg-note').innerHTML = `<span style="color:${ok?'var(--ok)':'var(--ink-2)'};font-weight:600">${msg}</span>
-    <br>Declining changes nothing else — not your pricing, not your multiplier, not your place in their queue.
-    Your totals continue to count toward their planning either way, without your name attached.`;
+  el('dlg-note').innerHTML = `<b style="color:${ok?'var(--ok)':'var(--ink)'}">${msg}</b>
+    <br>Materialspace never asks you to share this. It only goes out when you ask for a date, and your
+    volumes count toward their factory planning either way — as totals, with no name attached.`;
 }
 el('dlg-share').addEventListener('click',()=>{
-  dealerChoice('Shared. Smart Cabinetry can now see this project by name, and week 46 is held for 30 days.', true);
+  dealerChoice('Request sent. Week 46 is held for you for 30 days.', true);
   const v = PIPE.find(p=>p.proj==='Vernon Court — B'); if(v) v.opt = true; renderPipe();
 });
 el('dlg-agg').addEventListener('click',()=>{
-  dealerChoice('Kept to totals. Your units still count toward their factory planning, unattributed.', false);
-  const v = PIPE.find(p=>p.proj==='Vernon Court — B'); if(v) v.opt = false; renderPipe();
-});
-el('dlg-never').addEventListener('click',()=>{
-  dealerChoice('They will not ask again on this project.', false);
+  dealerChoice('Nothing sent. Week 46 stays subject to capacity.', false);
   const v = PIPE.find(p=>p.proj==='Vernon Court — B'); if(v) v.opt = false; renderPipe();
 });
 
