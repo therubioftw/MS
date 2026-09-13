@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Building for manufacturers — presentation</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --panel:#ffffff; --ink:#14181f; --ink-2:#454c59; --ink-3:#6b7280;
+    --line:#e2e5ea; --line-2:#eef0f3;
+    --accent:#1f5fd0; --accent-soft:#eaf1fd;
+    --ok:#15704a; --ok-soft:#e8f5ee;
+    --warn:#9c5a0b; --warn-soft:#fdf3e4;
+    --stop:#b23328; --stop-soft:#fdecea;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --s: min(.92vw, 1.64vh);         /* one unit that scales with a 16:9 screen */
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);overflow:hidden;
+    font:calc(var(--s)*1.9)/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+
+  .slide{display:none;position:absolute;inset:0;padding:calc(var(--s)*4) calc(var(--s)*8) calc(var(--s)*6);
+    flex-direction:column;justify-content:safe center;max-width:calc(var(--s)*170);margin:0 auto;overflow:auto}
+  .slide.on{display:flex}
+
+  .eyebrow{font:600 calc(var(--s)*1.5) var(--mono);text-transform:uppercase;letter-spacing:.08em;
+    color:var(--ink-3);margin:0 0 calc(var(--s)*2)}
+  h1{font-size:calc(var(--s)*5.2);line-height:1.18;letter-spacing:-.025em;margin:0 0 calc(var(--s)*3);
+    font-weight:660;max-width:16em}
+  h2{font-size:calc(var(--s)*3.6);line-height:1.2;letter-spacing:-.02em;margin:0 0 calc(var(--s)*2.4);font-weight:650}
+  h3{font-size:calc(var(--s)*2.2);margin:0 0 calc(var(--s)*.8);font-weight:640;letter-spacing:-.01em}
+  p{margin:0 0 calc(var(--s)*1.2)}
+  .muted{color:var(--ink-3)}
+  .big{font-size:calc(var(--s)*4.4);font-weight:650;letter-spacing:-.02em;line-height:1.2;margin:0 0 calc(var(--s)*3)}
+
+  .grid{display:grid;gap:calc(var(--s)*2)}
+  .g2{grid-template-columns:1fr 1fr} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:calc(var(--s)*1.2);
+    padding:calc(var(--s)*2.2) calc(var(--s)*2.4)}
+  .card p{font-size:calc(var(--s)*1.75);color:var(--ink-2);margin:0}
+  .card .n{font:600 calc(var(--s)*1.45) var(--mono);color:var(--ink-3);margin-bottom:calc(var(--s)*.8)}
+  .card .gate{font-size:calc(var(--s)*1.55);color:var(--ink-2);margin-top:calc(var(--s)*1.2);
+    padding-top:calc(var(--s)*1);border-top:1px solid var(--line-2)}
+  .card.hl{border-color:#c3d6f5;background:linear-gradient(180deg,#f7faff,#fff)}
+  .note{margin-top:calc(var(--s)*2.6);font-size:calc(var(--s)*1.7);color:var(--ink-2);
+    padding:calc(var(--s)*1.4) calc(var(--s)*2);border-radius:calc(var(--s)*1);background:var(--warn-soft);
+    border:1px solid #f0dcb8}
+  .note.blue{background:var(--accent-soft);border-color:#c3d6f5}
+  .quote{font-size:calc(var(--s)*1.7);color:var(--ink-2);border-left:3px solid var(--line);
+    padding-left:calc(var(--s)*1.4);margin-top:calc(var(--s)*1.2)}
+  .src{font:500 calc(var(--s)*1.35) var(--mono);color:var(--ink-3);margin-top:calc(var(--s)*.8)}
+
+  .rows{display:flex;flex-direction:column;gap:calc(var(--s)*1.1)}
+  .row{display:grid;grid-template-columns:calc(var(--s)*13) 1fr calc(var(--s)*33);gap:calc(var(--s)*2);
+    align-items:baseline;background:var(--panel);border:1px solid var(--line);border-radius:calc(var(--s)*1);
+    padding:calc(var(--s)*1.1) calc(var(--s)*2)}
+  .row .who{font:600 calc(var(--s)*1.45) var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+  .row .q{font-size:calc(var(--s)*1.8);font-weight:600}
+  .row .ch{font-size:calc(var(--s)*1.75);color:var(--ink-2)}
+  .row .ch::before{content:"→ ";color:var(--accent);font-weight:700}
+
+  ul.plain{list-style:none;margin:0;padding:0;display:grid;gap:calc(var(--s)*1.1)}
+  ul.plain li{font-size:calc(var(--s)*2.1);padding-left:calc(var(--s)*2.4);position:relative}
+  ul.plain li::before{content:"";position:absolute;left:0;top:.62em;width:calc(var(--s)*.9);height:calc(var(--s)*.9);
+    border-radius:50%;background:var(--accent)}
+
+  .comp{display:grid;grid-template-columns:calc(var(--s)*30) 1fr 1fr;gap:0}
+  .comp > div{padding:calc(var(--s)*1.2) calc(var(--s)*1.6);border-bottom:1px solid var(--line-2);font-size:calc(var(--s)*1.7)}
+  .comp .h{font:600 calc(var(--s)*1.35) var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
+  .comp .nm{font-weight:640}
+  .comp .plus{color:var(--ok)} .comp .minus{color:var(--stop)}
+
+  /* workflow map */
+  .cad{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--s)*1.6);margin-bottom:calc(var(--s)*1.6)}
+  .cad .card{padding:calc(var(--s)*1.4) calc(var(--s)*1.8)}
+  .cad .when{font:600 calc(var(--s)*1.35) var(--mono);color:var(--ink-3);letter-spacing:.04em}
+  .cad .what{font-size:calc(var(--s)*1.9);font-weight:640;margin:calc(var(--s)*.3) 0}
+  .cad .scr{display:inline-block;font:600 calc(var(--s)*1.2) var(--mono);background:var(--accent-soft);
+    color:var(--accent);padding:calc(var(--s)*.2) calc(var(--s)*.7);border-radius:calc(var(--s)*.5);margin-right:calc(var(--s)*.5)}
+  .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--s)*1.6)}
+  .fcol h3{font:600 calc(var(--s)*1.35) var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin-bottom:calc(var(--s)*1)}
+  .stage{background:var(--panel);border:1px solid var(--line);border-left:calc(var(--s)*.45) solid var(--line);
+    border-radius:calc(var(--s)*.8);padding:calc(var(--s)*.6) calc(var(--s)*1.3);margin-bottom:calc(var(--s)*.6);
+    display:flex;justify-content:space-between;align-items:center;gap:calc(var(--s)*1);font-size:calc(var(--s)*1.6)}
+  .stage.built{border-left-color:var(--accent)}
+  .stage.part{border-left-color:#c9a227}
+  .stage.no{border-style:dashed;border-left-style:solid;border-left-color:#d5d9e0;background:#fbfbfc;color:var(--ink-3)}
+  .stage .mk{font:600 calc(var(--s)*1.1) var(--mono);padding:calc(var(--s)*.15) calc(var(--s)*.6);border-radius:calc(var(--s)*.4);white-space:nowrap}
+  .stage.built .mk{background:var(--accent-soft);color:var(--accent)}
+  .stage.part .mk{background:#fdf3e4;color:#8a6f13}
+  .stage.no .mk{background:var(--line-2);color:var(--ink-3)}
+
+  .btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:640;
+    font-size:calc(var(--s)*2.4);padding:calc(var(--s)*1.6) calc(var(--s)*3.2);border-radius:calc(var(--s)*1)}
+  .btn:hover{background:#1a52b5}
+
+  /* chrome */
+  .bar{position:fixed;left:0;right:0;bottom:0;height:calc(var(--s)*4.4);display:flex;align-items:center;
+    gap:calc(var(--s)*2);padding:0 calc(var(--s)*3);font-size:calc(var(--s)*1.3);color:var(--ink-3);z-index:5}
+  .prog{flex:1;height:calc(var(--s)*.35);background:var(--line);border-radius:9px;overflow:hidden}
+  .prog i{display:block;height:100%;background:var(--accent);transition:width .25s}
+  .navbtn{background:none;border:1px solid var(--line);color:var(--ink-2);border-radius:calc(var(--s)*.6);
+    font:inherit;padding:calc(var(--s)*.5) calc(var(--s)*1.2);cursor:pointer}
+  .navbtn:hover{background:var(--panel)}
+  #count{font-family:var(--mono);min-width:5em;text-align:right}
+  .g4 .card{padding:calc(var(--s)*1.7) calc(var(--s)*1.8)}
+  .g4 .card h3{font-size:calc(var(--s)*1.9)}
+  .g4 .card p{font-size:calc(var(--s)*1.6)}
+  .g4 .card .gate{font-size:calc(var(--s)*1.5)}
+  ul.inlist{margin:0;padding-left:calc(var(--s)*2.4);font-size:calc(var(--s)*1.8);color:var(--ink-2)}
+  ul.inlist li{margin-bottom:calc(var(--s)*.7)}
+  code{font-family:var(--mono);font-size:.92em;background:var(--line-2);padding:0 calc(var(--s)*.4);border-radius:calc(var(--s)*.3)}
+  h3.sm{font-size:calc(var(--s)*1.95)}
+  .g2 ul.inlist{font-size:calc(var(--s)*2)}
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<section class="slide">
+  <p class="eyebrow">Materialspace · Building a product for manufacturers</p>
+  <h1>A manufacturer answers every quote request the same day, whatever form it arrives in.</h1>
+  <p class="muted" style="font-size:calc(var(--s)*2)">Roy · September 2026 · A written version follows after today.</p>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <h2>What manufacturers want, and why it's hard today</h2>
+  <div class="grid g2">
+    <div class="card">
+      <div class="n">WHAT THEY WANT</div>
+      <ul class="inlist">
+        <li>Get a price back before the other manufacturers</li>
+        <li>Be the one that's easy to work with</li>
+        <li>Know what orders are coming</li>
+        <li>Keep their catalog accurate</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="n">WHY QUOTES ARE SLOW</div>
+      <h3 class="sm">The price isn't known when quoting</h3>
+      <p>It depends on a separate price book and each dealer's discount. Smart's ordering system asks the dealer
+      to type in an estimated multiplier.</p>
+      <h3 class="sm" style="margin-top:calc(var(--s)*1.4)">Non-standard items wait for a person</h3>
+      <div class="quote" style="margin-top:0">"…no pricing or cubes will show until we approve or correct the item."</div>
+      <div class="src">Smart spec book, page 73</div>
+    </div>
+  </div>
+  <div class="note blue" style="margin-top:calc(var(--s)*1.8)">Materialspace already works with the dealers sending these requests. This is the
+  manufacturer's side.</div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <h2>Where this fits in a manufacturer's day</h2>
+  <div class="cad">
+    <div class="card"><div class="when">EVERY DAY</div><div class="what">Quoting team</div><span class="scr">Inbox</span><span class="scr">Quote</span></div>
+    <div class="card"><div class="when">WEEKLY</div><div class="what">Sales operations</div><span class="scr">Catalog</span></div>
+    <div class="card"><div class="when">MONTHLY</div><div class="what">Plant scheduling</div><span class="scr">Pipeline</span></div>
+  </div>
+  <div class="flow">
+    <div class="fcol"><h3>Quoting</h3>
+      <div class="stage built">Request arrives<span class="mk">built</span></div>
+      <div class="stage built">Read and match<span class="mk">built</span></div>
+      <div class="stage built">Resolve problem lines<span class="mk">built</span></div>
+      <div class="stage built">Send price<span class="mk">built</span></div>
+      <div class="stage built">Dealer revises<span class="mk">built</span></div>
+    </div>
+    <div class="fcol"><h3>Order</h3>
+      <div class="stage no">Order submitted<span class="mk">not built</span></div>
+      <div class="stage no">Order entered<span class="mk">not built</span></div>
+      <div class="stage no" style="border-color:#c3d6f5;border-left-color:var(--accent);color:var(--ink)">24-hour review<span class="mk" style="background:var(--accent-soft);color:var(--accent)">next</span></div>
+      <div class="stage part">Scheduled<span class="mk">partly</span></div>
+      <div class="stage part">Materials bought<span class="mk">partly</span></div>
+    </div>
+    <div class="fcol"><h3>Delivery</h3>
+      <div class="stage no">Production<span class="mk">not built</span></div>
+      <div class="stage no">Delivery<span class="mk">not built</span></div>
+      <div class="stage no">Claims<span class="mk">not built</span></div>
+    </div>
+  </div>
+  <p class="muted" style="margin-top:calc(var(--s)*1.4);font-size:calc(var(--s)*1.7)">I built the quoting part,
+  because that's where jobs are won or lost. Order steps: Smart's process, page 71.</p>
+</section>
+
+<!-- 4 -->
+<section class="slide" style="align-items:flex-start">
+  <p class="eyebrow">Demo</p>
+  <p class="big">Here's the quoting part.</p>
+  <p class="muted" style="font-size:calc(var(--s)*2);margin-bottom:calc(var(--s)*3.4)">Every line item comes from the
+  marked-up order document you sent. Dealer names and volumes are made up.</p>
+  <a class="btn" href="index.html" target="_blank" rel="noopener">Open the prototype ↗</a>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <h2>What the messy data means for what we can build</h2>
+  <div class="grid g3">
+    <div class="card"><div class="n">HAND-MARKED ORDERS</div><h3>Notes can mean more than one thing</h3>
+      <p>"F-L" could be finished left or hinge left. The product shows its readings and asks, instead of guessing.</p></div>
+    <div class="card"><div class="n">CATALOG CODES</div><h3>Some codes read two ways</h3>
+      <p><code>W241224B</code> has no separators between sizes. Only the manufacturer can confirm which reading is right.</p></div>
+    <div class="card"><div class="n">PRICES</div><h3>Not in the catalog at all</h3>
+      <p>They live in a separate price book, times each dealer's discount. Without it, nothing prices automatically.</p></div>
+  </div>
+  <div class="note">So full automation isn't a realistic promise. The product prices what's certain, stops on
+  what isn't, and keeps every correction so the same problem isn't solved twice.</div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <p class="eyebrow">The assumption to confirm first</p>
+  <p class="big">Faster quotes win more jobs. The question is how many.</p>
+  <div class="grid g2">
+    <div class="card">
+      <h3>How I'd check</h3>
+      <p>Ask dealers, since they're the ones choosing:</p>
+      <ul class="inlist" style="margin-top:calc(var(--s)*1)">
+        <li>Why did you choose that manufacturer on your last few jobs?</li>
+        <li>A firm price in 2 hours with one line open, or a complete price in 3 days?</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>If speed matters less than we think</h3>
+      <p>Sell the same tool as a way to save work: the same team handles more quotes without hiring. That's a
+      pitch to operations rather than sales.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <h2>What I'd want to learn first</h2>
+  <div class="rows">
+    <div class="row"><span class="who">Dealers</span><span class="q">Why did you choose that manufacturer?</span>
+      <span class="ch">whether speed really is the selling point</span></div>
+    <div class="row"><span class="who">Manufacturers</span><span class="q">Who prepares your quotes: your team, or reps?</span>
+      <span class="ch">who the user actually is</span></div>
+    <div class="row"><span class="who">Manufacturers</span><span class="q">Would you connect your price book?</span>
+      <span class="ch">the full product, or a smaller one</span></div>
+    <div class="row"><span class="who">Manufacturers</span><span class="q">Would you ask dealers to use a platform?</span>
+      <span class="ch">whether this becomes a way to grow</span></div>
+  </div>
+  <p class="muted" style="margin-top:calc(var(--s)*2.4);font-size:calc(var(--s)*1.7)">Before any interviews: check
+  what Materialspace's own data can already answer, such as which manufacturer most of your dealers buy from.</p>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <h2>How I'd break it down, and where I'd start</h2>
+  <div class="grid g4">
+    <div class="card hl"><div class="n">PHASE 0 · START HERE</div><h3>Show them what we already know</h3>
+      <p>One manufacturer reviews their catalog and connects their prices.</p>
+      <div class="gate">Next: once prices are connected</div></div>
+    <div class="card"><div class="n">PHASE 1</div><h3>Quote requests and problem lines</h3>
+      <p>Requests in any form, since most dealers aren't on Materialspace yet. Email address and PDF upload first.</p>
+      <div class="gate">Next: once enough requests come through</div></div>
+    <div class="card"><div class="n">PHASE 2</div><h3>Expected volume for planning</h3>
+      <p>Weekly totals against factory capacity.</p>
+      <div class="gate">Depends on: how they schedule production</div></div>
+    <div class="card"><div class="n">PHASE 3</div><h3>Dealer activity per project</h3>
+      <p>Only if dealers are comfortable sharing it.</p>
+      <div class="gate">Depends on: dealer interviews</div></div>
+  </div>
+  <div class="grid g2" style="margin-top:calc(var(--s)*2.2)">
+    <div class="note blue" style="margin:0"><b>Why Phase 0 first:</b> the full product depends on prices, it's the
+    first reason in your brief, only the manufacturer can agree to it, and there's little to build.</div>
+    <div class="note" style="margin:0"><b>No prices connected?</b> A smaller product still works: clean, checked
+    orders they price in their own system. No timelines yet: I'd size these with engineering.</div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <h2>How I'd know it's working</h2>
+  <div class="grid g3" style="margin-bottom:calc(var(--s)*2.4)">
+    <div class="card"><div class="n">PRODUCT</div><h3>Time to quote</h3><p>From request to price. Target: the same working day.</p></div>
+    <div class="card"><div class="n">PRODUCT</div><h3>Lines priced automatically</h3><p>How much manual work is saved.</p></div>
+    <div class="card"><div class="n">PRODUCT</div><h3>Questions per quote</h3><p>Too many means the reading or the catalog isn't good enough.</p></div>
+  </div>
+  <div class="card hl">
+    <div class="n">STRATEGY</div>
+    <h3>Dealers joining Materialspace through a manufacturer's invitation, per quarter</h3>
+    <p>A few: a useful product to sell. Dozens: the main way the platform grows, and hard for anyone to replace.</p>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <h2>Competition</h2>
+  <div class="card" style="padding:calc(var(--s)*.6) calc(var(--s)*1.2)">
+    <div class="comp">
+      <div class="h">Alternative</div><div class="h">Has</div><div class="h">Missing</div>
+      <div class="nm">Keeping things as they are</div><div class="plus">Free, and works well enough</div><div class="minus">Slow, lots of retyping</div>
+      <div class="nm">2020 (Cyncly)</div><div class="plus">Catalogs and dealers</div><div class="minus">Built for design, and disliked</div>
+      <div class="nm">Portals (KitchenDEV, Cabentry)</div><div class="plus">Quoting and ordering</div><div class="minus">Dealers must come to them</div>
+      <div class="nm">Conexiom</div><div class="plus">Reads messy orders</div><div class="minus">Knows nothing about cabinets</div>
+      <div class="nm" style="border:0">Parspec</div><div class="plus" style="border:0">Same idea, in electrical</div><div class="minus" style="border:0">Built for reps, not manufacturers</div>
+    </div>
+  </div>
+  <div class="grid g2" style="margin-top:calc(var(--s)*2.2)">
+    <div class="note blue" style="margin:0"><b>The gap:</b> pricing multifamily projects in volume, accepting any
+    format, with dealers and manufacturers on one platform.</div>
+    <div class="note blue" style="margin:0"><b>Why manufacturers must be users here:</b> cabinets are configured, and
+    non-standard quotes get stuck at the manufacturer.</div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <h2>Who wins what</h2>
+  <div class="grid g4" style="margin-bottom:calc(var(--s)*2.4)">
+    <div class="card"><h3>Dealer</h3><p>Faster prices, fewer rejected orders.</p><div class="gate">Risk: what manufacturers can see</div></div>
+    <div class="card"><h3>Manufacturer</h3><p>Wins more jobs, less manual work, sees what's coming.</p><div class="gate">Risk: relying on another company</div></div>
+    <div class="card"><h3>Materialspace</h3><p>Confirmed catalogs, both sides, new dealers.</p><div class="gate">Risk: responsible when a price is wrong</div></div>
+    <div class="card"><h3>Sales reps</h3><p>Faster quotes, or a way to bring dealers in.</p><div class="gate">Risk: may see it as a threat</div></div>
+  </div>
+  <div class="note blue">
+    <b>Open question:</b> would dealers mind a manufacturer seeing whether a job is still active?
+    If not, show it. If they would, share it only when a dealer asks for something in return, like a firm ship
+    date. Materialspace never asks on the manufacturer's behalf.
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="slide">
+  <h2>What could go wrong</h2>
+  <ul class="plain">
+    <li>Reading mistakes that look correct, and surface months later</li>
+    <li>Dealers seeing it as a way for manufacturers to go around them</li>
+    <li>Manufacturers not wanting to do setup work this early</li>
+    <li>2020 adding automated quoting to the catalogs it already has</li>
+    <li>Manufacturers worried about relying on us: their data, their name on quotes, no paid ranking</li>
+  </ul>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+  <div class="grid g2" style="margin-bottom:calc(var(--s)*4)">
+    <div class="card"><h3>What's real</h3><p>Every line item, rule and page reference comes from the two documents
+    you sent.</p></div>
+    <div class="card"><h3>What's made up</h3><p>Dealer names, volumes, and the numbers on the Catalog and Pipeline
+    screens.</p></div>
+  </div>
+  <p class="big" style="margin:0">Questions</p>
+  <p class="muted" style="font-size:calc(var(--s)*2)">A written version will follow today.</p>
+</section>
+
+<div class="bar">
+  <button class="navbtn" id="prev" aria-label="Previous slide">←</button>
+  <button class="navbtn" id="next" aria-label="Next slide">→</button>
+  <div class="prog"><i id="progfill"></i></div>
+  <span id="count"></span>
+</div>
+
+<script>
+const slides = [...document.querySelectorAll('.slide')];
+let cur = 0;
+function show(i){
+  cur = Math.max(0, Math.min(slides.length-1, i));
+  slides.forEach((s,k)=>s.classList.toggle('on', k===cur));
+  document.getElementById('count').textContent = (cur+1) + ' / ' + slides.length;
+  document.getElementById('progfill').style.width = ((cur+1)/slides.length*100) + '%';
+  history.replaceState(null,'','#'+(cur+1));
+}
+document.addEventListener('keydown', e=>{
+  if(['ArrowRight','PageDown',' '].includes(e.key)){ e.preventDefault(); show(cur+1); }
+  if(['ArrowLeft','PageUp'].includes(e.key)){ e.preventDefault(); show(cur-1); }
+  if(e.key==='Home') show(0);
+  if(e.key==='End') show(slides.length-1);
+});
+document.getElementById('next').addEventListener('click',()=>show(cur+1));
+document.getElementById('prev').addEventListener('click',()=>show(cur-1));
+const start = parseInt(location.hash.slice(1),10);
+show(Number.isFinite(start) ? start-1 : 0);
+</script>
+</body>
+</html>
