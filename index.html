@@ -413,8 +413,8 @@
         <h3>Week 47 onward is nearly all unconfirmed</h3>
         <p>Confirmed work runs out around week 45. Everything after that is pipeline —
         including a 120-unit job you priced 239 days ago, with no update since.</p>
-        <p>Your own process needs materials purchased 12–14 business days before the build date.
-        On a $1.41M order that is roughly two weeks of notice.</p>
+        <p>Materials for each order are bought 12–14 business days before it's built. If that 120-unit job
+        lands, it needs materials and a production slot in those same weeks.</p>
         <p style="font-size:12px;font-weight:500">From your order process (spec book, page 71).</p>
       </div>
 
@@ -742,6 +742,7 @@ const AGG = [
   {per:'Weeks 50–51', conf:44000,   pipe:1771000,units:186}
 ];
 
+const fmtMoney = v => v>=1e6 ? "$"+(v/1e6).toFixed(2)+"M" : "$"+Math.round(v/1000)+"k";
 function renderPipe(){
   const agg = state.pipe==='agg';
   el('p-agg').classList.toggle('on',agg); el('p-det').classList.toggle('on',!agg);
@@ -757,8 +758,8 @@ function renderPipe(){
     el('pipe-rows').innerHTML = AGG.map(a=>{
       const pct = Math.round(a.conf/(a.conf+a.pipe)*100);
       return `<tr><td><b>${a.per}</b></td>
-        <td class="money">$${(a.conf/1000).toFixed(0)}k</td>
-        <td class="money muted">$${(a.pipe/1000).toFixed(0)}k</td>
+        <td class="money">${fmtMoney(a.conf)}</td>
+        <td class="money muted">${fmtMoney(a.pipe)}</td>
         <td class="money">${a.units}</td>
         <td colspan="2"><div style="background:var(--line-2);border-radius:3px;height:6px;overflow:hidden">
           <div style="width:${pct}%;height:100%;background:${pct<30?'var(--stop)':'var(--accent)'}"></div></div>
