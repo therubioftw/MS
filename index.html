@@ -238,32 +238,6 @@
   .fineprint{font-size:12.5px;color:var(--ink-3);line-height:1.55}
   .closex{margin-left:auto;background:none;border:0;color:#93a0b4;font-size:18px;cursor:pointer;line-height:1}
 
-  /* workflow */
-  .daystrip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-  .slot{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:13px 15px}
-  .slot .when{font:600 11px var(--mono);color:var(--ink-3);letter-spacing:.03em}
-  .slot .what{font-size:15.5px;font-weight:640;margin:5px 0 4px;letter-spacing:-.01em;line-height:1.35}
-  .slot .who2{font-size:12.5px;color:var(--ink-3)}
-  .slot .scr{display:inline-block;font:600 11px var(--mono);background:var(--accent-soft);
-    color:var(--accent);padding:2px 7px;border-radius:5px;margin-top:7px}
-
-  .flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
-  @media (max-width:1000px){.flow{grid-template-columns:1fr}.daystrip{grid-template-columns:1fr 1fr}}
-  .fcol h3{margin:0 0 3px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
-  .fcol .csub{font-size:12px;color:var(--ink-3);margin-bottom:10px}
-  .stage{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--line);
-    border-radius:8px;padding:11px 13px;margin-bottom:8px}
-  .stage.built{border-left-color:var(--accent)}
-  .stage.part{border-left-color:#c9a227}
-  .stage.no{border-style:dashed;border-left-style:solid;border-left-color:#d5d9e0;background:#fbfbfc}
-  .stage .st{font-size:13.5px;font-weight:600;margin-bottom:3px}
-  .stage .rl{font-size:11.5px;color:var(--ink-3)}
-  .stage .mk{display:inline-block;font:600 10.5px var(--mono);padding:2px 6px;border-radius:4px;margin-top:7px}
-  .stage.built .mk{background:var(--accent-soft);color:var(--accent)}
-  .stage.part .mk{background:#fdf3e4;color:#8a6f13}
-  .stage.no .mk{background:var(--line-2);color:var(--ink-3)}
-  .stage .cite{font:500 10.5px var(--mono);color:var(--ink-3);margin-top:5px}
-
   .tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap}
   .t-perm{background:#eceef2;color:#3d4658}
   .t-temp{background:#fdf3e4;color:var(--warn)}
@@ -281,61 +255,20 @@
 <header class="top">
   <div class="brand">Materialspace <span>· Manufacturer Portal</span></div>
   <nav>
-    <button data-go="workflow" class="on">Workflow</button>
-    <button data-go="inbox">Inbox</button>
+    <button data-go="inbox" class="on">Inbox</button>
     <button data-go="quote">Quote</button>
     <button data-go="pipeline">Pipeline</button>
     <button data-go="catalog">Catalog</button>
     <a href="narrative.html" style="text-decoration:none;font:inherit;color:var(--ink-2);
       padding:7px 13px;border-radius:6px;margin-left:8px;border-left:1px solid var(--line)">Approach ↗</a>
   </nav>
-  <div class="who"><div class="av">MS</div> Every role, one process</div>
+  <div class="who"><div class="av">DM</div> Dana M. · Quoting desk</div>
 </header>
 
 <main>
 
-<!-- ============ WORKFLOW ============ -->
-<section class="view on" id="v-workflow">
-  <h1 style="font-size:24px;line-height:1.3;max-width:20em;margin-bottom:7px">
-    A manufacturer answers every quote request the same day, whatever form it arrives in.</h1>
-  <div class="sub" style="font-size:14px;max-width:48em">That is the product. Everything below is what makes
-    it possible, what it earns afterwards, or what I decided not to build — five screens inside a
-    sixteen-stage process.</div>
-
-  <div class="daystrip">
-    <div class="slot"><div class="when">08:00 · DAILY</div><div class="what">Triage what came in overnight</div>
-      <div class="who2">Quoting desk</div><div class="scr">Inbox</div></div>
-    <div class="slot"><div class="when">08:30–15:00 · DAILY</div><div class="what">Price, resolve, send</div>
-      <div class="who2">Quoting desk · engineering on customs</div><div class="scr">Quote</div></div>
-    <div class="slot"><div class="when">WEEKLY</div><div class="what">Publish catalog and price changes</div>
-      <div class="who2">Sales operations</div><div class="scr">Catalog</div></div>
-    <div class="slot"><div class="when">MONTHLY</div><div class="what">Review forward load with the plant</div>
-      <div class="who2">Plant scheduling</div><div class="scr">Pipeline</div></div>
-  </div>
-
-  <div class="banner" style="background:var(--accent-soft);border-color:#c3d6f5">
-    <div class="dot" style="background:var(--accent);margin-top:7px"></div>
-    <div>
-      <b>One of these is not like the others</b>
-      The quoting desk lives in this product every day. Sales operations touches it weekly, plant scheduling
-      monthly. That difference in cadence is why the quoting screens are the wedge and the other two are
-      support — and why the daily user is not the person who signs the contract.
-    </div>
-  </div>
-
-  <div class="flow" id="flow"></div>
-
-  <div class="sub" style="margin-top:16px">
-    <b style="color:var(--ink)">What is not built, and why.</b>
-    Order entry through delivery is a real part of the manufacturer's day and half of what a dealer means by
-    “service.” It is out of scope here on purpose — the quote loop is where accounts are won or lost, so it
-    goes first. The 24-hour sign-off window is the next thing I would build, because it is the first moment
-    after the quote where the dealer feels served or ignored.
-  </div>
-</section>
-
 <!-- ============ INBOX ============ -->
-<section class="view" id="v-inbox">
+<section class="view on" id="v-inbox">
   <h1>Inbox</h1>
   <div class="sub">Requests waiting on a price. Sorted by how long the dealer has been waiting.</div>
 
@@ -434,20 +367,20 @@
 <!-- ============ PIPELINE ============ -->
 <section class="view" id="v-pipeline">
   <h1>Pipeline &amp; factory load</h1>
-  <div class="sub">What is coming, and when. Planning runs on totals, not on names.</div>
+  <div class="sub">What's coming, and when.</div>
 
   <div class="stats">
     <div class="stat"><div class="k">Open quoted value</div><div class="v">$3.12M</div></div>
-    <div class="stat hero"><div class="k">Still active</div><div class="v">5 <small>of 8 quotes</small></div></div>
-    <div class="stat"><div class="k">No signal 90+ days</div><div class="v" style="color:var(--stop)">2</div></div>
-    <div class="stat"><div class="k">Committed, next 12 wks</div><div class="v">$1.04M</div></div>
+    <div class="stat"><div class="k">Open quotes</div><div class="v">8</div></div>
+    <div class="stat"><div class="k">Dealer activity shared</div><div class="v" id="s-shared">—</div></div>
+    <div class="stat hero"><div class="k">Committed, next 12 wks</div><div class="v">$1.04M</div></div>
   </div>
 
   <div class="grid2">
     <div>
       <div class="card chart" style="margin-bottom:14px">
         <h3>Factory load, next 14 weeks</h3>
-        <div class="cap">Confirmed orders, plus open quotes weighted by how recently the dealer touched the estimate. No dealer attribution — this is everything the plant needs to plan.</div>
+        <div class="cap">Confirmed orders, plus open quotes weighted by how recently the dealer worked on the estimate.</div>
         <div class="bars" id="bars"></div>
         <div class="wklabs" id="wklabs"></div>
         <div class="legend">
@@ -459,16 +392,16 @@
 
       <div class="toolbar">
         <div class="seg">
-          <button id="p-agg" class="on">Aggregate</button>
-          <button id="p-det">Project detail</button>
+          <button id="p-agg" class="on">Weekly totals</button>
+          <button id="p-det">By project</button>
         </div>
         <span class="muted" style="font-size:12.5px" id="pipe-note"></span>
       </div>
 
       <div class="card">
         <table id="pipe-table">
-          <colgroup><col><col style="width:150px"><col style="width:60px">
-            <col style="width:105px"><col style="width:125px"><col style="width:120px"></colgroup>
+          <colgroup><col><col style="width:190px"><col style="width:56px">
+            <col style="width:100px"><col style="width:150px"><col style="width:112px"></colgroup>
           <thead id="pipe-head"></thead>
           <tbody id="pipe-rows"></tbody>
         </table>
@@ -479,30 +412,29 @@
       <div class="callout" style="margin-bottom:14px">
         <h3>Week 47 onward is nearly all unconfirmed</h3>
         <p>Confirmed work runs out around week 45. Everything after that is pipeline —
-        including one 120-unit job priced 239 days ago with no signal since.</p>
+        including a 120-unit job you priced 239 days ago, with no update since.</p>
         <p>Your own process needs materials purchased 12–14 business days before the build date.
         On a $1.41M order that is roughly two weeks of notice.</p>
-        <p style="font-size:12px;font-weight:500">Timeline source: Specifications Guide p.71 — order process.</p>
+        <p style="font-size:12px;font-weight:500">From your order process (spec book, page 71).</p>
       </div>
 
       <div class="card privacy">
-        <h3>Two layers, deliberately</h3>
-        <p style="margin:0 0 2px;color:var(--ink-3)">Attribution is what makes dealers refuse. Planning does not need it.</p>
+        <h3>What you can see</h3>
         <div class="layer">
-          <b>Aggregate — on by default</b>
-          Total units and value landing per week, across every dealer. No names, no per-project detail.
-          A factory schedule does not need to know whose job it is.
+          <b>Projects you quoted</b>
+          Project, dealer, units and value, because the request came to you.
+        </div>
+        <div class="layer">
+          <b>Weekly totals</b>
+          Expected volume per week, across all dealers. No dealer is named.
         </div>
         <div class="layer opt">
-          <b>Project detail — only when the dealer asks for a date</b>
-          You never request this. It arrives because the dealer wanted a committed ship week and holding a
-          slot means the plant has to know which job it is for. Named project, units, and whether the
-          estimate is still live — on that job only, and only once you commit the week. Decline and you
-          keep the totals you already had.
+          <b>Whether a dealer is still working on a job</b>
+          Only if the dealer shares it, when they ask you for a firm ship date.
         </div>
-        <p style="margin:11px 0 0;color:var(--ink-3)">Never shared, at either layer: who else the dealer
-        is pricing, their margin, what they quote the builder, or any job they have not asked you to price.</p>
-        <button class="pub" id="see-dealer" style="margin-top:13px">See how a dealer starts this →</button>
+        <p style="margin:11px 0 0;color:var(--ink-3)">Not shown: who else a dealer is pricing, their
+        margins, which builder the job is for, or jobs they haven't sent you.</p>
+        <button class="pub" id="see-dealer" style="margin-top:13px">Preview what dealers see →</button>
       </div>
     </div>
   </div>
@@ -511,39 +443,36 @@
 <!-- ============ CATALOG ============ -->
 <section class="view" id="v-catalog">
   <h1>Catalog</h1>
-  <div class="sub">Your book, as the system currently reads it. You own what it says.</div>
+  <div class="sub">Your catalog as Materialspace reads it. Review it, correct it, and record changes.</div>
 
   <div class="stats">
-    <div class="stat"><div class="k">SKUs in catalog</div><div class="v">1,240</div></div>
-    <div class="stat hero"><div class="k">Quoted value on data confirmed &lt;90d</div>
-      <div class="v" style="color:var(--warn)">62<small>%</small></div>
-      <div class="meter"><i style="width:62%"></i></div></div>
-    <div class="stat"><div class="k">Changes awaiting publication</div><div class="v" style="color:var(--stop)">2</div></div>
-    <div class="stat"><div class="k">Active dealer overlays</div><div class="v">11</div></div>
+    <div class="stat"><div class="k">Items in catalog</div><div class="v">1,240</div></div>
+    <div class="stat"><div class="k">Read with confidence</div><div class="v">1,118 <small>of 1,240</small></div></div>
+    <div class="stat hero"><div class="k">Need your review</div><div class="v" style="color:var(--warn)">122</div></div>
+    <div class="stat"><div class="k">Price book</div><div class="v" style="color:var(--ok)">Connected <small>2023 prices</small></div></div>
   </div>
 
   <div class="banner">
     <div class="dot" style="background:var(--warn);margin-top:7px"></div>
     <div>
-      <b>We have read your book. We cannot price it.</b>
-      The 88-page Specifications Guide gives a complete product taxonomy and no prices at all — those live
-      in a separate price book, times a multiplier negotiated per dealer. The taxonomy below is derived from
-      that book plus what your dealers have actually ordered through us. What only you can supply is what
-      any of it costs, and what has changed since 2023.
-      <div class="src">Source: 2023 Specifications Guide, 88 pages · plus 90 days of dealer order traffic</div>
+      <b>122 items need your review</b>
+      These were read from your spec book, but not with enough confidence to price them automatically. Until
+      you confirm them, any quote that includes one stops for someone on your team to check.
+      <div class="src">Read from: 2023 Specifications Guide (88 pages), plus 90 days of dealer requests</div>
+      <button class="pub" style="margin-top:9px" onclick="document.getElementById('confirm').scrollIntoView({behavior:'smooth',block:'center'})">Review items</button>
     </div>
   </div>
 
   <div class="card" style="margin-bottom:14px">
     <div style="padding:15px 16px 4px">
-      <h3 style="margin:0 0 3px;font-size:14px">Change feed</h3>
-      <div class="sub" style="margin-bottom:8px">A catalog is not a document you replace. It is a set of
-        changes you publish — some permanent, some temporary, some for one dealer only.</div>
+      <h3 style="margin:0 0 3px;font-size:14px">Catalog updates <span class="muted" style="font-weight:500" id="chg-pending"></span></h3>
+      <div class="sub" style="margin-bottom:8px">Record anything that affects quotes: a discontinued item, a
+        temporary shortage, or an arrangement with a single dealer.</div>
     </div>
     <table>
       <colgroup><col><col style="width:96px"><col style="width:170px"><col style="width:120px">
         <col style="width:104px"><col style="width:128px"></colgroup>
-      <thead><tr><th>What changed</th><th>Type</th><th>Applies to</th><th>Effective</th>
+      <thead><tr><th>Change</th><th>Type</th><th>Applies to</th><th>When</th>
         <th style="text-align:right">Open quotes</th><th>Status</th></tr></thead>
       <tbody id="chg-rows"></tbody>
     </table>
@@ -552,8 +481,8 @@
   <div class="grid2">
     <div>
       <div class="card" style="padding:16px;margin-bottom:14px">
-        <h3 style="margin:0 0 3px;font-size:14px">How a code is read</h3>
-        <div class="sub" style="margin-bottom:14px">Codes are generated from a grammar, not picked from a list. Page 70 defines it.</div>
+        <h3 style="margin:0 0 3px;font-size:14px">How your codes are read</h3>
+        <div class="sub" style="margin-bottom:14px">Using the rules on page 70 of your spec book.</div>
         <div class="parse">
           <span class="tok t1"><b>T</b><span>Tall cabinet</span></span>
           <span class="tok t2"><b>36</b><span>36" wide</span></span>
@@ -562,18 +491,18 @@
           <span class="tok t5"><b>B</b><span>Butt doors</span></span>
         </div>
 
-        <div class="sec" style="margin-top:22px">Where the grammar bites</div>
+        <div class="sec" id="confirm" style="margin-top:22px">Please confirm</div>
         <div class="issue i-high"><span class="dot"></span><span>
-          <b>Field widths have no delimiter.</b> <code style="font-family:var(--mono)">W241224B</code> reads as
-          24×12×24 butt at 71%, or 2412×24B at 29%. Only a valid-dimension list settles it — and that list
-          is not in the book.</span></div>
+          <b><code style="font-family:var(--mono)">W241224B</code> can be read two ways.</b> The numbers have no
+          separators, so it could be 24 × 12 × 24 with butt doors, or 2412 × 24. Which is right?</span></div>
         <div class="issue i-high"><span class="dot"></span><span>
-          <b>An underscore changes the product.</b> <code style="font-family:var(--mono)">ROS</code> is a
-          field-installed roll-out shelf; <code style="font-family:var(--mono)">_ROS</code> is factory-installed.
-          Different price, different routing. Three codes in the book are typeset ambiguously.</span></div>
+          <b><code style="font-family:var(--mono)">ROS</code> or <code style="font-family:var(--mono)">_ROS</code>?</b>
+          One is a roll-out shelf installed on site, the other installed at the factory, at different prices. In
+          three places the spec book's layout makes it unclear which is meant.</span></div>
         <div class="issue i-med"><span class="dot"></span><span>
-          <b>Part codes reverse their order.</b> <code style="font-family:var(--mono)">DR</code> is width then
-          height. <code style="font-family:var(--mono)">DF</code> is height then width. Same page.</span></div>
+          <b>Door and drawer-front sizes are in a different order.</b>
+          <code style="font-family:var(--mono)">DR</code> codes give width then height,
+          <code style="font-family:var(--mono)">DF</code> codes give height then width. Is that intended?</span></div>
       </div>
 
       <div class="card" style="padding:16px">
@@ -589,25 +518,19 @@
 
     <div>
       <div class="callout" style="margin-bottom:14px">
-        <h3>Your dealers keep asking for a finish you do not make</h3>
-        <p>Tafisa L582 came up in 22 requests from 7 dealers this quarter. It is not in your book.
-        Either they are specifying around you, or there is a line here you are not selling.</p>
-        <p>Only Materialspace can see this. It is not in your catalog, and it is not in any one
-        dealer's orders — it is in the pattern across all of them.</p>
+        <h3>Dealers keep asking for a finish you don't offer</h3>
+        <p>Tafisa L582 came up in 22 requests from 7 dealers this quarter, and it isn't in your catalog.</p>
       </div>
 
       <div class="card privacy" style="margin-bottom:14px">
-        <h3>Overlays are confidential too</h3>
-        <p style="margin:0 0 8px;color:var(--ink-3)">Eleven of your dealers hold something non-standard —
-        an exclusive size, an approved modification, a negotiated tier.</p>
-        <p style="margin:0;color:var(--ink-3)">Each overlay is visible to you and to that dealer only.
-        Dealers never see each other's terms, and nothing in the aggregate views above is derived from them.
-        The same boundary that protects their pipeline protects your discount ladder.</p>
+        <h3>Arrangements with single dealers</h3>
+        <p style="margin:0;color:var(--ink-3)">11 dealers have something specific to them: an exclusive size,
+        an approved change, or a different discount. Each one is visible only to you and that dealer.</p>
       </div>
 
       <div class="card" style="padding:16px">
-        <h3 style="margin:0 0 3px;font-size:14px">Rules found in the prose</h3>
-        <div class="sub" style="margin-bottom:6px">Constraints written as footnotes, now enforced at quote time.</div>
+        <h3 style="margin:0 0 3px;font-size:14px">Rules from your spec book</h3>
+        <div class="sub" style="margin-bottom:6px">Checked on every quote.</div>
         <div id="rule-rows"></div>
       </div>
     </div>
@@ -628,24 +551,19 @@
       <div class="cust"><div class="av" style="background:#dfe4ec">HK</div>
         Hudson Kitchen Supply · Ronit A., estimating</div>
       <h2>Request a firm ship date on Vernon Court — Building B</h2>
-      <p>Smart Cabinetry quoted week 46, subject to capacity. To hold that slot, their plant has to know
-      which job it is being held for.</p>
+      <p>Smart Cabinetry quoted week 46, subject to capacity. To hold a slot for you, they need to know
+      this job is still going ahead.</p>
     </div>
     <div class="body">
       <div class="getback">
-        <b>What you get</b>
-        Week 46 committed and held for 30 days, instead of “subject to capacity.”
-        <div style="margin-top:7px;padding-top:7px;border-top:1px solid #c3d6f5">
-          They see the request and their own capacity. <b style="display:inline">Nothing below resolves
-          unless they commit the week</b> — if they cannot, the request closes and nothing is disclosed.
-        </div>
+        <b>What you're asking for</b>
+        A firm ship date instead of “subject to capacity.”
       </div>
 
       <div class="cols">
         <div class="col yes"><h4>Sending this shows them</h4><ul>
-          <li>Project name and unit count</li>
-          <li>The scope you already asked them to price</li>
-          <li>Whether you are still working the estimate</li>
+          <li>That you are still working on this job</li>
+          <li>When you last changed the estimate</li>
         </ul></div>
         <div class="col no"><h4>It does not show them</h4><ul>
           <li>Who else you are pricing against them</li>
@@ -808,14 +726,14 @@ document.querySelectorAll('[data-open]').forEach(tr=>
 
 // ---------- pipeline ----------
 const PIPE = [
-  {proj:'Ridgeline Commons', dealer:'Meridian Cabinet Co.',  units:120, val:1410000, sig:'Quiet 239 days',  st:'stop', lab:'No signal', opt:true},
-  {proj:'Brookfield Yards',  dealer:'Hudson Kitchen Supply', units:64,  val:602500,  sig:'Revised 11d ago', st:'live', lab:'Active',    opt:true},
-  {proj:'Larkspur Phase 2',  dealer:'Meridian Cabinet Co.',  units:48,  val:412000,  sig:'Revised 6d ago',  st:'live', lab:'Active',    opt:true},
-  {proj:'Harbor Row',        dealer:'Coastline Interiors',   units:34,  val:291000,  sig:'New today',       st:'live', lab:'Active',    opt:false},
-  {proj:'Vernon Court — B',  dealer:'Hudson Kitchen Supply', units:21,  val:184200,  sig:'Revised today',   st:'live', lab:'Active',    opt:true},
-  {proj:'The Winslow',       dealer:'Coastline Interiors',   units:12,  val:96400,   sig:'Quiet 94 days',   st:'warn', lab:'Cooling',   opt:false},
-  {proj:'Elm & 4th',         dealer:'Brightwood Supply',     units:9,   val:71800,   sig:'Awarded — PO due',st:'ok',   lab:'Won',       opt:true},
-  {proj:'Sutton Place',      dealer:'Fairmount Kitchens',    units:6,   val:48300,   sig:'Quiet 20 days',   st:'live', lab:'Active',    opt:false}
+  {proj:'Ridgeline Commons', dealer:'Meridian Cabinet Co.',  units:120, val:1410000, quoted:'239 days ago', sig:'',                st:'stop', lab:'No update',  opt:false},
+  {proj:'Brookfield Yards',  dealer:'Hudson Kitchen Supply', units:64,  val:602500,  quoted:'3 months ago', sig:'Changed 11 days ago', st:'live', lab:'Active', opt:true},
+  {proj:'Larkspur Phase 2',  dealer:'Meridian Cabinet Co.',  units:48,  val:412000,  quoted:'6 weeks ago',  sig:'Changed 6 days ago',  st:'live', lab:'Active', opt:true},
+  {proj:'Harbor Row',        dealer:'Coastline Interiors',   units:34,  val:291000,  quoted:'today',        sig:'',                st:'live', lab:'Active',     opt:false},
+  {proj:'Vernon Court — B',  dealer:'Hudson Kitchen Supply', units:21,  val:184200,  quoted:'2 days ago',   sig:'Changed today',   st:'live', lab:'Active',     opt:false},
+  {proj:'The Winslow',       dealer:'Coastline Interiors',   units:12,  val:96400,   quoted:'5 months ago', sig:'',                st:'warn', lab:'Cooling',    opt:false},
+  {proj:'Elm & 4th',         dealer:'Brightwood Supply',     units:9,   val:71800,   quoted:'4 months ago', sig:'Job won, order due', st:'ok', lab:'Won',        opt:true},
+  {proj:'Sutton Place',      dealer:'Fairmount Kitchens',    units:6,   val:48300,   quoted:'3 weeks ago',  sig:'',                st:'live', lab:'Active',     opt:false}
 ];
 const AGG = [
   {per:'Weeks 38–41', conf:1040000, pipe:118000, units:412},
@@ -828,8 +746,9 @@ function renderPipe(){
   const agg = state.pipe==='agg';
   el('p-agg').classList.toggle('on',agg); el('p-det').classList.toggle('on',!agg);
   el('pipe-note').textContent = agg
-    ? 'Totals only. No dealer is identified — this is the default view.'
-    : 'Only projects where the dealer opted in are named. The rest stay masked.';
+    ? 'Expected volume across all dealers. No dealer is named.'
+    : 'Dealer activity shows only where the dealer shared it when asking you for a firm ship date.';
+  el('s-shared').innerHTML = PIPE.filter(p=>p.opt).length + ' <small>of ' + PIPE.length + ' quotes</small>';
 
   if(agg){
     el('pipe-head').innerHTML = `<tr><th>Period</th><th style="text-align:right">Confirmed</th>
@@ -846,17 +765,18 @@ function renderPipe(){
           <div class="muted" style="font-size:11.5px;margin-top:3px">${pct}% confirmed</div></td></tr>`;
     }).join('');
   } else {
-    el('pipe-head').innerHTML = `<tr><th>Project</th><th>Dealer</th><th>Units</th>
-      <th style="text-align:right">Quoted value</th><th>Last signal</th><th>Status</th></tr>`;
-    el('pipe-rows').innerHTML = PIPE.map(p=> p.opt
-      ? `<tr><td><b>${p.proj}</b></td><td class="muted">${p.dealer}</td><td>${p.units}</td>
-          <td class="money">$${(p.val/1000).toFixed(1)}k</td>
-          <td class="muted nowrap" style="font-size:12.5px">${p.sig}</td>
-          <td><span class="pill p-${p.st}">${p.lab}</span></td></tr>`
-      : `<tr><td class="masked">Not shared</td><td class="masked">—</td><td class="masked">—</td>
-          <td class="money masked">$${(p.val/1000).toFixed(1)}k</td>
-          <td class="masked" style="font-size:12.5px">—</td>
-          <td><span class="pill p-idle">Aggregate only</span></td></tr>`).join('');
+    el('pipe-head').innerHTML = `<tr><th>Project you quoted</th><th>Dealer</th><th>Units</th>
+      <th style="text-align:right">Quoted value</th><th>Dealer activity</th><th>Status</th></tr>`;
+    el('pipe-rows').innerHTML = PIPE.map(p=>`<tr>
+        <td><b>${p.proj}</b><div class="muted" style="font-size:12px">Quoted ${p.quoted}</div></td>
+        <td class="muted">${p.dealer}</td><td>${p.units}</td>
+        <td class="money">${p.val>=1e6 ? "$"+(p.val/1e6).toFixed(2)+"M" : "$"+(p.val/1000).toFixed(1)+"k"}</td>
+        ${p.opt
+          ? `<td class="muted nowrap" style="font-size:12.5px">${p.sig}</td>
+             <td><span class="pill p-${p.st}">${p.lab}</span></td>`
+          : `<td class="masked" style="font-size:12.5px">—</td>
+             <td><span class="pill p-idle">Not shared</span></td>`}
+      </tr>`).join('');
   }
 }
 el('p-agg').addEventListener('click',()=>{state.pipe='agg';renderPipe();});
@@ -875,7 +795,7 @@ function dealerChoice(msg, ok){
     volumes count toward their factory planning either way — as totals, with no name attached.`;
 }
 el('dlg-share').addEventListener('click',()=>{
-  dealerChoice('Request sent. Smart committed week 46 — held for you for 30 days, and the project resolved on their side only at that point.', true);
+  dealerChoice('Request sent. Smart can now see this job is still going ahead, and will reply with a ship date.', true);
   const v = PIPE.find(p=>p.proj==='Vernon Court — B'); if(v) v.opt = true; renderPipe();
 });
 el('dlg-agg').addEventListener('click',()=>{
@@ -896,18 +816,16 @@ el('wklabs').innerHTML = LOAD.map(d=>`<div>${d.w}</div>`).join('');
 
 // ---------- catalog ----------
 const CHANGES = [
-  {what:'2026 price book — base cabinets +4.2%', det:'Supersedes the 2023 book across base and vanity lines',
+  {what:'2026 price list: base cabinets +4.2%', det:'Replaces 2023 prices for base and vanity cabinets',
    perm:'Permanent', scope:'all', sc:'All dealers', eff:'Not set', q:7, live:false},
-  {what:'Cascade TFL discontinued', det:'Successor is Summit TFL · 14 SKUs affected',
+  {what:'Cascade laminate discontinued', det:'Replaced by Summit laminate · 14 items affected',
    perm:'Permanent', scope:'all', sc:'All dealers', eff:'Oct 1', q:2, live:false},
-  {what:'Willow paint unavailable', det:'Supplier outage · expected back week 44',
-   perm:'Temporary', scope:'all', sc:'All dealers', eff:'Now → W44', q:3, live:true},
-  {what:'Tafisa panel lead time 6 weeks', det:'Through week 48, then reassess',
-   perm:'Temporary', scope:'all', sc:'All dealers', eff:'Now → W48', q:4, live:true},
-  {what:'3" depth increments on 33" wall', det:'Standing exception approved 2024',
-   perm:'Permanent', scope:'dealer', sc:'Meridian Cabinet Co.', eff:'Standing', q:1, live:true},
-  {what:'Multiplier 0.42 for Q4', det:'Down from 0.45 against a volume commitment',
-   perm:'Temporary', scope:'dealer', sc:'Hudson Kitchen Supply', eff:'Now → Dec 31', q:2, live:true}
+  {what:'Willow paint unavailable', det:'Supplier shortage · expected back week 44',
+   perm:'Temporary', scope:'all', sc:'All dealers', eff:'Now to week 44', q:3, live:true},
+  {what:'3" depth steps on 33" wall cabinets', det:'Special approval, 2024',
+   perm:'Permanent', scope:'dealer', sc:'Meridian Cabinet Co.', eff:'Ongoing', q:1, live:true},
+  {what:'Discount multiplier 0.42 for Q4', det:'Lowered from 0.45 for a volume commitment',
+   perm:'Temporary', scope:'dealer', sc:'Hudson Kitchen Supply', eff:'Now to Dec 31', q:2, live:true}
 ];
 function renderChanges(){
   el('chg-rows').innerHTML = CHANGES.map((c,i)=>`<tr>
@@ -919,19 +837,18 @@ function renderChanges(){
     <td>${c.live
       ? '<span class="pill p-ok">Live</span>'
       : `<button class="pub" data-pub="${i}">Publish</button>`}</td></tr>`).join('');
+  const pending = CHANGES.filter(c=>!c.live).length;
+  el('chg-pending').textContent = pending ? `· ${pending} not published` : '· all published';
   document.querySelectorAll('[data-pub]').forEach(b=>b.addEventListener('click',()=>{
     CHANGES[+b.dataset.pub].live = true;
     renderChanges();
-    const pending = CHANGES.filter(c=>!c.live).length;
-    document.querySelectorAll('#v-catalog .stat')[2].querySelector('.v').innerHTML =
-      pending ? '<span style="color:var(--stop)">'+pending+'</span>' : '<span style="color:var(--ok)">0</span>';
   }));
 }
 renderChanges();
 
 const GAPS = [
   {what:'Tafisa L582 finish', note:'not a finish you offer', req:22, dl:7},
-  {what:'33.875" wall cabinet width', note:'between stock 33" and 36" · Meridian already holds an exception for 3" increments', req:14, dl:6},
+  {what:'33.875" wall cabinet width', note:'between stock 33" and 36"', req:14, dl:6},
   {what:'Bottom panel removable (ADA)', note:'no modification code exists', req:11, dl:4},
   {what:'Notch for toe kick', note:'written as free text every time', req:9, dl:5},
   {what:'Side panels run to floor', note:'no modification code exists', req:8, dl:3}
@@ -942,49 +859,15 @@ el('gap-rows').innerHTML = GAPS.map(g=>`<tr><td><b>${g.what}</b>
 
 const RULES = [
   {pg:'p.25', t:'Wall cabinets 12–39" high take two hinges per door. 42" high take three.'},
-  {pg:'p.25', t:'Depth alterations available 6–24", in 3" increments only. 33.875" is not one of them.'},
+  {pg:'p.25', t:'Depth can be changed between 6" and 24", in 3" steps only.'},
   {pg:'p.25', t:'24" deep cabinets must be installed between cabinets or end panels of the same depth.'},
   {pg:'p.71', t:'One door style, finish and construction type per order. A mixed order is rejected after entry.'},
   {pg:'p.74', t:'250–300 cabinets, or 3,000 cubes, per truckload.'}
 ];
 el('rule-rows').innerHTML = RULES.map(r=>`<div class="rule"><span class="pg">${r.pg}</span><span>${r.t}</span></div>`).join('');
 
-// ---------- workflow ----------
-const FLOW = [
-  {h:'Quote loop', s:'Where the account is won or lost.', rows:[
-    {st:'Request arrives', rl:'Dealer → quoting desk', mk:'Inbox', k:'built'},
-    {st:'Read and match to catalog', rl:'Quoting desk', mk:'Quote', k:'built'},
-    {st:'Resolve what stopped', rl:'Quoting desk · engineering on customs', mk:'Quote', k:'built'},
-    {st:'Send price', rl:'Quoting desk', mk:'Quote', k:'built', cite:'firm lines + allowances + open queries'},
-    {st:'Dealer revises, loop repeats', rl:'Dealer → quoting desk', mk:'Quote', k:'built'},
-    {st:'Awarded, or silence', rl:'—', mk:'Pipeline', k:'built', cite:'estimate activity as the signal'}
-  ]},
-  {h:'Order', s:'Their own process, p.71.', rows:[
-    {st:'Order submitted', rl:'Dealer', mk:'Not built', k:'no'},
-    {st:'Entered, confirmation sent', rl:'Order entry', mk:'Not built · phase 1b', k:'no'},
-    {st:'24-hour sign-off window', rl:'Dealer + order entry', mk:'Next thing I would build', k:'no',
-     cite:'p.71 · the first service moment after the quote'},
-    {st:'Scheduled at lead time', rl:'Plant scheduling', mk:'Pipeline · partial', k:'part'},
-    {st:'Materials purchased', rl:'Procurement', mk:'Pipeline · partial', k:'part',
-     cite:'p.71 · 12–14 business days before build'}
-  ]},
-  {h:'Fulfilment', s:'Where “service” is judged.', rows:[
-    {st:'Production begins', rl:'Plant', mk:'Not built', k:'no', cite:'p.71 · 7 days before build'},
-    {st:'Delivery scheduled', rl:'Logistics', mk:'Not built', k:'no', cite:'p.71 · 3–5 days before ship'},
-    {st:'Built, shipped, delivered', rl:'Plant · logistics', mk:'Not built', k:'no'},
-    {st:'Claims and damage', rl:'Customer service', mk:'Not built', k:'no', cite:'p.83'},
-    {st:'Catalog and price upkeep', rl:'Sales operations', mk:'Catalog', k:'built',
-     cite:'runs alongside all of the above'}
-  ]}
-];
-el('flow').innerHTML = FLOW.map(c=>`<div class="fcol"><h3>${c.h}</h3><div class="csub">${c.s}</div>`+
-  c.rows.map(r=>`<div class="stage ${r.k}"><div class="st">${r.st}</div>
-    <div class="rl">${r.rl}</div><span class="mk">${r.mk}</span>
-    ${r.cite?`<div class="cite">${r.cite}</div>`:''}</div>`).join('')+'</div>').join('');
-
 // ---------- nav ----------
 const WHO = {
-  workflow: ['MS','Every role, one process'],
   inbox:    ['DM','Dana M. · Quoting desk'],
   quote:    ['DM','Dana M. · Quoting desk'],
   pipeline: ['MR','Marcus R. · Plant scheduling'],

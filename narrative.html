@@ -182,7 +182,7 @@ after, or not.</p>
 <p>In the brief, the manufacturer describes pricing a project, hearing nothing for up to a year, and then
 receiving a huge order the factory struggles to absorb.</p>
 <p><strong>In the prototype:</strong> the Pipeline screen shows expected volume by week against factory
-capacity. Whether it should also show individual projects by name is an open question, covered in
+capacity. Whether it should also show dealer activity on individual projects is an open question, covered in
 section 07.</p>
 
 <h3>4 · Keep the catalog accurate, with the manufacturer in charge of it</h3>
@@ -303,9 +303,9 @@ it, which would change who the product is designed for.</p>
 <div class="branch">
   <p class="ask">Would you mind if a manufacturer could see whether a job you asked them to price is still
   active?</p>
-  <p class="if"><b>Don't mind:</b> the pipeline can show projects by name, which is simpler and more useful
+  <p class="if"><b>Don't mind:</b> the pipeline can show dealer activity on every project, which is simpler and more useful
   to the manufacturer.</p>
-  <p class="if"><b>Do mind:</b> show only weekly totals by default, and share names only when the dealer asks
+  <p class="if"><b>Do mind:</b> show activity only as weekly totals, and on a single project only when the dealer asks
   for something in return (section 07).</p>
 </div>
 
@@ -422,7 +422,7 @@ will reach the product and what it has to connect to.</p>
 </div>
 
 <div class="phase">
-  <div class="hd"><b>Phase 3 · Projects by name in the pipeline</b></div>
+  <div class="hd"><b>Phase 3 · Dealer activity on individual projects</b></div>
   <p>Depends on what dealers say about sharing (section 07). It comes last because it's the one part that
   could damage trust with dealers.</p>
 </div>
@@ -618,23 +618,23 @@ manufacturer already receives every quote request today. The only new thing woul
 still active over time.</p>
 <p><strong>So it depends on what dealers say:</strong></p>
 <ul>
-  <li><strong>They don't mind:</strong> show projects by name. It's simpler, and more useful to the
+  <li><strong>They don't mind:</strong> show dealer activity on every project. It's simpler, and more useful to the
   manufacturer.</li>
-  <li><strong>They do mind:</strong> the manufacturer sees only weekly totals by default, with no dealer
-  names. A name is shared only when a dealer asks for something in return, such as a guaranteed ship date.
+  <li><strong>They do mind:</strong> the manufacturer still sees the projects it was asked to quote, and weekly totals across
+  all dealers, but not whether a dealer is still working on a particular job. That is shared only when a dealer asks for something in return, such as a firm ship date.
   Materialspace never asks dealers to share on a manufacturer's behalf, because even a request they turn
   down tells them their data is being discussed. Dealers are Materialspace's only paying customers today,
   and I don't want to put that at risk. The prototype's Pipeline screen shows this version.</li>
 </ul>
 
-<h3>If names are only shared when a dealer asks for a date</h3>
+<h3>If activity is only shared when a dealer asks for a date</h3>
 <p>There are two ways to design it, and I'd want to discuss them with you:</p>
 <ul>
-  <li><strong>Simple:</strong> the project name is shared as soon as the dealer sends the request. Easy to
+  <li><strong>Simple:</strong> the dealer's activity on that job is shared as soon as they send the request. Easy to
   build. But if the manufacturer then can't commit to a date, the dealer shared information and got nothing
   back.</li>
   <li><strong>Held until the manufacturer commits:</strong> the manufacturer sees the request against its own
-  capacity, and the project name is revealed only if it commits to a date. Fairer to the dealer, but more
+  capacity, and the dealer's activity is shared only if it commits to a date. Fairer to the dealer, but more
   complex: each request needs states (waiting, committed, expired, withdrawn) and a hold on the production
   slot for a set time.</li>
 </ul>
