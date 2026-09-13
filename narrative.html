@@ -29,7 +29,7 @@
 
   main{max-width:820px;margin:0 auto;padding:34px 20px 90px}
   h1{font-size:27px;line-height:1.25;letter-spacing:-.02em;margin:0 0 6px}
-  .deck{color:var(--ink-3);font-size:16px;margin:0 0 34px}
+  .deck{color:var(--ink-3);font-size:16px;margin:0 0 26px}
   h2{font-size:19px;letter-spacing:-.015em;margin:44px 0 4px;padding-top:22px;border-top:1px solid var(--line)}
   h2 .num{color:var(--ink-3);font:600 13px var(--mono);display:block;margin-bottom:6px;letter-spacing:.04em}
   h3{font-size:15px;margin:26px 0 6px}
@@ -82,6 +82,14 @@
   .branch .if b{color:var(--ink);font-weight:620}
   ul ul{margin:6px 0 0}
   .first-tag{font:600 10.5px var(--mono);background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:4px;margin-left:8px;vertical-align:1px;white-space:nowrap}
+  html{scroll-behavior:smooth}
+  h2[id]{scroll-margin-top:64px}
+  .toc{display:grid;grid-template-columns:1fr 1fr;gap:2px 18px;margin:-12px 0 32px;padding:14px 16px;
+    background:var(--panel);border:1px solid var(--line);border-radius:9px;font-size:14px}
+  @media (max-width:640px){.toc{grid-template-columns:1fr}}
+  .toc a{text-decoration:none;color:var(--ink-2);padding:4px 0;display:flex;gap:9px}
+  .toc a:hover{color:var(--accent);background:none}
+  .toc span{font:600 12px var(--mono);color:var(--ink-3);padding-top:2px}
 </style>
 </head>
 <body>
@@ -103,6 +111,18 @@ lead to, and what I'd leave out for now.</p>
 
 <p class="deck">This is the written version of the presentation: how I'd start, what I'd want to learn first,
 and who wins what. The prototype is <a href="index.html">here</a>.</p>
+
+<nav class="toc" aria-label="Contents">
+  <a href="#goals"><span>01</span>What the manufacturer is trying to get</a>
+  <a href="#day"><span>02</span>How a manufacturer's day works</a>
+  <a href="#learn"><span>03</span>What I'd want to learn before building</a>
+  <a href="#steps"><span>04</span>How I'd break it into steps</a>
+  <a href="#start"><span>05</span>Where I'd start, and why</a>
+  <a href="#competition"><span>06</span>Competition</a>
+  <a href="#value"><span>07</span>Who wins what</a>
+  <a href="#risks"><span>08</span>What could go wrong</a>
+  <a href="#sources"><span>09</span>Assumptions and sources</a>
+</nav>
 
 <div class="lede">
   <p><strong>Where I landed.</strong> Manufacturers win accounts by getting a price back fast. Two things
@@ -135,7 +155,7 @@ and who wins what. The prototype is <a href="index.html">here</a>.</p>
   either way, because the rest depends on it.</p>
 </div>
 
-<h2><span class="num">01</span>What the manufacturer is trying to get</h2>
+<h2 id="goals"><span class="num">01</span>What the manufacturer is trying to get</h2>
 <p>Four goals, in the order I think a manufacturer would rank them. For each one I've noted which part of
 the prototype serves it, and where it only partly does.</p>
 
@@ -207,7 +227,7 @@ on whether it's realistic.</p>
 why they lost a job, while dealers do, which is why I'd ask dealers. Is that a reasonable guess, or does
 speed decide more jobs than that, or fewer?</p>
 
-<h2><span class="num">02</span>How a manufacturer's day works</h2>
+<h2 id="day"><span class="num">02</span>How a manufacturer's day works</h2>
 <p>The prototype covers a small part of a longer process. Roughly, different people use it at different
 rhythms:</p>
 <ul>
@@ -224,7 +244,7 @@ purpose, because jobs are won or lost at the quoting stage.</p>
 <p>These roles are my guess for a large manufacturer. At a smaller one, the same two people might do all of
 it, which would change who the product is designed for.</p>
 
-<h2><span class="num">03</span>What I'd want to learn before building</h2>
+<h2 id="learn"><span class="num">03</span>What I'd want to learn before building</h2>
 <p>For each question, I've noted what the different answers would change. If I could only ask four, they'd be the ones marked <span class="first-tag" style="margin-left:0">Ask first</span>.</p>
 
 <h3>From Materialspace's own data</h3>
@@ -366,7 +386,7 @@ it, which would change who the product is designed for.</p>
   same-day prices, so it falls short of the main goal, but it's a real starting point.</p>
 </div>
 
-<h2><span class="num">04</span>How I'd break it into steps</h2>
+<h2 id="steps"><span class="num">04</span>How I'd break it into steps</h2>
 <p>I haven't put timelines on these. I'd estimate them with the engineering team, once we know how requests
 will reach the product and what it has to connect to.</p>
 
@@ -450,7 +470,7 @@ will reach the product and what it has to connect to.</p>
   grow.</p>
 </div>
 
-<h2><span class="num">05</span>Where I'd start, and why</h2>
+<h2 id="start"><span class="num">05</span>Where I'd start, and why</h2>
 <p>Phase 0, with one manufacturer. Once requests start coming in, take them in whatever form they arrive,
 not only from Materialspace dealers.</p>
 <ul>
@@ -473,7 +493,7 @@ not only from Materialspace dealers.</p>
   dealers onto it. That's how the dealer growth described above would happen.</p>
 </div>
 
-<h2><span class="num">06</span>Competition</h2>
+<h2 id="competition"><span class="num">06</span>Competition</h2>
 <p>If a manufacturer doesn't use this, what do they use instead?</p>
 
 <h3>Keeping things as they are</h3>
@@ -555,7 +575,7 @@ turned into item lists, and quotes go out in minutes without retyping. That's ve
   they don't read emailed orders.</li>
 </ol>
 
-<h2><span class="num">07</span>Who wins what</h2>
+<h2 id="value"><span class="num">07</span>Who wins what</h2>
 
 <table>
   <thead><tr><th style="width:120px">Who</th><th>Wins</th><th>Risks</th></tr></thead>
@@ -647,7 +667,7 @@ is a platform they can't leave that stops improving. I'd want to decide a few co
 advantage and becomes what everyone expects. Early manufacturers would join to get ahead, and later ones so
 they don't fall behind.</p>
 
-<h2><span class="num">08</span>What could go wrong</h2>
+<h2 id="risks"><span class="num">08</span>What could go wrong</h2>
 
 <h3>Product</h3>
 <p><strong>Reading mistakes don't announce themselves.</strong> Codes like W1818 and W1858 both look valid,
@@ -678,7 +698,7 @@ has.</p>
 <p><strong>Parspec could move into cabinets.</strong></p>
 <p><strong>Sales reps could push back</strong>, where manufacturers rely on them.</p>
 
-<h2><span class="num">09</span>Assumptions and sources</h2>
+<h2 id="sources"><span class="num">09</span>Assumptions and sources</h2>
 
 <h3>Assumptions</h3>
 <ul>
