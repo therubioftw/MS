@@ -34,7 +34,7 @@
   h2 .num{color:var(--ink-3);font:600 13px var(--mono);display:block;margin-bottom:6px;letter-spacing:.04em}
   h3{font-size:15px;margin:26px 0 6px}
   p{margin:0 0 14px}
-  ul{margin:0 0 14px;padding-left:20px} li{margin-bottom:7px}
+  ul,ol{margin:0 0 14px;padding-left:20px} li{margin-bottom:7px}
   strong{font-weight:640}
   em{font-style:normal;background:#fdf3e4;padding:0 3px;border-radius:3px}
   code{font-family:var(--mono);font-size:13px;background:var(--line-2);padding:1px 5px;border-radius:4px}
@@ -52,13 +52,10 @@
   .phase{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:11px}
   .phase .hd{display:flex;align-items:baseline;gap:10px;margin-bottom:7px;flex-wrap:wrap}
   .phase .hd b{font-size:15px}
-  .phase .wk{font:600 11px var(--mono);color:var(--ink-3);background:var(--line-2);
-    padding:2px 8px;border-radius:5px;letter-spacing:.02em}
   .phase p{margin:0 0 8px;font-size:14px}
   .phase p:last-child{margin-bottom:0}
   .phase .kill{font-size:13px;color:var(--stop);background:var(--stop-soft);
     border-radius:6px;padding:8px 11px;margin-top:9px}
-  .phase.no{background:#fafbfc;border-style:dashed}
 
   table{width:100%;border-collapse:collapse;background:var(--panel);
     border:1px solid var(--line);border-radius:9px;overflow:hidden;margin:0 0 14px;font-size:14px}
@@ -70,11 +67,11 @@
   .box{border-radius:9px;padding:14px 16px;margin:0 0 14px;font-size:14px}
   .box b{display:block;margin-bottom:3px}
   .box p{margin:0 0 8px} .box p:last-child{margin:0}
+  .box ul,.box ol{margin:0 0 8px}
   .b-warn{background:var(--warn-soft);border:1px solid #f0dcb8;color:#6d4207}
   .b-ok{background:var(--ok-soft);border:1px solid #bfe3d0;color:#1c5e40}
   .b-stop{background:var(--stop-soft);border:1px solid #f3ceca;color:#7d2820}
 
-  .q{font-size:14px;padding-left:15px;border-left:2px solid var(--line);color:var(--ink-2);margin:0 0 9px}
   .foot{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-3);font-size:13px}
   .branch{font-size:14px;margin:0 0 15px;padding:1px 0 1px 15px;border-left:2px solid var(--line)}
   .branch .ask{font-weight:620;color:var(--ink);margin:0 0 5px}
@@ -105,7 +102,7 @@
 <main>
 
 <p class="eyebrow">Building a product for manufacturers</p>
-<h1 class="thesis">A manufacturer answers every quote request the same day, whatever form it arrives in.</h1>
+<h1 class="thesis">A manufacturer prices every quote request the same day, whatever form it arrives in.</h1>
 <p class="thesissub">That's the product. The rest of this page covers what makes it possible, what it could
 lead to, and what I'd leave out for now.</p>
 
@@ -114,7 +111,7 @@ and who wins what. The prototype is <a href="index.html">here</a>.</p>
 
 <nav class="toc" aria-label="Contents">
   <a href="#goals"><span>01</span>What the manufacturer is trying to get</a>
-  <a href="#day"><span>02</span>How a manufacturer's day works</a>
+  <a href="#day"><span>02</span>How a job moves, and who's involved</a>
   <a href="#learn"><span>03</span>What I'd want to learn before building</a>
   <a href="#steps"><span>04</span>How I'd break it into steps</a>
   <a href="#start"><span>05</span>Where I'd start, and why</a>
@@ -125,14 +122,16 @@ and who wins what. The prototype is <a href="index.html">here</a>.</p>
 </nav>
 
 <div class="lede">
-  <p><strong>Where I landed.</strong> Manufacturers win accounts by getting a price back fast. Two things
-  slow them down. The price usually isn't available while the quote is being put together, because it
-  depends on a separate price book and a discount agreed with each dealer. And anything that isn't a
-  standard catalog item has to wait for someone at the manufacturer to check and price it.</p>
-  <p>Materialspace already works with the dealers who send those requests. A manufacturer product covers the
-  other side of the same exchange. The first step isn't building catalog reading, which Materialspace
-  already does. It's getting the manufacturer to take responsibility for their own catalog data, and to
-  connect their pricing.</p>
+  <p><strong>Where I landed.</strong> Today, a dealer using Materialspace finishes pricing a job and downloads an
+  Excel file. What happens next depends on the manufacturer. Some want the file by email, some want the SKUs
+  pasted into their own Excel template, and some want everything entered in a web portal.</p>
+  <p>At the manufacturer, someone then checks each SKU and its modifications, looks up prices in a separate
+  price book, and applies the dealer's discount, which depends on the dealer's volume and on the size of the
+  job. Anything that isn't a standard catalog item waits until someone approves and prices it.</p>
+  <p>A manufacturer product covers the other side of that exchange. Requests from Materialspace dealers arrive
+  already structured and get priced in minutes. Requests from other dealers still come in by email or Excel,
+  and the product handles those too. The first step isn't reading catalogs, which Materialspace already does.
+  It's getting the manufacturer to take charge of their own catalog data and connect their pricing.</p>
 </div>
 
 <div class="box b-stop">
@@ -144,15 +143,13 @@ and who wins what. The prototype is <a href="index.html">here</a>.</p>
   would be sold differently.</p>
   <p><strong>How I'd test it.</strong> Ask dealers, since they're the ones choosing. On your last few jobs,
   why did you go with that manufacturer? Would you rather have a firm price in two hours with one line
-  still open, or a complete price in three days? I'd ask dealers rather than manufacturers, because
-  manufacturers rarely find out why they lost a job.</p>
+  still open, or a complete price in three days?</p>
   <p><strong>If speed isn't the reason.</strong> The same tool can be sold as a way to save work instead of
-  a way to win jobs. Today someone at the manufacturer retypes and checks orders by hand. If the tool does
+  a way to win jobs. Today someone at the manufacturer retypes and checks requests by hand. If the tool does
   most of that, the same team can handle more quotes without hiring. That's a pitch to whoever runs
   operations, not to the head of sales. Materialspace already makes this argument to dealers: a customer on
-  your website describes doing with one estimator what used to take four. In that case I'd move the
-  planning work earlier, because it becomes the bigger benefit. The catalog and pricing work stays first
-  either way, because the rest depends on it.</p>
+  your website describes doing with one estimator what used to take four. The catalog and pricing work stays
+  first either way, because the rest depends on it.</p>
 </div>
 
 <h2 id="goals"><span class="num">01</span>What the manufacturer is trying to get</h2>
@@ -160,40 +157,43 @@ and who wins what. The prototype is <a href="index.html">here</a>.</p>
 the prototype serves it, and where it only partly does.</p>
 
 <h3>1 · Get a price back before the other manufacturers quoting the same job</h3>
-<p>The products are largely interchangeable, so the job tends to go to whoever answers first and gets it
-right.</p>
-<p><strong>In the prototype:</strong> the Inbox sorts requests by how long the dealer has been waiting. On
-the Quote screen, eleven of sixteen lines are priced automatically. A difficult custom line can go out with
-an estimated price, confirmed later, so it doesn't hold up the rest of the quote.</p>
+<p>The brief puts speed to quote at the center of winning a job. How much it decides is the assumption
+above.</p>
+<p><strong>In the prototype:</strong> the Inbox shows every request in one list, whether it came from a
+Materialspace dealer, an Excel file or an emailed PDF, sorted by how long the dealer has been waiting. On the
+Quote screen, SKUs and their modifications are priced automatically, with the dealer's standard discount and
+the manufacturer's job-size pricing. A custom line can go out with an estimated price, confirmed later, so it
+doesn't hold up the rest of the quote.</p>
 
 <h3>2 · Be the manufacturer that's easy to work with</h3>
-<p>When the products are interchangeable, service is a big part of what the dealer is choosing.</p>
+<p>Service is the other part of what the brief asks for.</p>
 <p><strong>In the prototype:</strong> questions for the dealer go out together with the price instead of
-delaying it. An order that mixes two finishes is flagged before it's sent, because Smart's rules allow one
-finish per order and it would otherwise be rejected later.</p>
-<p><strong>Only partly covered.</strong> A lot of what dealers experience as service happens after they
-place the order: was it entered correctly, did anything change, when will it ship. I haven't built that
-part. The first thing I'd add is the review step right after an order is entered. Smart's order process
-(spec book, page 71) gives the dealer 24 hours to check the confirmation and ask for changes before the
-order is locked into production. It's the first moment after the quote where a dealer can feel well looked
-after, or not.</p>
+delaying it. A request that breaks a catalog rule is flagged before the price goes out. For example, Smart
+allows one finish per order (spec book, page 71), so a mixed-finish order would otherwise be rejected
+later.</p>
+<p><strong>Only partly covered.</strong> A lot of the friction comes later, at ordering. A multifamily
+project is quoted as one total, but it's ordered apartment by apartment, after shop drawings, by email or
+portal. Checking each of those orders against the approved quote is the next thing I'd build (Phase 2).</p>
 
 <h3>3 · Know what orders are coming before they arrive</h3>
 <p>In the brief, the manufacturer describes pricing a project, hearing nothing for up to a year, and then
 receiving a huge order the factory struggles to absorb.</p>
+<p>This is harder than it looks. Materialspace doesn't know whether a quoted job was won. It only finds out
+when shop drawings are made, which is much later. And nothing about a dealer's project can be shared with a
+manufacturer without the dealer agreeing.</p>
 <p><strong>In the prototype:</strong> the Pipeline screen shows expected volume by week against factory
-capacity. Whether it should also show dealer activity on individual projects is an open question, covered in
-section 07.</p>
+capacity, and projects that dealers have chosen to register with the manufacturer. How registration would
+work is in section 07.</p>
 
 <h3>4 · Keep the catalog accurate, with the manufacturer in charge of it</h3>
-<p>As I understand it, Materialspace already reads manufacturer catalogs for its dealers, and checks and
-cleans up that data itself, without anyone at the manufacturer confirming it. With the manufacturer on the
-platform, they review and correct their own data, and bring in catalogs Materialspace doesn't have yet.
-Materialspace still does the technical work behind the scenes.</p>
-<p><strong>In the prototype:</strong> the Catalog screen shows how codes are read, where they're ambiguous,
-and what dealers ask for that isn't in the catalog. It also shows a list of changes for the manufacturer to
-publish. I don't know how often catalogs or prices actually change. They may stay the same for years. That's
-a question for manufacturers (section 03).</p>
+<p>A catalog is more than a list of SKUs. It has rules, such as depth changes only in 3-inch steps (page 25),
+and real SKUs include modifications that the spec book doesn't show. As I understand it, Materialspace
+already reads manufacturer catalogs for its dealers and cleans up that data itself. With the manufacturer on
+the platform, they review and correct their own SKUs, rules and modifications, and bring in catalogs
+Materialspace doesn't have yet. Materialspace still does the technical work behind the scenes.</p>
+<p><strong>In the prototype:</strong> the Catalog screen shows how codes are read, which rules apply, where
+things are ambiguous, and what dealers ask for that isn't in the catalog. I don't know how often catalogs or
+prices change. They may stay the same for years. That's a question for manufacturers (section 03).</p>
 
 <div class="box b-warn">
   <b>Not in scope for now</b>
@@ -202,14 +202,14 @@ a question for manufacturers (section 03).</p>
   new.</p>
   <ul>
     <li><strong>Helping manufacturers chase deals</strong>, by showing their sales teams which dealers are
-    working on what. It depends on dealers being comfortable sharing, which is still open.</li>
+    working on what. Nothing gets shared without the dealer agreeing, and that mechanism comes first.</li>
     <li><strong>Selling more to existing dealers</strong>, through upselling or promotions. Useful, but it
     doesn't make quoting faster.</li>
     <li><strong>Replacing the manufacturer's order or accounting system.</strong> That's a big, risky switch
-    for them. The product should work alongside what they already use.</li>
-    <li><strong>Charging manufacturers early.</strong> Your list of reasons puts revenue last, so I'd focus
-    first on getting manufacturers and their catalogs onto the platform. Later, it could be charged per quote,
-    as Parspec does, or as a subscription per manufacturer.</li>
+    for them. The product should work alongside what they already use (section 07).</li>
+    <li><strong>Charging manufacturers early.</strong> You've said distribution and a moat come first, and
+    that this should be free or very cheap for manufacturers at the start. Later, it could be charged per
+    quote, as Parspec does, or as a subscription.</li>
     <li><strong>Self-serve sign-up, and a second manufacturer.</strong> Both should wait until the first
     manufacturer shows the product works.</li>
   </ul>
@@ -223,26 +223,32 @@ on whether it's realistic.</p>
   <li>Answering the same day instead of in six days means winning 2 more out of every 100 projects priced.</li>
   <li>That's 8 extra projects a year, or about $1.4 million in revenue.</li>
 </ul>
-<p>Everything depends on that "2 more out of 100", and it's hard to measure. Manufacturers often don't know
-why they lost a job, while dealers do, which is why I'd ask dealers. Is that a reasonable guess, or does
-speed decide more jobs than that, or fewer?</p>
+<p>Everything depends on that "2 more out of 100", and it's hard to measure. Dealers know why they chose a
+manufacturer, so I'd ask them. Is that a reasonable guess, or does speed decide more jobs than that, or
+fewer?</p>
 
-<h2 id="day"><span class="num">02</span>How a manufacturer's day works</h2>
-<p>The prototype covers a small part of a longer process. Roughly, different people use it at different
-rhythms:</p>
-<ul>
-  <li><strong>Every day:</strong> the quoting team goes through new requests and prices them. They're the
-  main users.</li>
-  <li><strong>Weekly:</strong> sales operations update catalog and price information.</li>
-  <li><strong>Monthly:</strong> plant scheduling reviews what's coming.</li>
-</ul>
-<p>Counting the quoting steps and Smart's order process, it takes about sixteen steps to get from a dealer's
-request to delivery. The prototype covers the quoting steps: receiving a request, reading it, resolving
-problems, and sending the price. It partly covers planning. It doesn't cover anything after the order is
-placed, such as order entry, the 24-hour review, production, delivery or claims. I left those out on
-purpose, because jobs are won or lost at the quoting stage.</p>
-<p>These roles are my guess for a large manufacturer. At a smaller one, the same two people might do all of
-it, which would change who the product is designed for.</p>
+<h2 id="day"><span class="num">02</span>How a job moves, and who's involved</h2>
+<p>From what you've described and Smart's order process, a multifamily job goes roughly like this:</p>
+<ol>
+  <li>The dealer prices the job in Materialspace and downloads an Excel file.</li>
+  <li>The dealer sends it to one or more manufacturers: by email, in the manufacturer's Excel template, or
+  through a portal.</li>
+  <li>The manufacturer checks the SKUs and modifications, prices them, applies the dealer's discount and any
+  job-size pricing, and sends a quote back.</li>
+  <li>Nothing may happen for months, sometimes up to a year.</li>
+  <li>If the job is won, shop drawings are made.</li>
+  <li>Orders go to the manufacturer apartment by apartment, by email or portal.</li>
+  <li>At Smart, the dealer has 24 hours to review the order confirmation before it's locked (page 71).</li>
+  <li>Materials are bought 12 to 14 business days before the cabinets are built (page 71), then production
+  and delivery.</li>
+</ol>
+<p>The prototype covers steps 2 and 3, and partly the planning problem between steps 3 and 6. Phase 2 would
+cover steps 6 and 7. I left production and delivery out on purpose.</p>
+<p>At the manufacturer, I'd expect a few different people to be involved: the quoting team, who'd use it
+every day; whoever decides job-size pricing on large jobs, probably sales; whoever maintains the catalog and
+price book; and whoever schedules the plant. I don't know how often each of them would use it. A catalog
+might change once a year, while a busy plant's schedule changes every day. At a smaller manufacturer, the
+same two people might do all of it.</p>
 
 <h2 id="learn"><span class="num">03</span>What I'd want to learn before building</h2>
 <p>For each question, I've noted what the different answers would change. If I could only ask four, they'd be the ones marked <span class="first-tag" style="margin-left:0">Ask first</span>.</p>
@@ -250,11 +256,12 @@ it, which would change who the product is designed for.</p>
 <h3>From Materialspace's own data</h3>
 
 <div class="branch">
-  <p class="ask">Does Materialspace know which quoted jobs its dealers actually won?</p>
-  <p class="if"><b>If yes:</b> check whether activity on an estimate, such as recent changes, predicts that
-  the job gets won. If it does, the pipeline view can rely on it.</p>
-  <p class="if"><b>If no:</b> that can't be checked from data. The signal would have to come from asking
-  dealers, or be dropped.</p>
+  <p class="ask">How long after a quote do shop drawings usually appear, and how many quoted jobs never get
+  them?</p>
+  <p class="if"><b>Weeks before the order:</b> shop drawings are an early enough sign that orders are coming,
+  at least for buying materials, if dealers agree to share it.</p>
+  <p class="if"><b>Days before the order:</b> they come too late to help planning, so registration (section
+  07) matters more.</p>
 </div>
 
 <div class="branch">
@@ -269,13 +276,6 @@ it, which would change who the product is designed for.</p>
   fix.</p>
   <p class="if"><b>Many gaps or errors:</b> the first step is a bigger cleanup, and the manufacturer needs a
   clearer reason to take it on.</p>
-</div>
-
-<div class="branch">
-  <p class="ask">Do Materialspace's dealers design in 2020, and does Materialspace use 2020 catalogs?</p>
-  <p class="if"><b>If yes:</b> 2020 is something the business relies on as well as a competitor, so moving
-  away from it needs to be gradual.</p>
-  <p class="if"><b>If no:</b> 2020 is simply the competitor to replace.</p>
 </div>
 
 <h3>From dealers</h3>
@@ -301,12 +301,14 @@ it, which would change who the product is designed for.</p>
 </div>
 
 <div class="branch">
-  <p class="ask">Would you mind if a manufacturer could see whether a job you asked them to price is still
-  active?</p>
-  <p class="if"><b>Don't mind:</b> the pipeline can show dealer activity on every project, which is simpler and more useful
-  to the manufacturer.</p>
-  <p class="if"><b>Do mind:</b> show activity only as weekly totals, and on a single project only when the dealer asks
-  for something in return (section 07).</p>
+  <p class="ask">Would you register a project with a manufacturer, and confirm every few weeks that it's still
+  alive, if they held your project price until you order?</p>
+  <p class="if"><b>Yes:</b> registration is how dealers share, and the Pipeline screen can show registered
+  projects.</p>
+  <p class="if"><b>No:</b> planning works from orders already booked and totals only, and it's a smaller
+  benefit.</p>
+  <p class="if"><b>Only if other dealers can't see it:</b> registration has to stay private between the dealer
+  and the manufacturer.</p>
 </div>
 
 <div class="branch">
@@ -331,14 +333,28 @@ it, which would change who the product is designed for.</p>
 </div>
 
 <div class="branch">
-  <p class="ask">How long does a quote take today, usually and at worst, and how many people touch it?</p>
-  <p class="if">This is the starting point for measuring the product.</p>
-</div>
-
-<div class="branch">
   <p class="ask">Where does your price book live, and would you connect it?<span class="first-tag">Ask first</span></p>
   <p class="if"><b>Yes:</b> the full product is possible.</p>
   <p class="if"><b>No:</b> a smaller product is still possible (see the box below).</p>
+</div>
+
+<div class="branch">
+  <p class="ask">How do you decide job-size pricing, and who decides it?</p>
+  <p class="if"><b>Set bands by job size:</b> it can be priced automatically.</p>
+  <p class="if"><b>Someone decides each time:</b> large quotes wait for that person, so the product has to get
+  those decisions to them quickly, or same-day quoting only works for smaller jobs.</p>
+</div>
+
+<div class="branch">
+  <p class="ask">Where are your catalog rules and modifications written down?</p>
+  <p class="if"><b>In documents or the price book:</b> they can be loaded and checked against requests.</p>
+  <p class="if"><b>Mostly in people's heads:</b> the first job is writing them down with the quoting team,
+  which takes longer and needs their help.</p>
+</div>
+
+<div class="branch">
+  <p class="ask">How long does a quote take today, usually and at worst, and how many people touch it?</p>
+  <p class="if">This is the starting point for measuring the product.</p>
 </div>
 
 <div class="branch">
@@ -346,15 +362,15 @@ it, which would change who the product is designed for.</p>
   <p class="if"><b>Rarely:</b> it's set up once, with occasional updates, and maintenance is a small part of
   the product.</p>
   <p class="if"><b>Often:</b> keeping it current is real ongoing work, so having the manufacturer run it
-  matters more.</p>
+  matters more. It also makes a price hold (section 07) more costly for them.</p>
 </div>
 
 <div class="branch">
   <p class="ask">How do you schedule production: by total volume, or around rush jobs and priority
   dealers?</p>
-  <p class="if"><b>By volume:</b> weekly totals are enough for planning, and dealer names aren't needed.</p>
+  <p class="if"><b>By volume:</b> weekly totals are enough for planning.</p>
   <p class="if"><b>Around urgency and priority:</b> totals hide what matters, so planning needs detail per
-  job, which brings the dealer question back.</p>
+  project, which only registration can give.</p>
 </div>
 
 <div class="branch">
@@ -379,11 +395,11 @@ it, which would change who the product is designed for.</p>
 
 <div class="box b-stop">
   <b>If manufacturers won't connect their prices</b>
-  <p>I first thought there'd be no product without prices. There's still a smaller one. Materialspace can
-  turn a messy, marked-up order into a clean, checked list of catalog items, flagging problems such as
-  non-standard sizes and mixed finishes. The manufacturer then prices it in their own system.</p>
-  <p>That still removes most of the retyping, which is the first pain point in the brief. It doesn't give
-  same-day prices, so it falls short of the main goal, but it's a real starting point.</p>
+  <p>There's still a smaller product. Materialspace can turn any request into the manufacturer's own format,
+  such as their Excel template or a file their portal accepts, with SKUs, modifications and catalog rules
+  already checked. The manufacturer then prices it in their own system.</p>
+  <p>That removes most of the retyping and checking. It doesn't give same-day prices, so it falls short of
+  the main goal, but it's a real starting point.</p>
 </div>
 
 <h2 id="steps"><span class="num">04</span>How I'd break it into steps</h2>
@@ -393,8 +409,8 @@ will reach the product and what it has to connect to.</p>
 <div class="phase">
   <div class="hd"><b>Phase 0 · Show the manufacturer what Materialspace already knows</b></div>
   <p>Start with one manufacturer. Show them their catalog as Materialspace already holds it, including the
-  codes it isn't sure about. Ask them to take over reviewing and correcting it, and to connect their
-  prices.</p>
+  codes, rules and modifications it isn't sure about. Ask them to take over reviewing and correcting it, and
+  to connect their price book and job-size pricing.</p>
   <p>Two risks: they may not want to do any work this early, and there may not be much to maintain if their
   catalog rarely changes. That's why the first ask is a review rather than data entry, and why Materialspace
   does the heavy lifting.</p>
@@ -406,25 +422,34 @@ will reach the product and what it has to connect to.</p>
   <div class="hd"><b>Phase 1 · Quote requests and problem lines</b></div>
   <p>One manufacturer, taking requests in whatever form they arrive. This is most of the work, and where the
   main value is.</p>
-  <p><strong>How requests get in at first:</strong> a dedicated email address. The manufacturer forwards
-  quote requests to it, or asks dealers to send them there directly, and the team can also upload PDFs.
-  Requests from Materialspace dealers arrive already structured once that connection is built. Reading
-  straight from the manufacturer's inbox, and connecting to their own systems, come later.</p>
-  <p>Corrections the quoting team makes are saved from the start, so the same problem doesn't have to be
-  solved twice.</p>
+  <p><strong>How requests get in:</strong></p>
+  <ul>
+    <li>From Materialspace dealers: sent straight to the manufacturer, with no Excel download.</li>
+    <li>From other dealers: a request link with the manufacturer's name on it, where the dealer uploads their
+    Excel file or fills in the manufacturer's template. Plus a dedicated email address, and PDF upload for
+    the quoting team.</li>
+  </ul>
+  <p>Each line is checked against the catalog rules, priced with its modifications and the dealer's discount,
+  and flagged if something needs a person. Corrections the quoting team makes are saved from the start, so the
+  same problem doesn't have to be solved twice.</p>
 </div>
 
 <div class="phase">
-  <div class="hd"><b>Phase 2 · Expected volume for planning</b></div>
-  <p>Weekly totals of expected orders against factory capacity. It depends on two things: enough requests
-  coming through the product to make a useful forecast, and the manufacturer's answer about how they
-  schedule production.</p>
+  <div class="hd"><b>Phase 2 · Orders checked against the quote</b></div>
+  <p>After shop drawings, orders arrive apartment by apartment. A 200-apartment project can mean 200 orders to
+  check against one approved quote. The product matches each order to the quote, flags anything that changed,
+  and sends it on in the format the manufacturer's ordering system already takes. It includes the dealer's
+  24-hour review (page 71).</p>
+  <p>It comes before planning because it doesn't need anyone to agree to share anything. The orders go to the
+  manufacturer anyway, and you've said ordering has a lot of friction today.</p>
 </div>
 
 <div class="phase">
-  <div class="hd"><b>Phase 3 · Dealer activity on individual projects</b></div>
-  <p>Depends on what dealers say about sharing (section 07). It comes last because it's the one part that
-  could damage trust with dealers.</p>
+  <div class="hd"><b>Phase 3 · Planning</b></div>
+  <p>Expected volume by week against factory capacity, using three things: orders already booked in the
+  manufacturer's own system, including ones that never went through Materialspace; quotes in progress; and
+  projects dealers have registered. It depends on dealers being willing to register, and on how the
+  manufacturer schedules production.</p>
 </div>
 
 <h3>How I'd measure it</h3>
@@ -441,33 +466,39 @@ will reach the product and what it has to connect to.</p>
     <tr><td><strong>Questions per quote</strong></td>
       <td>How many questions go back to the dealer for each quote.</td>
       <td>Too many means the reading isn't good enough, or the catalog has gaps.</td></tr>
-    <tr><td><strong>Forecast accuracy</strong></td>
-      <td>For a given week, compare the units forecast four to eight weeks earlier with the orders that
-      actually came in.</td>
-      <td>Shows whether the planning view can be trusted.</td></tr>
+    <tr><td><strong>Orders that match the quote</strong></td>
+      <td>Share of apartment orders that go through without a correction. (Phase 2)</td>
+      <td>Shows whether ordering got easier.</td></tr>
+    <tr><td><strong>Projects registered</strong></td>
+      <td>Share of quoted projects that dealers register, and how many are still confirmed after three
+      months. (Phase 3)</td>
+      <td>Shows whether dealers think the trade is worth it.</td></tr>
     <tr><td><strong>Dealers joining through manufacturers</strong></td>
-      <td>New dealers signing up to Materialspace through a manufacturer's invitation, per manufacturer, per
-      quarter. Tracked with invite links.</td>
+      <td>Dealers who use a manufacturer's request link, and how many of them become Materialspace customers,
+      per manufacturer, per quarter.</td>
       <td>Shows whether the strategy works (below).</td></tr>
   </tbody>
 </table>
 
 <div class="box b-ok">
   <b>The number that shows whether the strategy works</b>
-  <p>The other measures show whether the product works. This one shows whether the strategy does.</p>
-  <p>Say a manufacturer has 100 dealers, and a few already use Materialspace. Their requests arrive clean and
-  get priced in minutes, while everyone else's arrive as PDFs. The hope is that the manufacturer starts
-  telling its other dealers to send requests through Materialspace to get faster prices. Every dealer who
-  joins that way is a new customer Materialspace didn't have to go out and win.</p>
+  <p>The other measures show whether the product works. This one shows whether the strategy does. You've
+  said distribution comes first, so it's the number I'd lead with.</p>
+  <p>Say a manufacturer has 100 dealers, and a few already use Materialspace. Their requests arrive with one
+  click and get priced in minutes. Everyone else sends an Excel file through the manufacturer's request link,
+  and that works, but it's slower. The hope is that the manufacturer starts sending its other dealers the
+  link, and some of those dealers see that Materialspace customers have it easier. Every dealer who joins that
+  way is a new customer Materialspace didn't have to go out and win.</p>
   <ul>
     <li><strong>A few dealers a quarter:</strong> the manufacturer product is a useful thing to sell, but a
     modest one.</li>
     <li><strong>Dozens a quarter:</strong> each manufacturer brings a large group of dealers with it, and
     that's how the platform grows. Once dealers and manufacturers all work in the same place, it's also hard
-    for a competitor to replace. Those are reasons two and three in your brief.</li>
+    for a competitor to replace.</li>
   </ul>
-  <p>So this number tells Materialspace whether the manufacturer product is a side product or its main way to
-  grow.</p>
+  <p>The catch: if the request link is too good, dealers get fast prices for free and have no reason to pay.
+  So the link should do one thing, getting a request to the manufacturer, and none of the design and
+  estimating that Materialspace customers pay for.</p>
 </div>
 
 <h2 id="start"><span class="num">05</span>Where I'd start, and why</h2>
@@ -484,21 +515,22 @@ not only from Materialspace dealers.</p>
 </ul>
 
 <div class="box b-warn">
-  <b>Why start with messy requests</b>
-  <p>An obvious question: Materialspace produces the dealer's estimate, so why read a printed, marked-up
-  version of it?</p>
+  <b>Why take requests from dealers who aren't on Materialspace</b>
+  <p>An obvious question: Materialspace already produces the dealer's request, so why handle Excel files and
+  PDFs from other dealers?</p>
   <p>Because today, most of a manufacturer's dealers don't use Materialspace. On day one, the product is only
-  useful if it handles all of a manufacturer's requests, whatever form they come in. Once the manufacturer
-  sees that requests sent through Materialspace are faster to price, it has a reason to move its other
-  dealers onto it. That's how the dealer growth described above would happen.</p>
+  useful if it handles all of a manufacturer's requests. Most of those will probably be Excel files. Scanned,
+  handwritten orders like the sample one are rare, but they happen, and the prototype shows one. Once the
+  manufacturer sees that requests from Materialspace dealers are faster to price, it has a reason to move its
+  other dealers onto it.</p>
 </div>
 
 <h2 id="competition"><span class="num">06</span>Competition</h2>
 <p>If a manufacturer doesn't use this, what do they use instead?</p>
 
 <h3>Keeping things as they are</h3>
-<p>Email, the manufacturer's own ordering portal (Smart has one), and people retyping orders. This is often
-the strongest competitor, because it costs nothing to keep.</p>
+<p>Excel files by email, the manufacturer's own template, its ordering portal (Smart has one), and people
+retyping and checking by hand. This is often the strongest competitor, because it costs nothing to keep.</p>
 
 <h3>2020 (now Design Flex, from Cyncly)</h3>
 <p>You've told me this is the main competitor today, and that customers would be glad to replace it with
@@ -514,14 +546,14 @@ quoting and ordering with manufacturers.</p>
 <p>KitchenDEV, Cabentry and Kitchen365 give manufacturers a branded portal where dealers configure, price and
 order. This kind of software is often called CPQ, short for configure, price, quote.</p>
 <p>They expect dealers to come to the portal and enter orders there. KitchenDEV's product page, for example,
-doesn't mention reading orders sent by email. And each manufacturer has its own portal, so a dealer who buys
-from five manufacturers needs five logins. That's probably why orders still arrive by email.</p>
+doesn't mention reading orders sent by email. And each manufacturer has its own process, so a dealer who buys
+from five manufacturers deals with five different ones. That matches what you described.</p>
 
 <h3>General order-reading tools</h3>
 <p>Conexiom turns emailed orders, including PDFs, spreadsheets and handwritten notes, into orders in a
-manufacturer's system, for any industry. That's close to how the prototype handles messy requests, so reading
-messy documents isn't new on its own. What Conexiom doesn't have is knowledge of cabinets, such as how codes
-are built, finish rules and dealer discounts, or a network of dealers.</p>
+manufacturer's system, for any industry. So reading documents isn't new on its own. What Conexiom doesn't have
+is knowledge of cabinets, such as how codes are built, modifications, finish rules and dealer discounts, or a
+network of dealers.</p>
 
 <h3>Parspec, the closest example</h3>
 <p>Parspec does something similar for electrical and plumbing products. It reads drawings and specifications,
@@ -544,12 +576,12 @@ turned into item lists, and quotes go out in minutes without retyping. That's ve
   reasons specific to cabinets:</p>
   <ul>
     <li><strong>Cabinets are configured.</strong> A cabinet code is built from rules: type, width, height,
-    depth and options (Smart spec book, page 70). You can't simply copy a list of products from a
-    website.</li>
-    <li><strong>Quotes get stuck at the manufacturer.</strong> In electrical, the rep or distributor produces
-    the quote. In cabinets, anything non-standard waits for the manufacturer to price it. Smart's ordering
-    guide says such items show no price "until we approve or correct the item" (page 73). The delay is at
-    the manufacturer, so the manufacturer has to use the product.</li>
+    depth and options (Smart spec book, page 70), plus modifications that aren't in the spec book at all. You
+    can't simply copy a list of products from a website.</li>
+    <li><strong>Quotes get stuck at the manufacturer.</strong> In cabinets, the price depends on the
+    manufacturer's price book, the dealer's discount and the size of the job, and anything non-standard waits
+    for the manufacturer. Smart's ordering guide says such items show no price "until we approve or correct the
+    item" (page 73). The delay is at the manufacturer, so the manufacturer has to use the product.</li>
   </ul>
   <p>One open question: do some cabinet manufacturers rely on independent reps to prepare quotes? The brief
   and Smart's documents both point to the manufacturer's own team. Where reps are involved, they could be a
@@ -582,14 +614,16 @@ turned into item lists, and quotes go out in minutes without retyping. That's ve
   <tbody>
     <tr>
       <td><strong>Dealer</strong></td>
-      <td>Prices back faster. Fewer rejected orders. One place to send requests instead of email.</td>
+      <td>Prices back faster. No more sending the same job a different way to each manufacturer. Fewer
+      rejected orders. Project pricing held, if they register.</td>
       <td>May worry about what manufacturers can see (below).</td>
     </tr>
     <tr>
       <td><strong>Manufacturer</strong></td>
-      <td>Wins more jobs by quoting faster. Less manual work per quote. A better idea of what's coming.</td>
-      <td>Relies on another company to reach its dealers, on a platform that also lets dealers compare it
-      with competitors. Takes on responsibility for its catalog data.</td>
+      <td>Wins more jobs by quoting faster. Less manual work per quote and per order. A better idea of what's
+      coming.</td>
+      <td>Relies on another company to reach its dealers, on a platform its competitors also use. Takes on
+      responsibility for its catalog data. Carries the cost of held prices.</td>
     </tr>
     <tr>
       <td><strong>Materialspace</strong></td>
@@ -606,44 +640,41 @@ turned into item lists, and quotes go out in minutes without retyping. That's ve
   </tbody>
 </table>
 
-<h3>Does sharing dealer activity with manufacturers hurt dealers?</h3>
-<p>This is an open question, and it decides how the pipeline feature should work.</p>
-<p><strong>Why it might matter.</strong> Discounts are negotiated partly on volume, so a manufacturer who can
-see all of a dealer's upcoming work knows more going into that conversation. And a manufacturer who can see
-which projects are live could try to sell directly to the builder and skip the dealer. As far as I know,
-some manufacturers already sell directly to large builders.</p>
-<p><strong>Why it might not.</strong> Discounts are often set in advance in volume tiers, and volume is a
-normal part of the conversation anyway. A quote request doesn't have to say who the builder is. And the
-manufacturer already receives every quote request today. The only new thing would be seeing whether a job is
-still active over time.</p>
-<p><strong>So it depends on what dealers say:</strong></p>
+<h3>Getting dealers to share: project registration</h3>
+<p>The manufacturer wants to know which quoted projects are still alive. Materialspace can't tell them
+without the dealer agreeing, and on its own it only finds out a job was won at shop drawings, which is late.
+So the dealer needs a reason to share.</p>
+<p><strong>Why a dealer might not want to.</strong> The dealer's discount depends on its volume and on the
+size of each job. A manufacturer who can see all of a dealer's upcoming work knows more going into that
+conversation.</p>
+<p><strong>The idea.</strong> Something like this already exists in IT and networking, where it's called deal
+registration. A reseller registers a deal with the vendor, and gets better pricing on it in return. The vendor
+gets a view of its pipeline. For cabinets, it could work like this:</p>
 <ul>
-  <li><strong>They don't mind:</strong> show dealer activity on every project. It's simpler, and more useful to the
-  manufacturer.</li>
-  <li><strong>They do mind:</strong> the manufacturer still sees the projects it was asked to quote, and weekly totals across
-  all dealers, but not whether a dealer is still working on a particular job. That is shared only when a dealer asks for something in return, such as a firm ship date.
-  Materialspace never asks dealers to share on a manufacturer's behalf, because even a request they turn
-  down tells them their data is being discussed. Dealers are Materialspace's only paying customers today,
-  and I don't want to put that at risk. The prototype's Pipeline screen shows this version.</li>
+  <li>The dealer chooses to register a quoted project with the manufacturer.</li>
+  <li>In return, the manufacturer holds the project price until the dealer orders, up to an end date.</li>
+  <li>Every few weeks, the dealer confirms the project is still alive. If they don't, the hold lapses.</li>
+  <li>The manufacturer sees registered projects, with expected timing, on its Pipeline screen. Nothing about
+  unregistered projects is shared.</li>
 </ul>
-
-<h3>If activity is only shared when a dealer asks for a date</h3>
-<p>There are two ways to design it, and I'd want to discuss them with you:</p>
+<p><strong>Why I like it.</strong> The dealer decides what to share, and gets something worth money for it.
+It fits the problem in the brief, where a quote sits for up to a year. And the large jobs that surprise the
+factory are the same ones where held pricing is worth the most to the dealer. Materialspace never asks dealers
+to register on a manufacturer's behalf. Dealers are its only paying customers today, and I don't want to put
+that at risk.</p>
+<p><strong>Open questions.</strong></p>
 <ul>
-  <li><strong>Simple:</strong> the dealer's activity on that job is shared as soon as they send the request. Easy to
-  build. But if the manufacturer then can't commit to a date, the dealer shared information and got nothing
-  back.</li>
-  <li><strong>Held until the manufacturer commits:</strong> the manufacturer sees the request against its own
-  capacity, and the dealer's activity is shared only if it commits to a date. Fairer to the dealer, but more
-  complex: each request needs states (waiting, committed, expired, withdrawn) and a hold on the production
-  slot for a set time.</li>
+  <li>Holding a price costs the manufacturer if prices go up. That's why the hold needs an end date, and why
+  it matters how often prices change.</li>
+  <li>If two dealers register the same project with the same manufacturer, what happens? In IT, the first one
+  is usually protected. Dealers might like that, or it might cause conflict.</li>
+  <li>Is a price hold enough reward on small jobs? Maybe not, but the small jobs aren't the ones that surprise
+  the factory.</li>
 </ul>
-<p>Either way, two questions remain. First, what does "commit" mean when the dealer hasn't won the job yet?
-A manufacturer holding a production slot for a job the dealer might lose is keeping capacity free for
-nothing. Second, manufacturers could leave dates vague on purpose, so that dealers have to ask and share.
-One way to discourage that is to show dealers how often each manufacturer gives firm dates.</p>
-<p>If I had to build it soon, I'd start with the simple version and track how often manufacturers can't
-commit.</p>
+<p><strong>Another option I considered.</strong> A dealer shares a project in exchange for a firm ship date,
+with the details held back until the manufacturer commits. The problem is that the manufacturer would be
+reserving factory capacity for a job the dealer might still lose. A price hold doesn't take up capacity, which
+is why I'd start with registration. I'd want to discuss both with you.</p>
 
 <h3>Relying on Materialspace, from the manufacturer's side</h3>
 <p>A manufacturer joining the platform could worry about:</p>
@@ -651,8 +682,7 @@ commit.</p>
   <li>another company sitting between it and its dealers</li>
   <li>its data being held somewhere else, and not being able to get it back out</li>
   <li>prices going up once it's hard to leave</li>
-  <li>the platform helping dealers compare it with competitors, since Materialspace already lets dealers
-  price jobs across several catalogs</li>
+  <li>the platform making it easy for dealers to compare it with competitors</li>
 </ul>
 <p>Manufacturers already accept this with 2020, because that's where dealers are. What they'd want to avoid
 is a platform they can't leave that stops improving. I'd want to decide a few commitments early:</p>
@@ -661,7 +691,16 @@ is a platform they can't leave that stops improving. I'd want to decide a few co
   <li>quotes go out under the manufacturer's name</li>
   <li>no manufacturer can pay to be shown ahead of others</li>
   <li>one manufacturer's data is never shown to another, for example which items dealers ask it for</li>
-  <li>the product works alongside the manufacturer's own systems instead of replacing them</li>
+  <li>it works with the systems the manufacturer already has:
+    <ul>
+      <li><strong>Price book:</strong> read from wherever it lives today, such as an Excel file, not
+      re-entered.</li>
+      <li><strong>Order entry:</strong> checked orders go into their ordering system or portal in the format it
+      already takes.</li>
+      <li><strong>Production schedule:</strong> expected volume is fed into however they plan today. The
+      product doesn't schedule the plant.</li>
+    </ul>
+  </li>
 </ul>
 <p>There's also a longer-term effect. Once every manufacturer quotes the same day, speed stops being an
 advantage and becomes what everyone expects. Early manufacturers would join to get ahead, and later ones so
@@ -670,29 +709,35 @@ they don't fall behind.</p>
 <h2 id="risks"><span class="num">08</span>What could go wrong</h2>
 
 <h3>Product</h3>
-<p><strong>Reading mistakes don't announce themselves.</strong> Codes like W1818 and W1858 both look valid,
-so a wrong reading can look correct. It might only come to light months later, as the wrong cabinet in a
-hundred-unit building. That's why the prototype shows how confident it is about each line, and doesn't
-recommend anything below a threshold.</p>
+<p><strong>Reading mistakes don't announce themselves.</strong> Two codes can both look valid, so a wrong
+reading can look correct. It might only come to light months later, as the wrong cabinet in a hundred
+apartments. That's why the prototype shows how confident it is about each line, and doesn't recommend anything
+below a threshold.</p>
 <p><strong>The confidence threshold is a business decision.</strong> The 85% in the prototype is a
 placeholder. The real threshold should weigh the cost of accepting a wrong line against the cost of asking
 the dealer, and could differ by type of item.</p>
+<p><strong>Modifications and rules may be hard to capture.</strong> You've said real SKUs include
+modifications the spec book doesn't show. If those rules only live in the quoting team's heads, loading them
+is slow, and the product misprices lines until it's done.</p>
 <p><strong>Corrections need to be kept.</strong> Each fix the quoting team makes is an example of a hard
 case. If the product doesn't learn from them, the same problem has to be fixed again next time. I'd build
 this in from the start, because that's when there are the most corrections.</p>
 
 <h3>Process</h3>
-<p><strong>The price book may be hard to use.</strong> The spec book is a print document, and the price book
-could be an old spreadsheet with years of in-house conventions.</p>
-<p><strong>The quoting team may not welcome it.</strong> It's often one or two people who have done it their
-way for years, and part of their value is that they're the only ones who know how.</p>
+<p><strong>The price book may be hard to use.</strong> You've said it's a list of SKUs and prices. It may
+still carry years of in-house conventions that only the quoting team understands.</p>
+<p><strong>The quoting team may not welcome it.</strong> Part of their value is that they're the ones who know
+how pricing really works.</p>
+<p><strong>Job-size pricing may need a person.</strong> If someone has to approve every large quote, the delay
+moves from the quoting team to them.</p>
 <p><strong>Manufacturers may not want to do setup work early,</strong> especially if their catalog rarely
 changes.</p>
 
 <h3>Market</h3>
-<p><strong>Dealers could see it as a threat,</strong> if they think it helps manufacturers go around them.
-They're Materialspace's paying customers, so getting this wrong affects the existing business, not just the
-new product.</p>
+<p><strong>Dealers could see it as a threat,</strong> if they think it gives manufacturers too much insight
+into their business. They're Materialspace's paying customers, so getting this wrong affects the existing
+business, not just the new product.</p>
+<p><strong>The request link could replace paying for Materialspace,</strong> if it does too much for free.</p>
 <p><strong>2020 could add automated quoting</strong>, starting with the catalogs and dealers it already
 has.</p>
 <p><strong>Parspec could move into cabinets.</strong></p>
@@ -705,15 +750,31 @@ has.</p>
   <li>The dollar amounts on the sample order are line totals, not prices per item.</li>
   <li>The handwritten "F-L" means finished left: the left side of the cabinet gets a finished panel because
   it's exposed. "b" means "by".</li>
-  <li>Revenue being last in your list of reasons is deliberate, so early on this would be free or cheap for
-  manufacturers.</li>
   <li>Materialspace already reads manufacturer catalogs for its dealers.</li>
+  <li>Most requests from dealers who aren't on Materialspace are Excel files.</li>
+  <li>Job-size pricing can be set as bands for most jobs.</li>
   <li>What the dealer sends the manufacturer is a quote request. I've avoided "bid", which usually means what
   the dealer sends the builder.</li>
-  <li>The roles in the prototype (quoting, plant scheduling, sales operations) are my guess for a large
-  manufacturer.</li>
+  <li>The people involved at the manufacturer (quoting, sales, catalog, plant scheduling) are my guess for a
+  large manufacturer.</li>
   <li>The $1.4 million example in section 01 uses made-up numbers.</li>
-  <li>The dealer names, volumes, and all numbers on the Catalog and Pipeline screens are made up.</li>
+  <li>The dealer names, volumes, and all numbers in the prototype are made up.</li>
+</ul>
+
+<h3>What's taken from your answers</h3>
+<ul>
+  <li>How dealers send requests today: an Excel file by email, the manufacturer's template, or a portal.</li>
+  <li>Ordering happens after shop drawings, by email or portal, with a lot of friction.</li>
+  <li>Materialspace only knows a job was won when shop drawings are made, and nothing can be shared without
+  the dealer agreeing.</li>
+  <li>Multifamily projects are quoted as a total but ordered per apartment.</li>
+  <li>Distribution and a moat come before revenue, so this would be free or very cheap for manufacturers at
+  first.</li>
+  <li>The price book is separate from the spec book, and real SKUs include modifications the spec book doesn't
+  show.</li>
+  <li>The dealer's discount depends on its volume and on the size of the job.</li>
+  <li>2020 is the main competitor, and customers would switch to something faster and smarter.</li>
+  <li>The sample order is an old retail job. I use it only to show a messy request.</li>
 </ul>
 
 <h3>What's taken from the documents you sent</h3>
@@ -733,7 +794,8 @@ has.</p>
     </ul>
   </li>
 </ul>
-<p>Information about competitors comes from their public websites and press coverage, September 2026.</p>
+<p>Information about competitors comes from their public websites and press coverage, September 2026. Deal
+registration is a common practice in IT and networking sales.</p>
 
 <div class="foot">
   Prototype: <a href="index.html">therubioftw.github.io/MS</a> · prepared for the Materialspace product
