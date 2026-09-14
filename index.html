@@ -334,7 +334,7 @@
       <tbody id="inbox-rows"></tbody>
     </table>
   </div>
-  <div class="sub" style="margin-top:10px">Q-4476 and Q-4471 open. The rest are illustrative.</div>
+  <div class="sub" style="margin-top:10px">Q-4476 opens. To see a PDF being read, use + Add request. The rest are illustrative.</div>
 </section>
 
 <!-- ============ QUOTE ============ -->
@@ -417,12 +417,12 @@
     <div>
       <div class="card chart" style="margin-bottom:14px">
         <h3>Factory load, next 14 weeks</h3>
-        <div class="cap">Orders already booked in your own system, including ones that never went through Materialspace,
+        <div class="cap">Orders already booked, from the weekly export of your ordering system (last uploaded Monday), including ones that never went through Materialspace,
           plus what open quotes and shared projects suggest is coming.</div>
         <div class="bars" id="bars"></div>
         <div class="wklabs" id="wklabs"></div>
         <div class="legend">
-          <span><i style="background:var(--accent)"></i>Booked orders (from your system)</span>
+          <span><i style="background:var(--accent)"></i>Booked orders (from your weekly export)</span>
           <span><i style="background:repeating-linear-gradient(45deg,#c9d8f2,#c9d8f2 3px,#dde7f8 3px,#dde7f8 6px)"></i>Expected from quotes</span>
           <span><i style="background:#c9a227"></i>Plant capacity</span>
         </div>
@@ -468,7 +468,7 @@
         </div>
         <div class="layer">
           <b>Orders already booked</b>
-          From your own ordering system, whichever way they came in.
+          From the weekly export of your ordering system, whichever way the orders came in.
         </div>
         <div class="layer opt">
           <b>Whether a job is still alive</b>
@@ -486,116 +486,178 @@
 <!-- ============ CATALOG ============ -->
 <section class="view" id="v-catalog">
   <h1>Catalog</h1>
-  <div class="sub">Your catalog as Materialspace reads it. Review it, correct it, and record changes.</div>
+  <div class="sub">Your items, prices and rules as Materialspace reads them. Review them, correct them, and publish changes.</div>
 
-  <div class="stats">
-    <div class="stat"><div class="k">Items in catalog</div><div class="v">1,240</div></div>
-    <div class="stat"><div class="k">Read with confidence</div><div class="v">1,118 <small>of 1,240</small></div></div>
-    <div class="stat hero"><div class="k">Need your review</div><div class="v" style="color:var(--warn)">122</div></div>
-    <div class="stat"><div class="k">Price book</div><div class="v" style="color:var(--ok)">Connected <small>2023 prices</small></div></div>
-  </div>
-
-  <div class="banner">
-    <div class="dot" style="background:var(--warn);margin-top:7px"></div>
-    <div>
-      <b>122 items need your review</b>
-      These were read from your spec book, but not with enough confidence to price them automatically. Until
-      you confirm them, any quote that includes one stops for someone on your team to check.
-      <div class="src">Read from: 2023 Specifications Guide (88 pages), plus 90 days of dealer requests</div>
-      <button class="pub" style="margin-top:9px" onclick="document.getElementById('confirm').scrollIntoView({behavior:'smooth',block:'center'})">Review items</button>
+  <div class="toolbar" style="margin-bottom:14px">
+    <div class="seg">
+      <button data-cat="items" class="on">Items and modifications <span class="muted">· 122 to review</span></button>
+      <button data-cat="pricing">Pricing <span class="muted" id="tab-pricing">· 1 change waiting</span></button>
+      <button data-cat="rules">Rules <span class="muted" id="tab-rules">· 1 to confirm</span></button>
     </div>
   </div>
 
-  <div class="card" style="margin-bottom:14px">
-    <div style="padding:15px 16px 4px">
-      <h3 style="margin:0 0 3px;font-size:14px">Catalog updates <span class="muted" style="font-weight:500" id="chg-pending"></span></h3>
-      <div class="sub" style="margin-bottom:8px">Record anything that affects quotes: a discontinued item, a
-        temporary shortage, or an arrangement with a single dealer.</div>
+  <!-- items and modifications -->
+  <div id="cat-items">
+    <div class="stats">
+      <div class="stat"><div class="k">Items in catalog</div><div class="v">1,240</div></div>
+      <div class="stat"><div class="k">Modifications</div><div class="v">86</div></div>
+      <div class="stat"><div class="k">Read with confidence</div><div class="v">1,118 <small>of 1,240 items</small></div></div>
+      <div class="stat hero"><div class="k">Need your review</div><div class="v" style="color:var(--warn)">122</div></div>
     </div>
-    <table>
-      <colgroup><col><col style="width:96px"><col style="width:170px"><col style="width:120px">
-        <col style="width:104px"><col style="width:128px"></colgroup>
-      <thead><tr><th>Change</th><th>Type</th><th>Applies to</th><th>When</th>
-        <th style="text-align:right">Open quotes</th><th>Status</th></tr></thead>
-      <tbody id="chg-rows"></tbody>
-    </table>
-  </div>
 
-  <div class="grid2">
-    <div>
-      <div class="card" style="padding:16px;margin-bottom:14px">
-        <h3 style="margin:0 0 3px;font-size:14px">How your codes are read</h3>
-        <div class="sub" style="margin-bottom:14px">Using the rules on page 70 of your spec book.</div>
-        <div class="parse">
-          <span class="tok t1"><b>T</b><span>Tall cabinet</span></span>
-          <span class="tok t2"><b>36</b><span>36" wide</span></span>
-          <span class="tok t3"><b>84</b><span>84" high</span></span>
-          <span class="tok t4"><b>24</b><span>24" deep</span></span>
-          <span class="tok t5"><b>B</b><span>Butt doors</span></span>
+    <div class="banner">
+      <div class="dot" style="background:var(--warn);margin-top:7px"></div>
+      <div>
+        <b>122 items need your review</b>
+        These were read from your spec book, but not with enough confidence to price them automatically. Until
+        you confirm them, any quote that includes one stops for someone on your team to check.
+        <div class="src">Read from: 2023 Specifications Guide (88 pages), your price book, and 90 days of dealer requests</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <div class="card" style="padding:16px;margin-bottom:14px">
+          <h3 style="margin:0 0 3px;font-size:14px">Please confirm</h3>
+          <div class="sub" style="margin-bottom:10px">The first 3 of 122.</div>
+          <div class="issue i-high"><span class="dot"></span><span>
+            <b><code style="font-family:var(--mono)">ROS</code> or <code style="font-family:var(--mono)">_ROS</code>?</b>
+            One is a roll-out shelf installed on site, the other installed at the factory, at different prices. In
+            three places the spec book's layout makes it unclear which is meant. <b>Holding 1 open quote.</b></span></div>
+          <div class="issue i-high"><span class="dot"></span><span>
+            <b><code style="font-family:var(--mono)">W241224B</code> can be read two ways.</b> The numbers have no
+            separators, so it could be 24 × 12 × 24 with butt doors, or 2412 × 24. Which is right?</span></div>
+          <div class="issue i-med"><span class="dot"></span><span>
+            <b>Door and drawer-front sizes are in a different order.</b>
+            <code style="font-family:var(--mono)">DR</code> codes give width then height,
+            <code style="font-family:var(--mono)">DF</code> codes give height then width. Is that intended?</span></div>
         </div>
 
-        <div class="sec" style="margin-top:20px">Modifications, read from your price book</div>
-        <div class="rule"><span class="pg" style="width:70px">FE-L</span><span>Finished end, left. Adds a price per cabinet, not in the spec book.</span></div>
-        <div class="rule"><span class="pg" style="width:70px">TIP-ON</span><span>Push-to-open hardware. Adds a price per door.</span></div>
-        <div class="rule"><span class="pg" style="width:70px">DEPTH</span><span>Reduced depth. Checked against the 3" step rule on page 25.</span></div>
-
-        <div class="sec" id="confirm" style="margin-top:22px">Please confirm</div>
-        <div class="issue i-high"><span class="dot"></span><span>
-          <b><code style="font-family:var(--mono)">W241224B</code> can be read two ways.</b> The numbers have no
-          separators, so it could be 24 × 12 × 24 with butt doors, or 2412 × 24. Which is right?</span></div>
-        <div class="issue i-high"><span class="dot"></span><span>
-          <b><code style="font-family:var(--mono)">ROS</code> or <code style="font-family:var(--mono)">_ROS</code>?</b>
-          One is a roll-out shelf installed on site, the other installed at the factory, at different prices. In
-          three places the spec book's layout makes it unclear which is meant.</span></div>
-        <div class="issue i-med"><span class="dot"></span><span>
-          <b>Door and drawer-front sizes are in a different order.</b>
-          <code style="font-family:var(--mono)">DR</code> codes give width then height,
-          <code style="font-family:var(--mono)">DF</code> codes give height then width. Is that intended?</span></div>
+        <div class="card" style="padding:16px;margin-bottom:14px">
+          <h3 style="margin:0 0 3px;font-size:14px">How your codes are read</h3>
+          <div class="sub" style="margin-bottom:14px">An item code, using the rules on page 70 of your spec book.</div>
+          <div class="parse">
+            <span class="tok t1"><b>T</b><span>Tall cabinet</span></span>
+            <span class="tok t2"><b>36</b><span>36" wide</span></span>
+            <span class="tok t3"><b>84</b><span>84" high</span></span>
+            <span class="tok t4"><b>24</b><span>24" deep</span></span>
+            <span class="tok t5"><b>B</b><span>Butt doors</span></span>
+          </div>
+          <div class="sec" style="margin-top:20px">Modifications</div>
+          <div class="sub" style="margin-bottom:6px">Added to an item code. Priced from your price book, not the spec book.</div>
+          <div class="rule"><span class="pg" style="width:70px">FE-L</span><span>Finished end, left. Adds a price per cabinet.</span></div>
+          <div class="rule"><span class="pg" style="width:70px">TIP-ON</span><span>Push-to-open hardware. Adds a price per door.</span></div>
+          <div class="rule"><span class="pg" style="width:70px">DEPTH</span><span>Reduced depth. Checked against your depth rule (Rules tab).</span></div>
+        </div>
       </div>
 
-      <div class="card" style="padding:16px">
-        <h3 style="margin:0 0 3px;font-size:14px">Asked for, not in your book</h3>
-        <div class="sub" style="margin-bottom:10px">Across every dealer request in the last 90 days.</div>
-        <table>
-          <colgroup><col><col style="width:90px"><col style="width:80px"></colgroup>
-          <thead><tr><th>What dealers asked for</th><th style="text-align:right">Requests</th><th style="text-align:right">Dealers</th></tr></thead>
-          <tbody id="gap-rows"></tbody>
-        </table>
+      <div>
+        <div class="callout" style="margin-bottom:14px">
+          <h3>Dealers keep asking for a finish you don't offer</h3>
+          <p>Tafisa L582 came up in 22 requests from 7 dealers this quarter, and it isn't in your catalog.</p>
+        </div>
+        <div class="card" style="padding:16px;margin-bottom:14px">
+          <h3 style="margin:0 0 3px;font-size:14px">Asked for, not in your catalog</h3>
+          <div class="sub" style="margin-bottom:10px">Across every dealer request in the last 90 days.</div>
+          <table>
+            <colgroup><col><col style="width:80px"><col style="width:70px"></colgroup>
+            <thead><tr><th>What dealers asked for</th><th style="text-align:right">Requests</th><th style="text-align:right">Dealers</th></tr></thead>
+            <tbody id="gap-rows"></tbody>
+          </table>
+        </div>
+        <div class="card" style="padding:16px">
+          <h3 style="margin:0 0 3px;font-size:14px">Item changes</h3>
+          <div class="sub" style="margin-bottom:8px">Discontinued items and shortages. Open quotes that include them are flagged.</div>
+          <div id="chg-items"></div>
+        </div>
       </div>
     </div>
+  </div>
 
-    <div>
-      <div class="callout" style="margin-bottom:14px">
-        <h3>Dealers keep asking for a finish you don't offer</h3>
-        <p>Tafisa L582 came up in 22 requests from 7 dealers this quarter, and it isn't in your catalog.</p>
+  <!-- pricing -->
+  <div id="cat-pricing" hidden>
+    <div class="stats">
+      <div class="stat"><div class="k">Price book</div><div class="v" style="color:var(--ok)">Connected <small>2023 prices</small></div></div>
+      <div class="stat"><div class="k">Dealers with a discount</div><div class="v">38</div></div>
+      <div class="stat"><div class="k">Job-size bands</div><div class="v">4</div></div>
+      <div class="stat hero"><div class="k">Changes waiting</div><div class="v" style="color:var(--warn)" id="pr-waiting">1</div></div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <div class="card" style="margin-bottom:14px">
+          <div style="padding:15px 16px 4px">
+            <h3 style="margin:0 0 3px;font-size:14px">Dealer discounts</h3>
+            <div class="sub" style="margin-bottom:8px">Each dealer's standard discount, based on their volume. Visible only
+              to you and that dealer.</div>
+          </div>
+          <table>
+            <colgroup><col><col style="width:110px"><col style="width:200px"><col style="width:100px"></colgroup>
+            <thead><tr><th>Dealer</th><th style="text-align:right">Discount</th><th>Arrangement</th><th style="text-align:right">Open quotes</th></tr></thead>
+            <tbody id="disc-rows"></tbody>
+          </table>
+        </div>
+        <div class="card" style="padding:16px">
+          <h3 style="margin:0 0 3px;font-size:14px">Price changes</h3>
+          <div class="sub" style="margin-bottom:8px">Open quotes keep their price. New quotes use the change once it's published.</div>
+          <div id="chg-pricing"></div>
+        </div>
       </div>
 
-      <div class="card" style="padding:16px;margin-bottom:14px">
-        <h3 style="margin:0 0 3px;font-size:14px">Job-size pricing</h3>
-        <div class="sub" style="margin-bottom:8px">Set once by your sales team. Applied on top of each dealer's
-          standard discount, so most quotes price themselves.</div>
+      <div>
+        <div class="card" style="padding:16px;margin-bottom:14px">
+          <h3 style="margin:0 0 3px;font-size:14px">Job-size pricing</h3>
+          <div class="sub" style="margin-bottom:8px">Set once by your sales team. Applied on top of each dealer's
+            discount, so most quotes price themselves.</div>
+          <table>
+            <colgroup><col><col style="width:130px"></colgroup>
+            <thead><tr><th>Apartments in the job</th><th style="text-align:right">Extra discount</th></tr></thead>
+            <tbody>
+              <tr><td>1–49</td><td class="money">None</td></tr>
+              <tr><td>50–99</td><td class="money">2%</td></tr>
+              <tr><td>100–199</td><td class="money">4%</td></tr>
+              <tr><td>200 or more</td><td style="text-align:right"><span class="pill p-warn">Sales decides</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card privacy">
+          <h3>How a quote is priced</h3>
+          List price from your price book, plus modifications, times the dealer's discount, times the job-size
+          band. Delivery is added separately.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- rules -->
+  <div id="cat-rules" hidden>
+    <div class="stats">
+      <div class="stat"><div class="k">Rules for all dealers</div><div class="v">5</div></div>
+      <div class="stat hero"><div class="k">Confirmed by you</div><div class="v" id="rules-ok">4 <small>of 5</small></div></div>
+      <div class="stat"><div class="k">Single-dealer approvals</div><div class="v">1</div></div>
+      <div class="stat"><div class="k">Suggested from corrections</div><div class="v">0</div></div>
+    </div>
+    <div class="grid2">
+      <div class="card" style="padding:16px">
+        <h3 style="margin:0 0 3px;font-size:14px">Rules for all dealers</h3>
+        <div class="sub" style="margin-bottom:6px">Read from your spec book and checked on every quote. Once you confirm a rule,
+          dealers on Materialspace also see it while they price.</div>
         <table>
-          <colgroup><col><col style="width:130px"></colgroup>
-          <thead><tr><th>Apartments in the job</th><th style="text-align:right">Extra discount</th></tr></thead>
-          <tbody>
-            <tr><td>1–49</td><td class="money">None</td></tr>
-            <tr><td>50–99</td><td class="money">2%</td></tr>
-            <tr><td>100–199</td><td class="money">4%</td></tr>
-            <tr><td>200 or more</td><td style="text-align:right"><span class="pill p-warn">Sales decides</span></td></tr>
-          </tbody>
+          <colgroup><col style="width:52px"><col><col style="width:130px"></colgroup>
+          <tbody id="rule-rows"></tbody>
         </table>
       </div>
-
-      <div class="card privacy" style="margin-bottom:14px">
-        <h3>Arrangements with single dealers</h3>
-        <p style="margin:0;color:var(--ink-3)">11 dealers have something specific to them: an exclusive size,
-        an approved change, or a different discount. Each one is visible only to you and that dealer.</p>
-      </div>
-
-      <div class="card" style="padding:16px">
-        <h3 style="margin:0 0 3px;font-size:14px">Rules from your spec book</h3>
-        <div class="sub" style="margin-bottom:6px">Checked on every quote.</div>
-        <div id="rule-rows"></div>
+      <div>
+        <div class="card" style="padding:16px;margin-bottom:14px">
+          <h3 style="margin:0 0 3px;font-size:14px">Approved for single dealers</h3>
+          <div class="sub" style="margin-bottom:8px">Exceptions to the rules. Visible only to you and that dealer.</div>
+          <div id="chg-rules"></div>
+        </div>
+        <div class="card privacy">
+          <h3>Where rules come from</h3>
+          Most rules are in your spec book. Some only live in your team's heads. Anything your quoting team
+          corrects more than twice shows up here as a suggested rule.
+        </div>
       </div>
     </div>
   </div>
@@ -673,10 +735,10 @@
       <label for="add-dealer">Dealer</label>
       <select id="add-dealer">
         <option>Meridian Cabinet Co.</option><option>Coastline Interiors</option>
-        <option>Hudson Kitchen Supply</option><option>Fairmount Kitchens</option><option>New dealer…</option>
+        <option selected>Hudson Kitchen Supply</option><option>Fairmount Kitchens</option><option>New dealer…</option>
       </select>
       <label for="add-proj">Project</label>
-      <input id="add-proj" value="Oakmont Terrace">
+      <input id="add-proj" value="Vernon Court">
       <label>File</label>
       <div class="drop" id="add-drop"><b>Drop an Excel file or PDF</b><br>or <a href="#" id="add-pick">choose a file</a></div>
       <div class="dlgacts"><button class="primary" id="add-go">Add to inbox</button></div>
@@ -702,7 +764,7 @@ const ORDERS = {
   'Q-4471': {
     id:'Q-4471', channel:'email', channelLabel:'PDF by email',
     dealer:'Hudson Kitchen Supply', project:'Vernon Court',
-    sub:'Marked-up PDF sent by email · dealer not on Materialspace · received Sep 8, 09:12',
+    sub:'Marked-up PDF emailed to your team, added to the inbox by Dana · dealer not on Materialspace',
     waiting:'2 days', median:'6 days', taxRate:0.08875,
     banner:{
       title:'Two finishes on one order',
@@ -774,51 +836,51 @@ const ORDERS = {
   'Q-4476': {
     id:'Q-4476', channel:'platform', channelLabel:'Materialspace',
     dealer:'Brightwood Supply', project:'Parkside Lofts',
-    sub:'120 apartments in 3 types (A ×64, B ×40, C ×16) · sent from Materialspace · received today, 10:02',
+    sub:'120 apartments with 3 kitchen layouts (A in 64, B in 40, C in 16) · sent from Materialspace · received today, 10:02',
     waiting:'14 min', median:'25 min', taxRate:0,
     pricing:{ disc:0.45, discLabel:'Brightwood standard discount', band:0.96, bandLabel:'Job size 100–199 apartments' },
     banner:{
       title:'Two finishes in one job',
-      body:'Apartment type C uses Tafisa L582, the rest Brighton / Willow. Your order process takes one finish per order, so type C apartments will need separate orders. Better to tell the dealer now than to reject orders later.',
+      body:'Kitchen layout C uses Tafisa L582, the rest Brighton / Willow. Your order process takes one finish per order, so layout C apartments will need separate orders. Better to tell the dealer now than to reject orders later.',
       src:'Rule source: Specifications Guide p.71 — “Door style, finish, and construction type must be unique per order.”',
-      split:'Split by finish: type C apartments will be ordered separately. This note goes out with the price.'
+      split:'Split by finish: layout C apartments will be ordered separately. This note goes out with the price.'
     },
     lines:[
-      { n:1, fields:{Apt:'A',SKU:'B24',Finish:'Brighton / Willow',Qty:'64'}, qty:64, list:520, status:'ok', confidence:1,
-        parsed:{Apartments:'Type A · 1 per apartment',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24'} },
-      { n:2, fields:{Apt:'A',SKU:'W3030',Finish:'Brighton / Willow',Qty:'128'}, qty:128, list:410, status:'ok', confidence:1,
-        parsed:{Apartments:'Type A · 2 per apartment',Type:'Wall cabinet',Dimensions:'30 × 30 × 12'} },
-      { n:3, fields:{Apt:'A',SKU:'B36',Mod:'FE-L',Finish:'Brighton / Willow',Qty:'64'}, qty:64, list:728, status:'ok', confidence:1,
-        parsed:{Apartments:'Type A · 1 per apartment',Type:'Base cabinet',Dimensions:'36 × 34.5 × 24',Modification:'FE-L · finished end, left · +$38.00 list'} },
-      { n:4, fields:{Apt:'A',SKU:'T368424B',Mod:'DEPTH 22.5',Finish:'Brighton / Willow',Qty:'64'}, qty:64, list:1480, status:'exception', confidence:0.99,
-        parsed:{Apartments:'Type A · 1 per apartment',Type:'Tall cabinet, butt doors',Dimensions:'36 × 84 × 22.5',Modification:'Reduced depth, 24" → 22.5"'},
+      { n:1, fields:{Layout:'A',SKU:'B24',Finish:'Brighton / Willow',Qty:'64'}, qty:64, list:520, status:'ok', confidence:1,
+        parsed:{Apartments:'Layout A · 1 per apartment',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24'} },
+      { n:2, fields:{Layout:'A',SKU:'W3030',Finish:'Brighton / Willow',Qty:'128'}, qty:128, list:410, status:'ok', confidence:1,
+        parsed:{Apartments:'Layout A · 2 per apartment',Type:'Wall cabinet',Dimensions:'30 × 30 × 12'} },
+      { n:3, fields:{Layout:'A',SKU:'B36',Mod:'FE-L',Finish:'Brighton / Willow',Qty:'64'}, qty:64, list:728, status:'ok', confidence:1,
+        parsed:{Apartments:'Layout A · 1 per apartment',Type:'Base cabinet',Dimensions:'36 × 34.5 × 24',Modification:'FE-L · finished end, left · +$38.00 list'} },
+      { n:4, fields:{Layout:'A',SKU:'T368424B',Mod:'DEPTH 22.5',Finish:'Brighton / Willow',Qty:'64'}, qty:64, list:1480, status:'exception', confidence:0.99,
+        parsed:{Apartments:'Layout A · 1 per apartment',Type:'Tall cabinet, butt doors',Dimensions:'36 × 84 × 22.5',Modification:'Reduced depth, 24" → 22.5"'},
         issues:[{sev:'high',text:'Depth 22.5" isn\'t allowed. Depth changes in 3" steps only (spec book p.25), so the choices are 21" or 24".'},
-                {sev:'med',text:'Repeats in all 64 type A apartments.'},
-                {sev:'med',text:'Once you confirm this rule on the Catalog screen, dealers on Materialspace see it while pricing, before they send.'}],
+                {sev:'med',text:'Repeats in all 64 layout A apartments.'},
+                {sev:'med',text:'Once you confirm this rule (Catalog, Rules tab), dealers on Materialspace see it while pricing, before they send.'}],
         actions:['Query dealer','Change to 21" deep','Keep 24" deep'] },
-      { n:5, fields:{Apt:'B',SKU:'W3615',Mod:'TIP-ON',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:354, status:'ok', confidence:1,
-        parsed:{Apartments:'Type B · 1 per apartment',Type:'Wall cabinet',Dimensions:'36 × 15 × 12',Modification:'TIP-ON · push-to-open · +$24.00 list'} },
-      { n:6, fields:{Apt:'B',SKU:'SB36',Mod:'ADA, REMOVABLE BOTTOM',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:610, status:'exception', confidence:0.9, allowanceUplift:1.22,
-        parsed:{Apartments:'Type B · 1 per apartment',Type:'Sink base',Dimensions:'36 × 34.5 × 24',Modification:'ADA, removable bottom panel'},
+      { n:5, fields:{Layout:'B',SKU:'W3615',Mod:'TIP-ON',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:354, status:'ok', confidence:1,
+        parsed:{Apartments:'Layout B · 1 per apartment',Type:'Wall cabinet',Dimensions:'36 × 15 × 12',Modification:'TIP-ON · push-to-open · +$24.00 list'} },
+      { n:6, fields:{Layout:'B',SKU:'SB36',Mod:'ADA, REMOVABLE BOTTOM',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:610, status:'exception', confidence:0.9, allowanceUplift:1.22,
+        parsed:{Apartments:'Layout B · 1 per apartment',Type:'Sink base',Dimensions:'36 × 34.5 × 24',Modification:'ADA, removable bottom panel'},
         issues:[{sev:'high',text:'This modification isn\'t in your price book, so it can\'t be priced automatically.'},
                 {sev:'med',text:'Your ordering guide shows no price for items like this “until we approve or correct the item” (p.73).'}],
         actions:['Quote as allowance, send now','Hold quote for engineering','Query dealer'] },
-      { n:7, fields:{Apt:'B',SKU:'DB24',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:780, status:'ok', confidence:1,
-        parsed:{Apartments:'Type B · 1 per apartment',Type:'Drawer base',Dimensions:'24 × 34.5 × 24'} },
-      { n:8, fields:{Apt:'B',SKU:'W3630',Mod:'ROS',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:506, status:'exception', confidence:0.62, note:'ROS',
-        parsed:{Apartments:'Type B · 1 per apartment',Type:'Wall cabinet',Dimensions:'36 × 30 × 12',Modification:'ROS · roll-out shelf'},
+      { n:7, fields:{Layout:'B',SKU:'DB24',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:780, status:'ok', confidence:1,
+        parsed:{Apartments:'Layout B · 1 per apartment',Type:'Drawer base',Dimensions:'24 × 34.5 × 24'} },
+      { n:8, fields:{Layout:'B',SKU:'W3630',Mod:'ROS',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:506, status:'exception', confidence:0.62, note:'ROS',
+        parsed:{Apartments:'Layout B · 1 per apartment',Type:'Wall cabinet',Dimensions:'36 × 30 × 12',Modification:'ROS · roll-out shelf'},
         readings:[{label:'_ROS · roll-out shelf, installed at the factory',pct:62,delta:'+$96.00 list'},
                   {label:'ROS · roll-out shelf, installed on site',pct:38,delta:'+$41.00 list'}],
         issues:[{sev:'high',text:'“ROS” can mean installed on site or at the factory, at different prices. This is one of the codes waiting for your review on the Catalog screen. Answer it there once, and it’s settled for every quote.'}],
         actions:['Factory-installed','Site-installed','Query dealer'] },
-      { n:9, fields:{Apt:'C',SKU:'B24',Finish:'Tafisa L582',Qty:'16'}, qty:16, list:560, status:'ok', confidence:1,
-        parsed:{Apartments:'Type C · 1 per apartment',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24'} },
-      { n:10, fields:{Apt:'C',SKU:'T188424',Finish:'Tafisa L582',Qty:'16'}, qty:16, list:1120, status:'ok', confidence:1,
-        parsed:{Apartments:'Type C · 1 per apartment',Type:'Tall cabinet',Dimensions:'18 × 84 × 24'} },
-      { n:11, fields:{Apt:'All',SKU:'FILLER',Finish:'Brighton / Willow',Qty:'240'}, qty:240, list:38, status:'ok', confidence:1,
-        parsed:{Apartments:'All types · 2 per apartment',Type:'Filler',Dimensions:'3 × 96 × 0.75'} },
-      { n:12, fields:{Apt:'A, B',SKU:'TK',Finish:'Brighton / Willow',Qty:'104'}, qty:104, list:52, status:'ok', confidence:1,
-        parsed:{Apartments:'Types A and B · 1 per apartment',Type:'Toe kick',Dimensions:'4.5 × 96 × 0.75'} }
+      { n:9, fields:{Layout:'C',SKU:'B24',Finish:'Tafisa L582',Qty:'16'}, qty:16, list:560, status:'ok', confidence:1,
+        parsed:{Apartments:'Layout C · 1 per apartment',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24'} },
+      { n:10, fields:{Layout:'C',SKU:'T188424',Finish:'Tafisa L582',Qty:'16'}, qty:16, list:1120, status:'ok', confidence:1,
+        parsed:{Apartments:'Layout C · 1 per apartment',Type:'Tall cabinet',Dimensions:'18 × 84 × 24'} },
+      { n:11, fields:{Layout:'All',SKU:'FILLER',Finish:'Brighton / Willow',Qty:'240'}, qty:240, list:38, status:'ok', confidence:1,
+        parsed:{Apartments:'All layouts · 2 per apartment',Type:'Filler',Dimensions:'3 × 96 × 0.75'} },
+      { n:12, fields:{Layout:'A, B',SKU:'TK',Finish:'Brighton / Willow',Qty:'104'}, qty:104, list:52, status:'ok', confidence:1,
+        parsed:{Apartments:'Layouts A and B · 1 per apartment',Type:'Toe kick',Dimensions:'4.5 × 96 × 0.75'} }
     ]
   }
 };
@@ -846,7 +908,6 @@ const CH = {platform:'Materialspace', link:'Request link', email:'Email', upload
 const INBOX = [
   {id:'Q-4468', dealer:'Meridian Cabinet Co.',  proj:'Ridgeway Tower',   ch:'link',     fmt:'Excel', units:260, lines:38, wait:'11d',   st:'warn', lab:'260 apartments · sales deciding price'},
   {id:'Q-4470', dealer:'Coastline Interiors',   proj:'The Winslow',      ch:'email',    fmt:'PDF',   units:12,  lines:14, wait:'6d',    st:'warn', lab:'2 need a decision'},
-  {id:'Q-4471', dealer:'Hudson Kitchen Supply', proj:'Vernon Court',     ch:'email',    fmt:'PDF',   units:'—', lines:16, wait:'2d',    st:'warn', lab:'5 need a decision', open:true},
   {id:'Q-4473', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 3', ch:'email',    fmt:'Excel', units:60,  lines:44, wait:'1d',    st:'idle', lab:'Reading file…'},
   {id:'Q-4474', dealer:'Fairmount Kitchens',    proj:'Sutton Place',     ch:'link',     fmt:'Excel', units:6,   lines:11, wait:'1d',    st:'ok',   lab:'Priced — ready to send'},
   {id:'Q-4475', dealer:'Coastline Interiors',   proj:'Harbor Row',       ch:'email',    fmt:'Excel', units:34,  lines:27, wait:'today', st:'ok',   lab:'Priced — ready to send'},
@@ -855,7 +916,7 @@ const INBOX = [
 ];
 function renderInbox(){
   el('inbox-rows').innerHTML = INBOX.map(r=>`
-    <tr class="${r.open?'click':''}" ${r.open?`data-open="${r.id}"`:''}>
+    <tr class="${r.open?'click':''}" ${r.open?`data-open="${r.id}"`:''} ${r.fresh?'style="background:var(--accent-soft)"':''}>
       <td><b>${r.id}</b></td><td>${r.dealer}</td><td class="muted">${r.proj}</td>
       <td><span class="chan c-${r.ch}">${CH[r.ch]}${r.fmt?' · '+r.fmt:''}</span></td>
       <td>${r.units}</td><td>${r.lines}</td>
@@ -877,16 +938,20 @@ el('add-req').addEventListener('click',()=>{ addFile=null; el('add-drop').innerH
 el('add-x').addEventListener('click',()=>addscrim.classList.remove('on'));
 addscrim.addEventListener('click',e=>{ if(e.target===addscrim) addscrim.classList.remove('on'); });
 function bindPick(){
-  el('add-pick').addEventListener('click',e=>{ e.preventDefault(); addFile='Oakmont_takeoff_rev2.xlsx';
-    el('add-drop').innerHTML=`<b>${addFile}</b><br>Excel file · 212 KB`; });
+  el('add-pick').addEventListener('click',e=>{ e.preventDefault(); addFile='Vernon Court - marked up order.pdf';
+    el('add-drop').innerHTML=`<b>${addFile}</b><br>PDF · 1 page · 340 KB`; });
 }
 bindPick();
 el('add-copy').addEventListener('click',()=>{ el('add-copy').textContent='Copied'; });
 el('add-go').addEventListener('click',()=>{
+  if(INBOX.some(r=>r.id==='Q-4471')){ addscrim.classList.remove('on'); return; }
   const dealer = el('add-dealer').value, proj = el('add-proj').value || 'Untitled project';
-  const fmt = addFile && addFile.endsWith('.pdf') ? 'PDF' : 'Excel';
-  INBOX.push({id:'Q-4478', dealer, proj, ch:'upload', fmt:fmt, units:'—', lines:'—', wait:'now', st:'idle', lab:'Reading file…'});
+  const fmt = addFile && !addFile.endsWith('.pdf') ? 'Excel' : 'PDF';
+  const row = {id:'Q-4471', dealer, proj, ch:'upload', fmt, units:'—', lines:'—', wait:'2d', st:'idle', lab:'Reading file…'};
+  INBOX.splice(2,0,row);
   renderInbox(); addscrim.classList.remove('on');
+  // the prototype always "reads" the sample order, whatever file was picked
+  setTimeout(()=>{ Object.assign(row,{lines:16, st:'warn', lab:'5 need a decision', open:true, fresh:true}); renderInbox(); }, 2500);
 });
 
 // ---------- pipeline ----------
@@ -986,30 +1051,36 @@ el('bars').innerHTML = `<div class="cap-line" style="bottom:${CAP/MAXY*100}%"><s
 el('wklabs').innerHTML = LOAD.map(d=>`<div>${d.w}</div>`).join('');
 
 // ---------- catalog ----------
+document.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-cat]').forEach(x=>x.classList.toggle('on',x===b));
+  ['items','pricing','rules'].forEach(t=>el('cat-'+t).hidden = t!==b.dataset.cat);
+}));
+
 const CHANGES = [
-  {what:'2026 price list: base cabinets +4.2%', det:'Replaces 2023 prices for base and vanity cabinets',
-   perm:'Permanent', scope:'all', sc:'All dealers', eff:'Not set', q:7, live:false},
-  {what:'Cascade laminate discontinued', det:'Replaced by Summit laminate · 14 items affected',
-   perm:'Permanent', scope:'all', sc:'All dealers', eff:'Oct 1', q:2, live:false},
-  {what:'Willow paint unavailable', det:'Supplier shortage · expected back week 44',
-   perm:'Temporary', scope:'all', sc:'All dealers', eff:'Now to week 44', q:3, live:true},
-  {what:'3" depth steps on 33" wall cabinets', det:'Special approval, 2024',
-   perm:'Permanent', scope:'dealer', sc:'Meridian Cabinet Co.', eff:'Ongoing', q:1, live:true},
-  {what:'Discount multiplier 0.42 for Q4', det:'Lowered from 0.45 for a volume commitment',
-   perm:'Temporary', scope:'dealer', sc:'Hudson Kitchen Supply', eff:'Now to Dec 31', q:2, live:true}
+  {tab:'pricing', what:'2026 price list: base cabinets +4.2%', det:'Replaces 2023 prices for base and vanity cabinets',
+   perm:'Permanent', sc:'All dealers', eff:'Not set', live:false},
+  {tab:'pricing', what:'Hudson Kitchen Supply: 0.42 for Q4', det:'Lowered from 0.45 for a volume commitment',
+   perm:'Temporary', sc:'Hudson Kitchen Supply', eff:'Now to Dec 31', live:true},
+  {tab:'items', what:'Cascade laminate discontinued', det:'Replaced by Summit laminate · 14 items',
+   perm:'Permanent', sc:'All dealers', eff:'Oct 1', live:false},
+  {tab:'items', what:'Willow paint unavailable', det:'Supplier shortage · expected back week 44',
+   perm:'Temporary', sc:'All dealers', eff:'Now to week 44', live:true},
+  {tab:'rules', what:'3" depth steps on 33" wall cabinets', det:'Special approval, 2024',
+   perm:'Permanent', sc:'Meridian Cabinet Co.', eff:'Ongoing', live:true}
 ];
 function renderChanges(){
-  el('chg-rows').innerHTML = CHANGES.map((c,i)=>`<tr>
-    <td><b>${c.what}</b><div class="muted" style="font-size:12px">${c.det}</div></td>
-    <td><span class="tag ${c.perm==='Permanent'?'t-perm':'t-temp'}">${c.perm}</span></td>
-    <td><span class="tag ${c.scope==='all'?'t-all':'t-dealer'}">${c.sc}</span></td>
-    <td class="muted nowrap" style="font-size:12.5px">${c.eff}</td>
-    <td class="money">${c.q}</td>
-    <td>${c.live
-      ? '<span class="pill p-ok">Live</span>'
-      : `<button class="pub" data-pub="${i}">Publish</button>`}</td></tr>`).join('');
-  const pending = CHANGES.filter(c=>!c.live).length;
-  el('chg-pending').textContent = pending ? `· ${pending} not published` : '· all published';
+  ['items','pricing','rules'].forEach(tab=>{
+    el('chg-'+tab).innerHTML = CHANGES.map((c,i)=>c.tab!==tab?'':`
+      <div class="rule" style="align-items:center">
+        <span style="flex:1"><b>${c.what}</b><div class="muted" style="font-size:12px">${c.det}</div>
+          <div style="margin-top:4px"><span class="tag ${c.perm==='Permanent'?'t-perm':'t-temp'}">${c.perm}</span>
+          <span class="tag ${c.sc==='All dealers'?'t-all':'t-dealer'}">${c.sc}</span>
+          <span class="muted" style="font-size:12px;margin-left:4px">${c.eff}</span></div></span>
+        ${c.live ? '<span class="pill p-ok">Live</span>' : `<button class="pub" data-pub="${i}">Publish</button>`}
+      </div>`).join('');
+  });
+  const w = CHANGES.filter(c=>c.tab==='pricing'&&!c.live).length;
+  el('pr-waiting').textContent = w; el('tab-pricing').textContent = w ? '· '+w+' change waiting' : '· up to date';
   document.querySelectorAll('[data-pub]').forEach(b=>b.addEventListener('click',()=>{
     CHANGES[+b.dataset.pub].live = true;
     renderChanges();
@@ -1017,10 +1088,20 @@ function renderChanges(){
 }
 renderChanges();
 
+const DISC = [
+  {d:'Coastline Interiors',   x:0.47, arr:'—', q:2},
+  {d:'Brightwood Supply',     x:0.45, arr:'—', q:3},
+  {d:'Hudson Kitchen Supply', x:0.42, arr:'Q4 volume commitment', q:2},
+  {d:'Meridian Cabinet Co.',  x:0.40, arr:'Largest account', q:3},
+  {d:'Fairmount Kitchens',    x:0.48, arr:'—', q:1}
+];
+el('disc-rows').innerHTML = DISC.map(r=>`<tr><td><b>${r.d}</b></td><td class="money">${r.x.toFixed(2)}</td>
+  <td class="muted" style="font-size:12.5px">${r.arr}</td><td class="money">${r.q}</td></tr>`).join('');
+
 const GAPS = [
   {what:'Tafisa L582 finish', note:'not a finish you offer', req:22, dl:7},
   {what:'33.875" wall cabinet width', note:'between stock 33" and 36"', req:14, dl:6},
-  {what:'Bottom panel removable (ADA)', note:'no modification code exists', req:11, dl:4},
+  {what:'ADA sink base, removable bottom', note:'no modification code exists', req:11, dl:4},
   {what:'Notch for toe kick', note:'written as free text every time', req:9, dl:5},
   {what:'Side panels run to floor', note:'no modification code exists', req:8, dl:3}
 ];
@@ -1029,13 +1110,21 @@ el('gap-rows').innerHTML = GAPS.map(g=>`<tr><td><b>${g.what}</b>
   <td class="money">${g.req}</td><td class="money muted">${g.dl}</td></tr>`).join('');
 
 const RULES = [
-  {pg:'p.25', t:'Wall cabinets 12–39" high take two hinges per door. 42" high take three.'},
-  {pg:'p.25', t:'Depth can be changed between 6" and 24", in 3" steps only.'},
-  {pg:'p.25', t:'24" deep cabinets must be installed between cabinets or end panels of the same depth.'},
-  {pg:'p.71', t:'One door style, finish and construction type per order. A mixed order is rejected after entry.'},
-  {pg:'p.74', t:'250–300 cabinets, or 3,000 cubes, per truckload.'}
+  {pg:'p.25', t:'Wall cabinets 12–39" high take two hinges per door. 42" high take three.', ok:true},
+  {pg:'p.25', t:'Depth can be changed between 6" and 24", in 3" steps only.', ok:false},
+  {pg:'p.25', t:'24" deep cabinets must be installed between cabinets or end panels of the same depth.', ok:true},
+  {pg:'p.71', t:'One door style, finish and construction type per order. A mixed order is rejected after entry.', ok:true},
+  {pg:'p.74', t:'250–300 cabinets, or 3,000 cubes, per truckload.', ok:true}
 ];
-el('rule-rows').innerHTML = RULES.map(r=>`<div class="rule"><span class="pg">${r.pg}</span><span>${r.t}</span></div>`).join('');
+function renderRules(){
+  el('rule-rows').innerHTML = RULES.map((r,i)=>`<tr><td class="n">${r.pg}</td><td style="font-size:13px">${r.t}</td>
+    <td style="text-align:right">${r.ok ? '<span class="pill p-ok">Confirmed</span>'
+      : `<button class="pub" data-rule="${i}">Confirm rule</button>`}</td></tr>`).join('');
+  const n = RULES.filter(r=>!r.ok).length; el('tab-rules').textContent = n ? '· '+n+' to confirm' : '· all confirmed';
+  el('rules-ok').innerHTML = (RULES.length-n)+' <small>of '+RULES.length+'</small>';
+  document.querySelectorAll('[data-rule]').forEach(b=>b.addEventListener('click',()=>{ RULES[+b.dataset.rule].ok=true; renderRules(); }));
+}
+renderRules();
 
 // ---------- nav ----------
 const WHO = {
