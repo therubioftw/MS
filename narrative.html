@@ -130,8 +130,8 @@ and who wins what. The prototype is <a href="index.html">here</a>.</p>
   price book, and applies the dealer's discount, which depends on the dealer's volume and on the size of the
   job. Anything that isn't a standard catalog item waits until someone approves and prices it.</p>
   <p>A manufacturer product covers the other side of that exchange. Requests from Materialspace dealers arrive
-  already structured and get priced in minutes. Requests from other dealers still come in by email or Excel,
-  and the product handles those too. The first step isn't reading catalogs, which Materialspace already does.
+  already structured and get priced in minutes. Other dealers still send Excel files or PDFs, and the product
+  handles those too. The first step isn't reading catalogs, which Materialspace already does.
   It's getting the manufacturer to take charge of their own catalog data and connect their pricing.</p>
 </div>
 
@@ -160,8 +160,11 @@ the prototype serves it, and where it only partly does.</p>
 <h3>1 · Get a price back before the other manufacturers quoting the same job</h3>
 <p>The brief puts speed to quote at the center of winning a job. How much it decides is the assumption
 above.</p>
-<p><strong>In the prototype:</strong> the Inbox shows every request in one list, whether it came from a
-Materialspace dealer, through the manufacturer's request link, or by email, sorted by how long the dealer has been waiting. On the
+<p><strong>In the prototype:</strong> the Inbox shows every request in one list, however it arrived: sent
+from Materialspace, uploaded through the manufacturer's request link, or emailed. The request link is a simple
+page with the manufacturer's name on it, where a dealer who isn't on Materialspace uploads their Excel file
+(section 04). The quoting team can also add a request themselves by uploading an Excel file or PDF. Requests
+are sorted by how long the dealer has been waiting. On the
 Quote screen, SKUs and their modifications are priced automatically, with the dealer's standard discount and
 the manufacturer's job-size pricing. A custom line can go out with an estimated price, confirmed later, so it
 doesn't hold up the rest of the quote.</p>
@@ -169,9 +172,10 @@ doesn't hold up the rest of the quote.</p>
 <h3>2 · Be the manufacturer that's easy to work with</h3>
 <p>Service is the other part of what the brief asks for.</p>
 <p><strong>In the prototype:</strong> questions for the dealer go out together with the price instead of
-delaying it. A request that breaks a catalog rule is flagged before the price goes out. For example, Smart
-allows one finish per order (spec book, page 71), so a mixed-finish order would otherwise be rejected
-later.</p>
+delaying it. Catalog rules stay the manufacturer's rules. What changes is when the dealer finds out about
+them. For example, Smart allows one finish per order (spec book, page 71). If a request mixes two finishes,
+the quote flags it and suggests splitting the job into two orders, one per finish. The dealer learns that
+while pricing, instead of having the order rejected later.</p>
 <p><strong>Only partly covered.</strong> A lot of the friction comes later, at ordering. A multifamily
 project is quoted as one total, but it's ordered apartment by apartment, after shop drawings, by email or
 portal. Checking each of those orders against the approved quote is the next thing I'd build (Phase 2).</p>
@@ -430,8 +434,10 @@ will reach the product and what it has to connect to.</p>
   <ul>
     <li>From Materialspace dealers: sent straight to the manufacturer, with no Excel download.</li>
     <li>From other dealers: a request link with the manufacturer's name on it, where the dealer uploads their
-    Excel file or fills in the manufacturer's template. Plus a dedicated email address, and PDF upload for
-    the quoting team.</li>
+    Excel file or fills in the manufacturer's template. Plus a dedicated email address for requests sent as
+    attachments.</li>
+    <li>From the quoting team: uploading an Excel file or PDF themselves, for requests that arrived some other
+    way.</li>
   </ul>
   <p>Each line is checked against the catalog rules, priced with its modifications and the dealer's discount,
   and flagged if something needs a person. Corrections the quoting team makes are saved from the start, so the
@@ -533,8 +539,8 @@ not only from Materialspace dealers.</p>
 <p>If a manufacturer doesn't use this, what do they use instead?</p>
 
 <h3>Keeping things as they are</h3>
-<p>Excel files by email, the manufacturer's own template, its ordering portal (Smart has one), and people
-retyping and checking by hand. This is often the strongest competitor, because it costs nothing to keep.</p>
+<p>Dealers emailing Excel files or filled-in templates, or typing jobs into the manufacturer's portal (Smart
+has one), and people at the manufacturer retyping and checking by hand. This is often the strongest competitor, because it costs nothing to keep.</p>
 
 <h3>2020 (now Design Flex, from Cyncly)</h3>
 <p>You've told me this is the main competitor today, and that customers would be glad to replace it with
@@ -750,7 +756,8 @@ changes.</p>
 <p><strong>Dealers could see it as a threat,</strong> if they think it gives manufacturers too much insight
 into their business. They're Materialspace's paying customers, so getting this wrong affects the existing
 business, not just the new product.</p>
-<p><strong>The request link could replace paying for Materialspace,</strong> if it does too much for free.</p>
+<p><strong>The request link could replace paying for Materialspace,</strong> if it does too much for free
+(section 04).</p>
 <p><strong>2020 could add automated quoting</strong>, starting with the catalogs and dealers it already
 has.</p>
 <p><strong>Parspec could move into cabinets.</strong></p>
@@ -776,7 +783,8 @@ has.</p>
 
 <h3>What's taken from your answers</h3>
 <ul>
-  <li>How dealers send requests today: an Excel file by email, the manufacturer's template, or a portal.</li>
+  <li>How dealers send requests today: their Excel file emailed as it is, the SKUs copied into the
+  manufacturer's Excel template, or the job typed into a portal.</li>
   <li>Ordering happens after shop drawings, by email or portal, with a lot of friction.</li>
   <li>Materialspace only knows a job was won when shop drawings are made, and nothing can be shared without
   the dealer agreeing.</li>
