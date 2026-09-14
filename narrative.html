@@ -123,8 +123,9 @@ and who wins what. The prototype is <a href="index.html">here</a>.</p>
 
 <div class="lede">
   <p><strong>Where I landed.</strong> Today, a dealer using Materialspace finishes pricing a job and downloads an
-  Excel file. What happens next depends on the manufacturer. Some want the file by email, some want the SKUs
-  pasted into their own Excel template, and some want everything entered in a web portal.</p>
+  Excel file. What happens next depends on the manufacturer. Some want that file emailed as it is. Some have
+  their own Excel template, so the dealer copies the SKUs into it first. Others want the whole job typed into
+  their web portal.</p>
   <p>At the manufacturer, someone then checks each SKU and its modifications, looks up prices in a separate
   price book, and applies the dealer's discount, which depends on the dealer's volume and on the size of the
   job. Anything that isn't a standard catalog item waits until someone approves and prices it.</p>
@@ -160,7 +161,7 @@ the prototype serves it, and where it only partly does.</p>
 <p>The brief puts speed to quote at the center of winning a job. How much it decides is the assumption
 above.</p>
 <p><strong>In the prototype:</strong> the Inbox shows every request in one list, whether it came from a
-Materialspace dealer, an Excel file or an emailed PDF, sorted by how long the dealer has been waiting. On the
+Materialspace dealer, through the manufacturer's request link, or by email, sorted by how long the dealer has been waiting. On the
 Quote screen, SKUs and their modifications are priced automatically, with the dealer's standard discount and
 the manufacturer's job-size pricing. A custom line can go out with an estimated price, confirmed later, so it
 doesn't hold up the rest of the quote.</p>
@@ -181,9 +182,11 @@ receiving a huge order the factory struggles to absorb.</p>
 <p>This is harder than it looks. Materialspace doesn't know whether a quoted job was won. It only finds out
 when shop drawings are made, which is much later. And nothing about a dealer's project can be shared with a
 manufacturer without the dealer agreeing.</p>
+<p>So dealers need a reason to share. I see two ways it could work, and section 07 covers both: a dealer
+shares a project and gets its price held until it orders, or a dealer shares a project and gets a firm
+delivery date.</p>
 <p><strong>In the prototype:</strong> the Pipeline screen shows expected volume by week against factory
-capacity, and projects that dealers have chosen to register with the manufacturer. How registration would
-work is in section 07.</p>
+capacity, and projects that dealers have chosen to share.</p>
 
 <h3>4 · Keep the catalog accurate, with the manufacturer in charge of it</h3>
 <p>A catalog is more than a list of SKUs. It has rules, such as depth changes only in 3-inch steps (page 25),
@@ -231,12 +234,15 @@ fewer?</p>
 <p>From what you've described and Smart's order process, a multifamily job goes roughly like this:</p>
 <ol>
   <li>The dealer prices the job in Materialspace and downloads an Excel file.</li>
-  <li>The dealer sends it to one or more manufacturers: by email, in the manufacturer's Excel template, or
-  through a portal.</li>
+  <li>The dealer sends it to one or more manufacturers, each in its own way: the Excel file emailed as it is,
+  the SKUs copied into the manufacturer's Excel template, or the job typed into the manufacturer's web
+  portal.</li>
   <li>The manufacturer checks the SKUs and modifications, prices them, applies the dealer's discount and any
   job-size pricing, and sends a quote back.</li>
   <li>Nothing may happen for months, sometimes up to a year.</li>
-  <li>If the job is won, shop drawings are made.</li>
+  <li>If the job is won, shop drawings are made. These are detailed drawings of exactly which cabinets go
+  where in each apartment, and the builder approves them before anything is ordered. The quote in step 3
+  doesn't need them.</li>
   <li>Orders go to the manufacturer apartment by apartment, by email or portal.</li>
   <li>At Smart, the dealer has 24 hours to review the order confirmation before it's locked (page 71).</li>
   <li>Materials are bought 12 to 14 business days before the cabinets are built (page 71), then production
@@ -260,8 +266,8 @@ same two people might do all of it.</p>
   them?</p>
   <p class="if"><b>Weeks before the order:</b> shop drawings are an early enough sign that orders are coming,
   at least for buying materials, if dealers agree to share it.</p>
-  <p class="if"><b>Days before the order:</b> they come too late to help planning, so registration (section
-  07) matters more.</p>
+  <p class="if"><b>Days before the order:</b> they come too late to help planning, so getting dealers to share
+  projects earlier (section 07) matters more.</p>
 </div>
 
 <div class="branch">
@@ -301,14 +307,12 @@ same two people might do all of it.</p>
 </div>
 
 <div class="branch">
-  <p class="ask">Would you register a project with a manufacturer, and confirm every few weeks that it's still
-  alive, if they held your project price until you order?</p>
-  <p class="if"><b>Yes:</b> registration is how dealers share, and the Pipeline screen can show registered
-  projects.</p>
-  <p class="if"><b>No:</b> planning works from orders already booked and totals only, and it's a smaller
-  benefit.</p>
-  <p class="if"><b>Only if other dealers can't see it:</b> registration has to stay private between the dealer
-  and the manufacturer.</p>
+  <p class="ask">Would you share a project with a manufacturer if you got something back? Which would matter
+  more: your price held until you order, or a firm delivery date?</p>
+  <p class="if"><b>Held price:</b> start with the first option in section 07.</p>
+  <p class="if"><b>Firm date:</b> start with the second option.</p>
+  <p class="if"><b>Neither is worth it:</b> planning works only from orders already booked and totals, and it's
+  a smaller benefit.</p>
 </div>
 
 <div class="branch">
@@ -362,7 +366,7 @@ same two people might do all of it.</p>
   <p class="if"><b>Rarely:</b> it's set up once, with occasional updates, and maintenance is a small part of
   the product.</p>
   <p class="if"><b>Often:</b> keeping it current is real ongoing work, so having the manufacturer run it
-  matters more. It also makes a price hold (section 07) more costly for them.</p>
+  matters more. It also makes holding a price (section 07) more costly for them.</p>
 </div>
 
 <div class="branch">
@@ -370,7 +374,7 @@ same two people might do all of it.</p>
   dealers?</p>
   <p class="if"><b>By volume:</b> weekly totals are enough for planning.</p>
   <p class="if"><b>Around urgency and priority:</b> totals hide what matters, so planning needs detail per
-  project, which only registration can give.</p>
+  project, which only dealers can give by sharing.</p>
 </div>
 
 <div class="branch">
@@ -448,7 +452,7 @@ will reach the product and what it has to connect to.</p>
   <div class="hd"><b>Phase 3 · Planning</b></div>
   <p>Expected volume by week against factory capacity, using three things: orders already booked in the
   manufacturer's own system, including ones that never went through Materialspace; quotes in progress; and
-  projects dealers have registered. It depends on dealers being willing to register, and on how the
+  projects dealers have chosen to share. It depends on dealers being willing to share, and on how the
   manufacturer schedules production.</p>
 </div>
 
@@ -469,8 +473,8 @@ will reach the product and what it has to connect to.</p>
     <tr><td><strong>Orders that match the quote</strong></td>
       <td>Share of apartment orders that go through without a correction. (Phase 2)</td>
       <td>Shows whether ordering got easier.</td></tr>
-    <tr><td><strong>Projects registered</strong></td>
-      <td>Share of quoted projects that dealers register, and how many are still confirmed after three
+    <tr><td><strong>Projects shared</strong></td>
+      <td>Share of quoted projects that dealers choose to share, and how many are still confirmed after three
       months. (Phase 3)</td>
       <td>Shows whether dealers think the trade is worth it.</td></tr>
     <tr><td><strong>Dealers joining through manufacturers</strong></td>
@@ -615,7 +619,7 @@ turned into item lists, and quotes go out in minutes without retyping. That's ve
     <tr>
       <td><strong>Dealer</strong></td>
       <td>Prices back faster. No more sending the same job a different way to each manufacturer. Fewer
-      rejected orders. Project pricing held, if they register.</td>
+      rejected orders. Something in return for sharing a project, if they choose to.</td>
       <td>May worry about what manufacturers can see (below).</td>
     </tr>
     <tr>
@@ -623,7 +627,7 @@ turned into item lists, and quotes go out in minutes without retyping. That's ve
       <td>Wins more jobs by quoting faster. Less manual work per quote and per order. A better idea of what's
       coming.</td>
       <td>Relies on another company to reach its dealers, on a platform its competitors also use. Takes on
-      responsibility for its catalog data. Carries the cost of held prices.</td>
+      responsibility for its catalog data. Carries the cost of what it offers dealers for sharing.</td>
     </tr>
     <tr>
       <td><strong>Materialspace</strong></td>
@@ -640,41 +644,50 @@ turned into item lists, and quotes go out in minutes without retyping. That's ve
   </tbody>
 </table>
 
-<h3>Getting dealers to share: project registration</h3>
+<h3>Getting dealers to share a project</h3>
 <p>The manufacturer wants to know which quoted projects are still alive. Materialspace can't tell them
 without the dealer agreeing, and on its own it only finds out a job was won at shop drawings, which is late.
 So the dealer needs a reason to share.</p>
 <p><strong>Why a dealer might not want to.</strong> The dealer's discount depends on its volume and on the
 size of each job. A manufacturer who can see all of a dealer's upcoming work knows more going into that
 conversation.</p>
-<p><strong>The idea.</strong> Something like this already exists in IT and networking, where it's called deal
-registration. A reseller registers a deal with the vendor, and gets better pricing on it in return. The vendor
-gets a view of its pipeline. For cabinets, it could work like this:</p>
-<ul>
-  <li>The dealer chooses to register a quoted project with the manufacturer.</li>
-  <li>In return, the manufacturer holds the project price until the dealer orders, up to an end date.</li>
-  <li>Every few weeks, the dealer confirms the project is still alive. If they don't, the hold lapses.</li>
-  <li>The manufacturer sees registered projects, with expected timing, on its Pipeline screen. Nothing about
-  unregistered projects is shared.</li>
-</ul>
-<p><strong>Why I like it.</strong> The dealer decides what to share, and gets something worth money for it.
-It fits the problem in the brief, where a quote sits for up to a year. And the large jobs that surprise the
-factory are the same ones where held pricing is worth the most to the dealer. Materialspace never asks dealers
-to register on a manufacturer's behalf. Dealers are its only paying customers today, and I don't want to put
-that at risk.</p>
-<p><strong>Open questions.</strong></p>
-<ul>
-  <li>Holding a price costs the manufacturer if prices go up. That's why the hold needs an end date, and why
-  it matters how often prices change.</li>
-  <li>If two dealers register the same project with the same manufacturer, what happens? In IT, the first one
-  is usually protected. Dealers might like that, or it might cause conflict.</li>
-  <li>Is a price hold enough reward on small jobs? Maybe not, but the small jobs aren't the ones that surprise
-  the factory.</li>
-</ul>
-<p><strong>Another option I considered.</strong> A dealer shares a project in exchange for a firm ship date,
-with the details held back until the manufacturer commits. The problem is that the manufacturer would be
-reserving factory capacity for a job the dealer might still lose. A price hold doesn't take up capacity, which
-is why I'd start with registration. I'd want to discuss both with you.</p>
+<p>I see two ways to give dealers a reason. I don't know yet which one dealers would value more, and I'd want
+to discuss both with you.</p>
+
+<table>
+  <thead><tr><th style="width:130px"></th><th>1 · Share for a held price</th><th>2 · Share for a firm delivery date</th></tr></thead>
+  <tbody>
+    <tr><td><strong>The dealer</strong></td>
+      <td>Shares a quoted project, and confirms every few weeks that it's still alive.</td>
+      <td>Shares a project when asking for a delivery date.</td></tr>
+    <tr><td><strong>Gets back</strong></td>
+      <td>The quoted price is held until they order, up to an end date.</td>
+      <td>A firm date. Details are only shown to the manufacturer once it commits to that date.</td></tr>
+    <tr><td><strong>Manufacturer sees</strong></td>
+      <td>Shared projects and their expected timing, kept up to date.</td>
+      <td>Projects where a dealer asked for a date, against its own capacity.</td></tr>
+    <tr><td><strong>Cost to the manufacturer</strong></td>
+      <td>Loses money on held prices if its prices go up.</td>
+      <td>Holds factory capacity for a job the dealer might still lose.</td></tr>
+    <tr><td><strong>What's new for dealers</strong></td>
+      <td>A regular check-in on each shared project.</td>
+      <td>Less. Dealers already ask manufacturers about lead times, as far as I can tell.</td></tr>
+    <tr><td><strong>Open questions</strong></td>
+      <td>How often prices change. What happens if two dealers share the same project.</td>
+      <td>What "commit" means before the job is won. Whether manufacturers keep dates vague on purpose, so
+      dealers have to share.</td></tr>
+  </tbody>
+</table>
+
+<p>Both ask dealers to do something they don't do today, so both add some friction. For dealers already on
+Materialspace it can be one step: the project is already there, so sharing it is a choice they make when they
+send the quote request. Neither option is needed before Phase 3.</p>
+<p>The first option is similar to something called deal registration in IT and networking sales, where a
+reseller registers a deal with a vendor and gets better pricing on it. The second one is closer to how dealers
+already talk to manufacturers.</p>
+<p>Either way, Materialspace never asks dealers to share on a manufacturer's behalf. Dealers are its only
+paying customers today, and I don't want to put that at risk. If dealers don't want either, planning works from
+orders already booked and weekly totals only.</p>
 
 <h3>Relying on Materialspace, from the manufacturer's side</h3>
 <p>A manufacturer joining the platform could worry about:</p>
