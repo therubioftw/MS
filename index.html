@@ -58,7 +58,35 @@
   .chan{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
     padding:2px 7px;border-radius:5px;white-space:nowrap;letter-spacing:.01em}
   .c-platform{background:var(--accent-soft);color:var(--accent)}
-  .c-scan{background:#f4eefb;color:#6b3fa0}
+  .c-scan,.c-email{background:#f4eefb;color:#6b3fa0}
+  .c-link{background:#e6f4f1;color:#0f6b58}
+  .c-upload{background:var(--line-2);color:var(--ink-2)}
+  .h1row{display:flex;align-items:flex-start;gap:12px}
+  .h1row .pub{margin-left:auto;font-size:13px;padding:8px 14px}
+  .drop{border:2px dashed #cfd5de;border-radius:9px;padding:22px;text-align:center;color:var(--ink-3);font-size:13px;margin:6px 0 14px}
+  .drop b{color:var(--ink)}
+  .frm label{display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin:0 0 4px}
+  .frm input,.frm select{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:7px;margin-bottom:12px;background:#fff}
+  .linkbox{display:flex;align-items:center;gap:10px;background:var(--line-2);border-radius:8px;padding:10px 12px;font-size:13px}
+  .linkbox code{font-family:var(--mono);font-size:12.5px;color:var(--ink-2)}
+  .linkbox button{margin-left:auto}
+  .pricing{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;background:var(--panel);border:1px solid var(--line);
+    border-radius:9px;padding:11px 15px;margin-bottom:14px;font-size:13px}
+  .pricing .step{display:flex;flex-direction:column}
+  .pricing .step span{font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+  .pricing .step b{font:600 14px var(--mono)}
+  .pricing .op{color:#b5bbc5;font-size:16px}
+  .pricing .who2{margin-left:auto;font-size:12px;color:var(--ink-3);max-width:260px;line-height:1.4}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+  @media (max-width:640px){.opts{grid-template-columns:1fr}}
+  .opt{border:1px solid var(--line);border-radius:9px;padding:14px;display:flex;flex-direction:column}
+  .opt h4{margin:0 0 4px;font-size:14px}
+  .opt .gv{font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:600;color:var(--ink-3);margin:10px 0 3px}
+  .opt p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.45}
+  .opt button{margin-top:14px;font:inherit;font-size:13.5px;padding:9px 12px;border-radius:8px;border:1px solid var(--accent);
+    background:var(--panel);color:var(--accent);font-weight:600;cursor:pointer}
+  .opt button:hover{background:var(--accent-soft)}
+  .opt.picked{border-color:var(--ok);background:var(--ok-soft)}
 
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
   .stat{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:13px 15px}
@@ -269,36 +297,44 @@
 
 <!-- ============ INBOX ============ -->
 <section class="view on" id="v-inbox">
-  <h1>Inbox</h1>
-  <div class="sub">Requests waiting on a price. Sorted by how long the dealer has been waiting.</div>
+  <div class="h1row">
+    <div>
+      <h1>Inbox</h1>
+      <div class="sub">Requests waiting on a price, however they arrived. Sorted by how long the dealer has been waiting.</div>
+    </div>
+    <button class="pub" id="add-req">+ Add request</button>
+  </div>
 
-  <div class="lanes">
+  <div class="lanes" style="grid-template-columns:1fr 1fr 1fr">
     <div class="lane">
-      <div class="hd"><span class="chan c-platform">Via Materialspace</span><b>3 of 7 requests</b></div>
-      <div class="row"><span>Arrives as</span><b>structured line items</b></div>
-      <div class="row"><span>Median exceptions per quote</span><b>0.3</b></div>
-      <div class="row"><span>Median time to price</span><b>4 min</b></div>
+      <div class="hd"><span class="chan c-platform">Materialspace</span><b id="n-platform"></b></div>
+      <div class="row"><span>Arrives as</span><b>SKUs and modifications</b></div>
+      <div class="row"><span>Median time to price</span><b>6 min</b></div>
+    </div>
+    <div class="lane">
+      <div class="hd"><span class="chan c-link">Request link</span><b id="n-link"></b></div>
+      <div class="row"><span>Arrives as</span><b>the dealer's Excel file</b></div>
+      <div class="row"><span>Median time to price</span><b>40 min</b></div>
     </div>
     <div class="lane hot">
-      <div class="hd"><span class="chan c-scan">Email attachment</span><b>4 of 7 requests</b></div>
-      <div class="row"><span>Arrives as</span><b>scans, marked-up PDFs</b></div>
-      <div class="row"><span>Median exceptions per quote</span><b>4.8</b></div>
-      <div class="row"><span>Median time to price</span><b>2.1 days</b></div>
+      <div class="hd"><span class="chan c-email">Email</span><b id="n-email"></b></div>
+      <div class="row"><span>Arrives as</span><b>Excel files and PDFs</b></div>
+      <div class="row"><span>Median time to price</span><b>1.8 days</b></div>
     </div>
   </div>
 
   <div class="card">
     <table>
-      <colgroup><col style="width:84px"><col><col><col style="width:130px">
-        <col style="width:60px"><col style="width:58px"><col style="width:80px"><col style="width:180px"></colgroup>
+      <colgroup><col style="width:84px"><col><col><col style="width:150px">
+        <col style="width:96px"><col style="width:58px"><col style="width:80px"><col style="width:210px"></colgroup>
       <thead><tr>
-        <th>Quote</th><th>Dealer</th><th>Project</th><th>Channel</th><th>Units</th>
+        <th>Quote</th><th>Dealer</th><th>Project</th><th>Arrived by</th><th>Apartments</th>
         <th>Lines</th><th>Waiting</th><th>Status</th>
       </tr></thead>
       <tbody id="inbox-rows"></tbody>
     </table>
   </div>
-  <div class="sub" style="margin-top:10px">Q-4471 and Q-4472 are open. The rest are illustrative.</div>
+  <div class="sub" style="margin-top:10px">Q-4476 and Q-4471 open. The rest are illustrative.</div>
 </section>
 
 <!-- ============ QUOTE ============ -->
@@ -317,20 +353,21 @@
 
   <div class="toolbar" style="margin-bottom:14px">
     <div class="seg">
-      <button data-order="Q-4472">Q-4472 · via Materialspace</button>
-      <button data-order="Q-4471" class="on">Q-4471 · email attachment</button>
+      <button data-order="Q-4476" class="on">Q-4476 · Materialspace</button>
+      <button data-order="Q-4471">Q-4471 · PDF by email</button>
     </div>
-    <span class="muted" style="font-size:12.5px">Same job, two channels. Switch to compare.</span>
+    <span class="muted" style="font-size:12.5px">Two open requests: a multifamily job from a Materialspace dealer, and a marked-up PDF.</span>
   </div>
 
   <div class="stats">
     <div class="stat hero"><div class="k">Priced automatically</div><div class="v" id="s-auto">—</div></div>
     <div class="stat"><div class="k">Need a decision</div><div class="v" id="s-exc">—</div></div>
     <div class="stat"><div class="k">Dealer waiting</div><div class="v" id="s-wait">—</div></div>
-    <div class="stat"><div class="k">Median on this account</div><div class="v">6 <small>days</small></div></div>
+    <div class="stat"><div class="k">Median on this account</div><div class="v" id="s-median">—</div></div>
   </div>
 
   <div id="order-banner"></div>
+  <div id="pricing"></div>
 
   <div class="toolbar">
     <div class="seg">
@@ -356,7 +393,7 @@
   <div class="footbar">
     <span class="muted" id="foot-note">—</span>
     <div class="tot">
-      <div class="k">Quote total <span class="muted" style="text-transform:none;letter-spacing:0">incl. 8.875% tax</span></div>
+      <div class="k">Quote total <span class="muted" style="text-transform:none;letter-spacing:0" id="tax-note"></span></div>
       <div class="v" id="q-total">—</div>
     </div>
     <button class="send" id="send" disabled>Send price to dealer</button>
@@ -370,22 +407,23 @@
   <div class="sub">What's coming, and when.</div>
 
   <div class="stats">
-    <div class="stat"><div class="k">Open quoted value</div><div class="v">$3.12M</div></div>
+    <div class="stat"><div class="k">Open quoted value</div><div class="v">$3.09M</div></div>
     <div class="stat"><div class="k">Open quotes</div><div class="v">8</div></div>
-    <div class="stat"><div class="k">Dealer activity shared</div><div class="v" id="s-shared">—</div></div>
-    <div class="stat hero"><div class="k">Committed, next 12 wks</div><div class="v">$1.04M</div></div>
+    <div class="stat"><div class="k">Projects shared by dealers</div><div class="v" id="s-shared">—</div></div>
+    <div class="stat hero"><div class="k">Booked, next 12 wks</div><div class="v">$1.04M</div></div>
   </div>
 
   <div class="grid2">
     <div>
       <div class="card chart" style="margin-bottom:14px">
         <h3>Factory load, next 14 weeks</h3>
-        <div class="cap">Confirmed orders, plus open quotes weighted by how recently the dealer worked on the estimate.</div>
+        <div class="cap">Orders already booked in your own system, including ones that never went through Materialspace,
+          plus what open quotes and shared projects suggest is coming.</div>
         <div class="bars" id="bars"></div>
         <div class="wklabs" id="wklabs"></div>
         <div class="legend">
-          <span><i style="background:var(--accent)"></i>Confirmed orders</span>
-          <span><i style="background:repeating-linear-gradient(45deg,#c9d8f2,#c9d8f2 3px,#dde7f8 3px,#dde7f8 6px)"></i>Weighted pipeline</span>
+          <span><i style="background:var(--accent)"></i>Booked orders (from your system)</span>
+          <span><i style="background:repeating-linear-gradient(45deg,#c9d8f2,#c9d8f2 3px,#dde7f8 3px,#dde7f8 6px)"></i>Expected from quotes</span>
           <span><i style="background:#c9a227"></i>Plant capacity</span>
         </div>
       </div>
@@ -400,8 +438,8 @@
 
       <div class="card">
         <table id="pipe-table">
-          <colgroup><col><col style="width:190px"><col style="width:56px">
-            <col style="width:100px"><col style="width:150px"><col style="width:112px"></colgroup>
+          <colgroup><col><col style="width:160px"><col style="width:96px">
+            <col style="width:96px"><col style="width:170px"><col style="width:180px"></colgroup>
           <thead id="pipe-head"></thead>
           <tbody id="pipe-rows"></tbody>
         </table>
@@ -411,8 +449,8 @@
     <div>
       <div class="callout" style="margin-bottom:14px">
         <h3>Week 47 onward is nearly all unconfirmed</h3>
-        <p>Confirmed work runs out around week 45. Everything after that is pipeline —
-        including a 120-unit job you priced 239 days ago, with no update since.</p>
+        <p>Booked work runs out around week 45. Everything after that is expected from quotes,
+        including a 120-apartment job you priced 239 days ago and haven't heard about since.</p>
         <p>Materials for each order are bought 12–14 business days before it's built. If that 120-unit job
         lands, it needs materials and a production slot in those same weeks.</p>
         <p style="font-size:12px;font-weight:500">From your order process (spec book, page 71).</p>
@@ -428,9 +466,14 @@
           <b>Weekly totals</b>
           Expected volume per week, across all dealers. No dealer is named.
         </div>
+        <div class="layer">
+          <b>Orders already booked</b>
+          From your own ordering system, whichever way they came in.
+        </div>
         <div class="layer opt">
-          <b>Whether a dealer is still working on a job</b>
-          Only if the dealer shares it, when they ask you for a firm ship date.
+          <b>Whether a job is still alive</b>
+          Only for projects a dealer chooses to share, in return for something from you. Two ways are being
+          tried: a held price, or a firm delivery date.
         </div>
         <p style="margin:11px 0 0;color:var(--ink-3)">Not shown: who else a dealer is pricing, their
         margins, which builder the job is for, or jobs they haven't sent you.</p>
@@ -491,6 +534,11 @@
           <span class="tok t5"><b>B</b><span>Butt doors</span></span>
         </div>
 
+        <div class="sec" style="margin-top:20px">Modifications, read from your price book</div>
+        <div class="rule"><span class="pg" style="width:70px">FE-L</span><span>Finished end, left. Adds a price per cabinet, not in the spec book.</span></div>
+        <div class="rule"><span class="pg" style="width:70px">TIP-ON</span><span>Push-to-open hardware. Adds a price per door.</span></div>
+        <div class="rule"><span class="pg" style="width:70px">DEPTH</span><span>Reduced depth. Checked against the 3" step rule on page 25.</span></div>
+
         <div class="sec" id="confirm" style="margin-top:22px">Please confirm</div>
         <div class="issue i-high"><span class="dot"></span><span>
           <b><code style="font-family:var(--mono)">W241224B</code> can be read two ways.</b> The numbers have no
@@ -522,6 +570,22 @@
         <p>Tafisa L582 came up in 22 requests from 7 dealers this quarter, and it isn't in your catalog.</p>
       </div>
 
+      <div class="card" style="padding:16px;margin-bottom:14px">
+        <h3 style="margin:0 0 3px;font-size:14px">Job-size pricing</h3>
+        <div class="sub" style="margin-bottom:8px">Set once by your sales team. Applied on top of each dealer's
+          standard discount, so most quotes price themselves.</div>
+        <table>
+          <colgroup><col><col style="width:130px"></colgroup>
+          <thead><tr><th>Apartments in the job</th><th style="text-align:right">Extra discount</th></tr></thead>
+          <tbody>
+            <tr><td>1–49</td><td class="money">None</td></tr>
+            <tr><td>50–99</td><td class="money">2%</td></tr>
+            <tr><td>100–199</td><td class="money">4%</td></tr>
+            <tr><td>200 or more</td><td style="text-align:right"><span class="pill p-warn">Sales decides</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
       <div class="card privacy" style="margin-bottom:14px">
         <h3>Arrangements with single dealers</h3>
         <p style="margin:0;color:var(--ink-3)">11 dealers have something specific to them: an exclusive size,
@@ -543,45 +607,84 @@
 <div class="scrim" id="scrim">
   <div class="dlg">
     <div class="flip">
-      <span>↔</span> <b>The other side of the glass</b> — this is what Hudson sees in their own
-      Materialspace account. Not part of the manufacturer product.
+      <span>↔</span> <span><b>Dealer's view.</b> What Brightwood sees in Materialspace, not part of the manufacturer product.</span>
       <button class="closex" id="dlg-x">✕</button>
     </div>
     <div class="dhd">
-      <div class="cust"><div class="av" style="background:#dfe4ec">HK</div>
-        Hudson Kitchen Supply · Ronit A., estimating</div>
-      <h2>Request a firm ship date on Vernon Court — Building B</h2>
-      <p>Smart Cabinetry quoted week 46, subject to capacity. To hold a slot for you, they need to know
-      this job is still going ahead.</p>
+      <div class="cust"><div class="av" style="background:#dfe4ec">BS</div>
+        Brightwood Supply · Ronit A., estimating</div>
+      <h2>Share Brookfield Yards with Smart Cabinetry?</h2>
+      <p>Smart priced this job three months ago. If you tell them it's still alive, they offer something back.
+      Pick one, or don't share.</p>
     </div>
     <div class="body">
-      <div class="getback">
-        <b>What you're asking for</b>
-        A firm ship date instead of “subject to capacity.”
+      <div class="opts">
+        <div class="opt" id="opt-price">
+          <h4>Hold my price</h4>
+          <div class="gv">You get</div>
+          <p>Smart's quoted price stays the same until you order, up to June 30.</p>
+          <div class="gv">You do</div>
+          <p>Confirm every four weeks that the job is still alive. If you don't, the hold ends.</p>
+          <button data-share="price">Share for a held price</button>
+        </div>
+        <div class="opt" id="opt-date">
+          <h4>Get a firm delivery date</h4>
+          <div class="gv">You get</div>
+          <p>A firm delivery week instead of “subject to capacity”.</p>
+          <div class="gv">You do</div>
+          <p>Share the job now. Smart sees the details only once it commits to a date.</p>
+          <button data-share="date">Share for a firm date</button>
+        </div>
       </div>
 
       <div class="cols">
-        <div class="col yes"><h4>Sending this shows them</h4><ul>
-          <li>That you are still working on this job</li>
-          <li>When you last changed the estimate</li>
+        <div class="col yes"><h4>Sharing shows Smart</h4><ul>
+          <li>That this job is still going ahead</li>
+          <li>When you expect to order</li>
         </ul></div>
-        <div class="col no"><h4>It does not show them</h4><ul>
+        <div class="col no"><h4>It never shows them</h4><ul>
           <li>Who else you are pricing against them</li>
           <li>Your margin, or what you quote the builder</li>
-          <li>Any project you have not asked them to price</li>
-          <li>Your other manufacturers’ terms</li>
+          <li>Any project you haven't sent them</li>
         </ul></div>
       </div>
 
       <div class="dlgacts">
-        <button class="primary" id="dlg-share">Send request</button>
-        <button id="dlg-agg">Not now</button>
+        <button id="dlg-agg">Don't share</button>
       </div>
 
-      <p class="fineprint" id="dlg-note"><b style="color:var(--ink)">Materialspace never asks you to share
-      this.</b> It only goes out when you ask for a date, on the job you asked about, and you can withdraw it
-      at any time. Your volumes already count toward their factory planning either way — as totals, with no
-      name attached.</p>
+      <p class="fineprint" id="dlg-note"><b style="color:var(--ink)">Materialspace never asks you to share on a
+      manufacturer's behalf.</b> You choose per project, and you can stop sharing at any time.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ADD REQUEST MODAL ============ -->
+<div class="scrim" id="addscrim">
+  <div class="dlg" style="max-width:520px">
+    <div class="dhd" style="display:flex;align-items:flex-start">
+      <div>
+        <h2 style="margin-top:4px">Add a request</h2>
+        <p>For requests that reached you some other way, like a PDF someone forwarded.</p>
+      </div>
+      <button class="closex" id="add-x" style="color:var(--ink-3)">✕</button>
+    </div>
+    <div class="body frm">
+      <label for="add-dealer">Dealer</label>
+      <select id="add-dealer">
+        <option>Meridian Cabinet Co.</option><option>Coastline Interiors</option>
+        <option>Hudson Kitchen Supply</option><option>Fairmount Kitchens</option><option>New dealer…</option>
+      </select>
+      <label for="add-proj">Project</label>
+      <input id="add-proj" value="Oakmont Terrace">
+      <label>File</label>
+      <div class="drop" id="add-drop"><b>Drop an Excel file or PDF</b><br>or <a href="#" id="add-pick">choose a file</a></div>
+      <div class="dlgacts"><button class="primary" id="add-go">Add to inbox</button></div>
+      <div class="linkbox" style="margin-top:6px">
+        <div><div style="font-weight:600;margin-bottom:2px">Dealers can send requests themselves</div>
+          <code>…/smart-cabinetry/request</code></div>
+        <button class="pub" id="add-copy">Copy link</button>
+      </div>
     </div>
   </div>
 </div>
@@ -591,75 +694,76 @@
 // Q-4471 line items are transcribed from the sample order document
 // supplied with the exercise. `raw` is the string as received;
 // `strike` and `note` record the dealer's hand markup.
-// Q-4472 is the same kind of job arriving through Materialspace.
+// Q-4476 is a multifamily request from a Materialspace dealer (made-up data).
 // ============================================================
 const AUTO_ACCEPT = 0.85;
 
 const ORDERS = {
   'Q-4471': {
-    id:'Q-4471', channel:'scan', channelLabel:'Email attachment',
-    dealer:'Hudson Kitchen Supply', project:'Vernon Court — Building B',
-    units:21, unitTypes:'2 unit types (14 + 7)', received:'Sep 8, 09:12',
-    waiting:'2 days', taxRate:0.08875,
+    id:'Q-4471', channel:'email', channelLabel:'PDF by email',
+    dealer:'Hudson Kitchen Supply', project:'Vernon Court',
+    sub:'Marked-up PDF sent by email · dealer not on Materialspace · received Sep 8, 09:12',
+    waiting:'2 days', median:'6 days', taxRate:0.08875,
     banner:{
-      title:'Two finish families on one order',
-      body:'PET White 1S HG and Tafisa L582 both appear. Your order form takes one door style, finish and construction type per order, so this would come back as a rejection after entry. Split it into two orders before sending, or confirm with the dealer.',
-      src:'Rule source: Specifications Guide p.71 — “Door style, finish, and construction type must be unique per order.”'
+      title:'Two finishes on one order',
+      body:'PET White 1S HG and Tafisa L582 both appear. Your order process takes one finish per order, so an order like this would be rejected after entry. Better to tell the dealer now, with the price.',
+      src:'Rule source: Specifications Guide p.71 — “Door style, finish, and construction type must be unique per order.”',
+      split:'Split by finish: PET White and Tafisa L582 lines will be ordered separately. This note goes out with the price.'
     },
     lines:[
       { n:1, raw:'14PC_PET WHITE 1S HG_W_36x15x24_TIP ON (T15) (BUILT IN)_U-1_$2705.9',
         price:2705.90, status:'exception',
         strike:'PET WHITE 1S HG_W_36x15x24', note:'Tafisa L582 33.875 x 15 x 24', confidence:0.86,
-        parsed:{Finish:'PET White 1S HG → Tafisa L582',Type:'Wall cabinet',Dimensions:'36 → 33.875 × 15 × 24',Hardware:'Tip-On (T15), built in',Quantity:'14 · 1 per unit'},
+        parsed:{Finish:'PET White 1S HG → Tafisa L582',Type:'Wall cabinet',Dimensions:'36 → 33.875 × 15 × 24',Hardware:'Tip-On (T15), built in',Quantity:'14 pieces'},
         issues:[{sev:'high',text:'Width 33.875" is not a stock size. Nearest stock is 33". Custom cut required.'},
                 {sev:'high',text:'Finish changed from PET White to Tafisa L582 — different material family, different price basis.'},
                 {sev:'med',text:'Line still carries $2,705.90 from the original spec. Stale.'}],
         actions:['Price as custom cut','Substitute stock 33"','Query dealer'] },
       { n:2, raw:'7PC_TAFISA L582 ( K )_B_24x34.5x24_H-L_U-1_$1292.53', price:1292.53, status:'ok', confidence:0.99,
-        parsed:{Finish:'Tafisa L582 (K)',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24',Hinge:'Left',Quantity:'7 · 1 per unit'} },
+        parsed:{Finish:'Tafisa L582 (K)',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24',Hinge:'Left',Quantity:'7 pieces'} },
       { n:3, raw:'7PC_TAFISA L582 ( K )_B-FHD_24x34.5x24_H-L_ADA , BOT PANEL REMOVABLE,2 SIDE PANEL TILL TO FLOOR AND NOTCH FOR TK_U-1_$1426.56',
         price:1426.56, status:'exception', confidence:0.72, allowance:1580.00,
-        parsed:{Finish:'Tafisa L582 (K)',Type:'Base, full height door',Dimensions:'24 × 34.5 × 24',Hinge:'Left',Quantity:'7 · 1 per unit'},
+        parsed:{Finish:'Tafisa L582 (K)',Type:'Base, full height door',Dimensions:'24 × 34.5 × 24',Hinge:'Left',Quantity:'7 pieces'},
         subInstructions:['ADA compliant','Bottom panel removable','2 side panels run to floor','Notch for toe kick'],
         issues:[{sev:'high',text:'Four separate build instructions packed into one description field. None map to a catalog modification code.'},
                 {sev:'med',text:'Not priceable from the catalog. Engineering has to quote it.'}],
         actions:['Quote as allowance, send now','Hold quote for engineering','Query dealer'] },
       { n:4, raw:'7PC_TAFISA L582 ( K )_B_24x34.5x24_H-R_U-1_$1292.53', price:1292.53, status:'ok', confidence:0.99,
-        parsed:{Finish:'Tafisa L582 (K)',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24',Hinge:'Right',Quantity:'7 · 1 per unit'} },
+        parsed:{Finish:'Tafisa L582 (K)',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24',Hinge:'Right',Quantity:'7 pieces'} },
       { n:5, raw:'7PC_TAFISA L582 ( K )_PC_24x96x24_H-L_TOP DOOR 42"H_U-1_$2872.12',
         price:2872.12, status:'exception', note:'F-L', confidence:0.58,
-        parsed:{Finish:'Tafisa L582 (K)',Type:'Pantry / tall',Dimensions:'24 × 96 × 24',Hinge:'Left',Detail:'Top door 42" high',Quantity:'7 · 1 per unit'},
+        parsed:{Finish:'Tafisa L582 (K)',Type:'Pantry / tall',Dimensions:'24 × 96 × 24',Hinge:'Left',Detail:'Top door 42" high',Quantity:'7 pieces'},
         readings:[{label:'Finished Left — exposed left end panel',pct:58,delta:'+$412.00'},
                   {label:'Flip to Left hinge',pct:34,delta:'no change — line already reads H-L'},
                   {label:'Something else',pct:8,delta:'—'}],
         issues:[{sev:'high',text:'Handwritten "F-L" has no unambiguous reading. Best guess falls below the 85% auto-accept threshold.'}],
         actions:['Finished left','Hinge left','Query dealer'] },
       { n:6, raw:'14PC_PET WHITE 1S HG_L-PANEL_3x34.5x24.875_U-1_$1284.84', price:1284.84, status:'ok', confidence:0.97,
-        parsed:{Finish:'PET White 1S HG',Type:'Left panel',Dimensions:'3 × 34.5 × 24.875',Quantity:'14 · 1 per unit'} },
+        parsed:{Finish:'PET White 1S HG',Type:'Left panel',Dimensions:'3 × 34.5 × 24.875',Quantity:'14 pieces'} },
       { n:7, raw:'7PC_PET WHITE 1S HG_L-PANEL_3x39.875x12.875_U-1_$502.86', price:502.86, status:'ok', confidence:0.97,
-        parsed:{Finish:'PET White 1S HG',Type:'Left panel',Dimensions:'3 × 39.875 × 12.875',Quantity:'7 · 1 per unit'} },
+        parsed:{Finish:'PET White 1S HG',Type:'Left panel',Dimensions:'3 × 39.875 × 12.875',Quantity:'7 pieces'} },
       { n:8, raw:'28PC_PET WHITE 1S HG_FILLER_6x30x0.75_U-1_$635.47', price:635.47, status:'ok', confidence:0.99,
-        parsed:{Finish:'PET White 1S HG',Type:'Filler',Dimensions:'6 × 30 × 0.75',Quantity:'28 · 2 per unit'} },
+        parsed:{Finish:'PET White 1S HG',Type:'Filler',Dimensions:'6 × 30 × 0.75',Quantity:'28 pieces'} },
       { n:9, raw:'21PC_PET WHITE 1S HG_FILLER_3x39.875x0.75_U-1_$476.6', price:476.60, status:'ok', confidence:0.99,
-        parsed:{Finish:'PET White 1S HG',Type:'Filler',Dimensions:'3 × 39.875 × 0.75',Quantity:'21 · 3 per unit'} },
+        parsed:{Finish:'PET White 1S HG',Type:'Filler',Dimensions:'3 × 39.875 × 0.75',Quantity:'21 pieces'} },
       { n:10, raw:'14PC_PET WHITE 1S HG_FILLER_6x39.875x0.75_U-1_$317.73', price:317.73, status:'ok', confidence:0.99,
-        parsed:{Finish:'PET White 1S HG',Type:'Filler',Dimensions:'6 × 39.875 × 0.75',Quantity:'14 · 1 per unit'} },
+        parsed:{Finish:'PET White 1S HG',Type:'Filler',Dimensions:'6 × 39.875 × 0.75',Quantity:'14 pieces'} },
       { n:11, raw:'7PC_PET WHITE 1S HG_PANEL_18.75x91.5x0.75_U-1_$757.1', price:757.10, status:'ok', confidence:0.98,
-        parsed:{Finish:'PET White 1S HG',Type:'Panel',Dimensions:'18.75 × 91.5 × 0.75',Quantity:'7 · 1 per unit'} },
+        parsed:{Finish:'PET White 1S HG',Type:'Panel',Dimensions:'18.75 × 91.5 × 0.75',Quantity:'7 pieces'} },
       { n:12, raw:'7PC_PET WHITE 1S HG_FILLER_3x72x0.75_U-1_$158.87', price:158.87, status:'ok', confidence:0.99,
-        parsed:{Finish:'PET White 1S HG',Type:'Filler',Dimensions:'3 × 72 × 0.75',Quantity:'7 · 1 per unit'} },
+        parsed:{Finish:'PET White 1S HG',Type:'Filler',Dimensions:'3 × 72 × 0.75',Quantity:'7 pieces'} },
       { n:13, raw:'21PC_PET WHITE 1S HG_TK_4.5x96x0.75_U-1_$714.9', price:714.90, status:'ok', confidence:0.99,
-        parsed:{Finish:'PET White 1S HG',Type:'Toe kick',Dimensions:'4.5 × 96 × 0.75',Quantity:'21 · 3 per unit'} },
+        parsed:{Finish:'PET White 1S HG',Type:'Toe kick',Dimensions:'4.5 × 96 × 0.75',Quantity:'21 pieces'} },
       { n:14, raw:'49PC_TAFISA L582 ( K )_FILLER_3x96x0.75_U-1_$824.45', price:824.45, status:'ok', confidence:0.99,
-        parsed:{Finish:'Tafisa L582 (K)',Type:'Filler',Dimensions:'3 × 96 × 0.75',Quantity:'49 · 7 per unit'} },
+        parsed:{Finish:'Tafisa L582 (K)',Type:'Filler',Dimensions:'3 × 96 × 0.75',Quantity:'49 pieces'} },
       { n:15, raw:'7PC_TAFISA L582 ( K )_PANEL_26x96x0.75_U-1_$663.49', price:663.49, status:'exception',
         strike:'ALL', confidence:0.95,
-        parsed:{Finish:'Tafisa L582 (K)',Type:'Panel',Dimensions:'26 × 96 × 0.75',Quantity:'7 · 1 per unit'},
+        parsed:{Finish:'Tafisa L582 (K)',Type:'Panel',Dimensions:'26 × 96 × 0.75',Quantity:'7 pieces'},
         issues:[{sev:'med',text:'Entire line struck through. Read as a deletion — removing it drops $663.49 from the quote.'}],
         actions:['Confirm deletion','Keep line','Query dealer'] },
       { n:16, raw:'14PC_TAFISA L582 ( K )_B-COLOUM_1.5x34.5x36_U-1_$1976.83', price:1976.83, status:'exception',
         strike:'B-COLOUM_1.5', note:'Panel .75 b 34.5 b 36', confidence:0.79,
-        parsed:{Finish:'Tafisa L582 (K)',Type:'Base column → Panel',Dimensions:'0.75 × 34.5 × 36',Quantity:'14 · 1 per unit'},
+        parsed:{Finish:'Tafisa L582 (K)',Type:'Base column → Panel',Dimensions:'0.75 × 34.5 × 36',Quantity:'14 pieces'},
         issues:[{sev:'high',text:'Product type changed, not just dimensions. A base column and a panel price off different tables.'},
                 {sev:'med',text:'Read "b" as "by". Source text also misspells COLUMN as COLOUM — matched on fuzzy lookup.'},
                 {sev:'med',text:'Line still carries $1,976.83 from the original spec. Stale.'}],
@@ -667,73 +771,135 @@ const ORDERS = {
     ]
   },
 
-  'Q-4472': {
-    id:'Q-4472', channel:'platform', channelLabel:'Via Materialspace',
-    dealer:'Brightwood Supply', project:'Elm & 4th',
-    units:9, unitTypes:'1 unit type', received:'Sep 10, 08:41',
-    waiting:'6 min', taxRate:0.08875,
-    banner:{ ok:true,
-      title:'Nothing to resolve',
-      body:'The request arrived as structured line items with the dealer\'s revisions already applied as a diff, so there was no document to read and nothing to interpret. Every line matched the catalog and priced on arrival.',
-      src:'Revision 3 of 3 · dealer changed 2 lines · both re-priced automatically'
+  'Q-4476': {
+    id:'Q-4476', channel:'platform', channelLabel:'Materialspace',
+    dealer:'Brightwood Supply', project:'Parkside Lofts',
+    sub:'120 apartments in 3 types (A ×64, B ×40, C ×16) · sent from Materialspace · received today, 10:02',
+    waiting:'14 min', median:'25 min', taxRate:0,
+    pricing:{ disc:0.45, discLabel:'Brightwood standard discount', band:0.96, bandLabel:'Job size 100–199 apartments' },
+    banner:{
+      title:'Two finishes in one job',
+      body:'Apartment type C uses Tafisa L582, the rest Brighton / Willow. Your order process takes one finish per order, so type C apartments will need separate orders. Better to tell the dealer now than to reject orders later.',
+      src:'Rule source: Specifications Guide p.71 — “Door style, finish, and construction type must be unique per order.”',
+      split:'Split by finish: type C apartments will be ordered separately. This note goes out with the price.'
     },
     lines:[
-      { n:1, fields:{Code:'B24',Finish:'Brighton / Willow',Dim:'24×34.5×24',Hinge:'L',Qty:'9'}, price:1662.30, status:'ok', confidence:1,
-        parsed:{Code:'B24',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24',Hinge:'Left',Quantity:'9 · 1 per unit'} },
-      { n:2, fields:{Code:'B24',Finish:'Brighton / Willow',Dim:'24×34.5×24',Hinge:'R',Qty:'9'}, price:1662.30, status:'ok', confidence:1,
-        parsed:{Code:'B24',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24',Hinge:'Right',Quantity:'9 · 1 per unit'} },
-      { n:3, fields:{Code:'W3030',Finish:'Brighton / Willow',Dim:'30×30×12',Qty:'18'}, price:2214.00, status:'ok', confidence:1,
-        parsed:{Code:'W3030',Type:'Wall cabinet',Dimensions:'30 × 30 × 12',Shelves:'2 adjustable',Quantity:'18 · 2 per unit'} },
-      { n:4, fields:{Code:'W1230',Finish:'Brighton / Willow',Dim:'12×30×12',Qty:'9'}, price:743.85, status:'ok', confidence:1,
-        parsed:{Code:'W1230',Type:'Wall cabinet',Dimensions:'12 × 30 × 12',Shelves:'2 adjustable',Quantity:'9 · 1 per unit'} },
-      { n:5, fields:{Code:'T368424B',Finish:'Brighton / Willow',Dim:'36×84×24',Qty:'9'}, price:3411.00, status:'ok', confidence:1,
-        parsed:{Code:'T368424B',Type:'Tall cabinet, butt doors',Dimensions:'36 × 84 × 24',Quantity:'9 · 1 per unit'} },
-      { n:6, fields:{Code:'SH12',Finish:'Matching interior',Dim:'12"',Qty:'27'}, price:486.00, status:'ok', confidence:1,
-        parsed:{Code:'SH12',Type:'Shelf, single',Dimensions:'12" · 0.75 thick',Quantity:'27 · 3 per unit'} },
-      { n:7, fields:{Code:'FILLER',Finish:'Brighton / Willow',Dim:'3×96×0.75',Qty:'18'}, price:302.40, status:'ok', confidence:1,
-        parsed:{Code:'FILLER',Type:'Filler',Dimensions:'3 × 96 × 0.75',Quantity:'18 · 2 per unit'} },
-      { n:8, fields:{Code:'TK',Finish:'Brighton / Willow',Dim:'4.5×96×0.75',Qty:'9'}, price:306.45, status:'ok', confidence:1,
-        parsed:{Code:'TK',Type:'Toe kick',Dimensions:'4.5 × 96 × 0.75',Quantity:'9 · 1 per unit'} }
+      { n:1, fields:{Apt:'A',SKU:'B24',Finish:'Brighton / Willow',Qty:'64'}, qty:64, list:520, status:'ok', confidence:1,
+        parsed:{Apartments:'Type A · 1 per apartment',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24'} },
+      { n:2, fields:{Apt:'A',SKU:'W3030',Finish:'Brighton / Willow',Qty:'128'}, qty:128, list:410, status:'ok', confidence:1,
+        parsed:{Apartments:'Type A · 2 per apartment',Type:'Wall cabinet',Dimensions:'30 × 30 × 12'} },
+      { n:3, fields:{Apt:'A',SKU:'B36',Mod:'FE-L',Finish:'Brighton / Willow',Qty:'64'}, qty:64, list:728, status:'ok', confidence:1,
+        parsed:{Apartments:'Type A · 1 per apartment',Type:'Base cabinet',Dimensions:'36 × 34.5 × 24',Modification:'FE-L · finished end, left · +$38.00 list'} },
+      { n:4, fields:{Apt:'A',SKU:'T368424B',Mod:'DEPTH 22.5',Finish:'Brighton / Willow',Qty:'64'}, qty:64, list:1480, status:'exception', confidence:0.99,
+        parsed:{Apartments:'Type A · 1 per apartment',Type:'Tall cabinet, butt doors',Dimensions:'36 × 84 × 22.5',Modification:'Reduced depth, 24" → 22.5"'},
+        issues:[{sev:'high',text:'Depth 22.5" isn\'t allowed. Depth changes in 3" steps only (spec book p.25), so the choices are 21" or 24".'},
+                {sev:'med',text:'Repeats in all 64 type A apartments.'},
+                {sev:'med',text:'Once you confirm this rule on the Catalog screen, dealers on Materialspace see it while pricing, before they send.'}],
+        actions:['Query dealer','Change to 21" deep','Keep 24" deep'] },
+      { n:5, fields:{Apt:'B',SKU:'W3615',Mod:'TIP-ON',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:354, status:'ok', confidence:1,
+        parsed:{Apartments:'Type B · 1 per apartment',Type:'Wall cabinet',Dimensions:'36 × 15 × 12',Modification:'TIP-ON · push-to-open · +$24.00 list'} },
+      { n:6, fields:{Apt:'B',SKU:'SB36',Mod:'ADA, REMOVABLE BOTTOM',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:610, status:'exception', confidence:0.9, allowanceUplift:1.22,
+        parsed:{Apartments:'Type B · 1 per apartment',Type:'Sink base',Dimensions:'36 × 34.5 × 24',Modification:'ADA, removable bottom panel'},
+        issues:[{sev:'high',text:'This modification isn\'t in your price book, so it can\'t be priced automatically.'},
+                {sev:'med',text:'Your ordering guide shows no price for items like this “until we approve or correct the item” (p.73).'}],
+        actions:['Quote as allowance, send now','Hold quote for engineering','Query dealer'] },
+      { n:7, fields:{Apt:'B',SKU:'DB24',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:780, status:'ok', confidence:1,
+        parsed:{Apartments:'Type B · 1 per apartment',Type:'Drawer base',Dimensions:'24 × 34.5 × 24'} },
+      { n:8, fields:{Apt:'B',SKU:'W3630',Mod:'ROS',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:506, status:'exception', confidence:0.62, note:'ROS',
+        parsed:{Apartments:'Type B · 1 per apartment',Type:'Wall cabinet',Dimensions:'36 × 30 × 12',Modification:'ROS · roll-out shelf'},
+        readings:[{label:'_ROS · roll-out shelf, installed at the factory',pct:62,delta:'+$96.00 list'},
+                  {label:'ROS · roll-out shelf, installed on site',pct:38,delta:'+$41.00 list'}],
+        issues:[{sev:'high',text:'“ROS” can mean installed on site or at the factory, at different prices. This is one of the codes waiting for your review on the Catalog screen. Answer it there once, and it’s settled for every quote.'}],
+        actions:['Factory-installed','Site-installed','Query dealer'] },
+      { n:9, fields:{Apt:'C',SKU:'B24',Finish:'Tafisa L582',Qty:'16'}, qty:16, list:560, status:'ok', confidence:1,
+        parsed:{Apartments:'Type C · 1 per apartment',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24'} },
+      { n:10, fields:{Apt:'C',SKU:'T188424',Finish:'Tafisa L582',Qty:'16'}, qty:16, list:1120, status:'ok', confidence:1,
+        parsed:{Apartments:'Type C · 1 per apartment',Type:'Tall cabinet',Dimensions:'18 × 84 × 24'} },
+      { n:11, fields:{Apt:'All',SKU:'FILLER',Finish:'Brighton / Willow',Qty:'240'}, qty:240, list:38, status:'ok', confidence:1,
+        parsed:{Apartments:'All types · 2 per apartment',Type:'Filler',Dimensions:'3 × 96 × 0.75'} },
+      { n:12, fields:{Apt:'A, B',SKU:'TK',Finish:'Brighton / Willow',Qty:'104'}, qty:104, list:52, status:'ok', confidence:1,
+        parsed:{Apartments:'Types A and B · 1 per apartment',Type:'Toe kick',Dimensions:'4.5 × 96 × 0.75'} }
     ]
   }
 };
 
+
 // ---------- state ----------
-const state = { order:'Q-4471', sel:null, resolved:{}, sent:{}, t0:null, tick:null, filter:'exc', pipe:'agg' };
+const state = { order:'Q-4476', sel:null, resolved:{}, sent:{}, t0:null, tick:null, filter:'exc', pipe:'agg' };
 const money = n => '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 const el = id => document.getElementById(id);
 const O = () => ORDERS[state.order];
+// net price = list × dealer discount × job-size band, worked out here so the numbers stay consistent
+Object.values(ORDERS).forEach(o=>{
+  if(!o.pricing) return;
+  const f = o.pricing.disc*o.pricing.band;
+  o.lines.forEach(l=>{
+    l.price = Math.round(l.qty*l.list*f*100)/100;
+    if(l.allowanceUplift) l.allowance = Math.round(l.price*l.allowanceUplift);
+    l.parsed.Price = `${l.qty} × ${money(l.list)} list × ${o.pricing.disc} × ${o.pricing.band}`;
+  });
+});
+
 
 // ---------- inbox ----------
+const CH = {platform:'Materialspace', link:'Request link', email:'Email', upload:'Added by you'};
 const INBOX = [
-  {id:'Q-4468', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 2',      ch:'scan',     units:48, lines:31, wait:'11d',  st:'stop', lab:'4 need a decision'},
-  {id:'Q-4470', dealer:'Coastline Interiors',   proj:'The Winslow',           ch:'scan',     units:12, lines:14, wait:'6d',   st:'warn', lab:'2 need a decision'},
-  {id:'Q-4471', dealer:'Hudson Kitchen Supply', proj:'Vernon Court — Bldg B', ch:'scan',     units:21, lines:16, wait:'2d',   st:'warn', lab:'5 need a decision', open:true},
-  {id:'Q-4472', dealer:'Brightwood Supply',     proj:'Elm & 4th',             ch:'platform', units:9,  lines:8,  wait:'6 min',st:'ok',   lab:'Priced — ready to send', open:true},
-  {id:'Q-4473', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 3',      ch:'scan',     units:60, lines:44, wait:'1d',   st:'idle', lab:'Reading document…'},
-  {id:'Q-4474', dealer:'Fairmount Kitchens',    proj:'Sutton Place',          ch:'platform', units:6,  lines:11, wait:'1d',   st:'ok',   lab:'Priced — ready to send'},
-  {id:'Q-4475', dealer:'Coastline Interiors',   proj:'Harbor Row',            ch:'platform', units:34, lines:27, wait:'today',st:'ok',   lab:'Priced — ready to send'}
+  {id:'Q-4468', dealer:'Meridian Cabinet Co.',  proj:'Ridgeway Tower',   ch:'link',     fmt:'Excel', units:260, lines:38, wait:'11d',   st:'warn', lab:'260 apartments · sales deciding price'},
+  {id:'Q-4470', dealer:'Coastline Interiors',   proj:'The Winslow',      ch:'email',    fmt:'PDF',   units:12,  lines:14, wait:'6d',    st:'warn', lab:'2 need a decision'},
+  {id:'Q-4471', dealer:'Hudson Kitchen Supply', proj:'Vernon Court',     ch:'email',    fmt:'PDF',   units:'—', lines:16, wait:'2d',    st:'warn', lab:'5 need a decision', open:true},
+  {id:'Q-4473', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 3', ch:'email',    fmt:'Excel', units:60,  lines:44, wait:'1d',    st:'idle', lab:'Reading file…'},
+  {id:'Q-4474', dealer:'Fairmount Kitchens',    proj:'Sutton Place',     ch:'link',     fmt:'Excel', units:6,   lines:11, wait:'1d',    st:'ok',   lab:'Priced — ready to send'},
+  {id:'Q-4475', dealer:'Coastline Interiors',   proj:'Harbor Row',       ch:'email',    fmt:'Excel', units:34,  lines:27, wait:'today', st:'ok',   lab:'Priced — ready to send'},
+  {id:'Q-4476', dealer:'Brightwood Supply',     proj:'Parkside Lofts',   ch:'platform', fmt:'',      units:120, lines:12, wait:'14 min',st:'warn', lab:'3 need a decision', open:true},
+  {id:'Q-4477', dealer:'Brightwood Supply',     proj:'Grove Street',     ch:'platform', fmt:'',      units:18,  lines:15, wait:'5 min', st:'ok',   lab:'Priced — ready to send'}
 ];
-el('inbox-rows').innerHTML = INBOX.map(r=>`
-  <tr class="${r.open?'click':''}" ${r.open?`data-open="${r.id}"`:''}>
-    <td><b>${r.id}</b></td><td>${r.dealer}</td><td class="muted">${r.proj}</td>
-    <td><span class="chan c-${r.ch}">${r.ch==='platform'?'Materialspace':'Attachment'}</span></td>
-    <td>${r.units}</td><td>${r.lines}</td>
-    <td class="${/\d+d/.test(r.wait)&&parseInt(r.wait)>=6?'aged':''}">${r.wait}</td>
-    <td><span class="pill p-${r.st}">${r.lab}</span></td></tr>`).join('');
-document.querySelectorAll('[data-open]').forEach(tr=>
-  tr.addEventListener('click',()=>{ setOrder(tr.dataset.open); go('quote'); }));
+function renderInbox(){
+  el('inbox-rows').innerHTML = INBOX.map(r=>`
+    <tr class="${r.open?'click':''}" ${r.open?`data-open="${r.id}"`:''}>
+      <td><b>${r.id}</b></td><td>${r.dealer}</td><td class="muted">${r.proj}</td>
+      <td><span class="chan c-${r.ch}">${CH[r.ch]}${r.fmt?' · '+r.fmt:''}</span></td>
+      <td>${r.units}</td><td>${r.lines}</td>
+      <td class="${/\d+d/.test(r.wait)&&parseInt(r.wait)>=6?'aged':''}">${r.wait}</td>
+      <td><span class="pill p-${r.st}">${r.lab}</span></td></tr>`).join('');
+  document.querySelectorAll('[data-open]').forEach(tr=>
+    tr.addEventListener('click',()=>{ setOrder(tr.dataset.open); go('quote'); }));
+  for(const c of Object.keys(CH)){
+    const n = INBOX.filter(r=>r.ch===c).length;
+    if(el('n-'+c)) el('n-'+c).textContent = n+' of '+INBOX.length+' requests';
+  }
+}
+renderInbox();
+
+// add request
+const addscrim = el('addscrim');
+let addFile = null;
+el('add-req').addEventListener('click',()=>{ addFile=null; el('add-drop').innerHTML='<b>Drop an Excel file or PDF</b><br>or <a href="#" id="add-pick">choose a file</a>'; bindPick(); addscrim.classList.add('on'); });
+el('add-x').addEventListener('click',()=>addscrim.classList.remove('on'));
+addscrim.addEventListener('click',e=>{ if(e.target===addscrim) addscrim.classList.remove('on'); });
+function bindPick(){
+  el('add-pick').addEventListener('click',e=>{ e.preventDefault(); addFile='Oakmont_takeoff_rev2.xlsx';
+    el('add-drop').innerHTML=`<b>${addFile}</b><br>Excel file · 212 KB`; });
+}
+bindPick();
+el('add-copy').addEventListener('click',()=>{ el('add-copy').textContent='Copied'; });
+el('add-go').addEventListener('click',()=>{
+  const dealer = el('add-dealer').value, proj = el('add-proj').value || 'Untitled project';
+  const fmt = addFile && addFile.endsWith('.pdf') ? 'PDF' : 'Excel';
+  INBOX.push({id:'Q-4478', dealer, proj, ch:'upload', fmt:fmt, units:'—', lines:'—', wait:'now', st:'idle', lab:'Reading file…'});
+  renderInbox(); addscrim.classList.remove('on');
+});
 
 // ---------- pipeline ----------
+// share: null = not shared, 'price' = shared for a held price, 'date' = shared for a firm delivery date
 const PIPE = [
-  {proj:'Ridgeline Commons', dealer:'Meridian Cabinet Co.',  units:120, val:1410000, quoted:'239 days ago', sig:'',                st:'stop', lab:'No update',  opt:false},
-  {proj:'Brookfield Yards',  dealer:'Hudson Kitchen Supply', units:64,  val:602500,  quoted:'3 months ago', sig:'Changed 11 days ago', st:'live', lab:'Active', opt:true},
-  {proj:'Larkspur Phase 2',  dealer:'Meridian Cabinet Co.',  units:48,  val:412000,  quoted:'6 weeks ago',  sig:'Changed 6 days ago',  st:'live', lab:'Active', opt:true},
-  {proj:'Harbor Row',        dealer:'Coastline Interiors',   units:34,  val:291000,  quoted:'today',        sig:'',                st:'live', lab:'Active',     opt:false},
-  {proj:'Vernon Court — B',  dealer:'Hudson Kitchen Supply', units:21,  val:184200,  quoted:'2 days ago',   sig:'Changed today',   st:'live', lab:'Active',     opt:false},
-  {proj:'The Winslow',       dealer:'Coastline Interiors',   units:12,  val:96400,   quoted:'5 months ago', sig:'',                st:'warn', lab:'Cooling',    opt:false},
-  {proj:'Elm & 4th',         dealer:'Brightwood Supply',     units:9,   val:71800,   quoted:'4 months ago', sig:'Job won, order due', st:'ok', lab:'Won',        opt:true},
-  {proj:'Sutton Place',      dealer:'Fairmount Kitchens',    units:6,   val:48300,   quoted:'3 weeks ago',  sig:'',                st:'live', lab:'Active',     opt:false}
+  {proj:'Ridgeline Commons', dealer:'Meridian Cabinet Co.',  units:120, val:1410000, quoted:'239 days ago', share:null},
+  {proj:'Brookfield Yards',  dealer:'Brightwood Supply',     units:64,  val:602500,  quoted:'3 months ago', share:null, demo:true},
+  {proj:'Larkspur Phase 2',  dealer:'Meridian Cabinet Co.',  units:48,  val:412000,  quoted:'6 weeks ago',  share:'price', sig:'Confirmed alive 6 days ago', exp:'Order expected Nov'},
+  {proj:'Parkside Lofts',    dealer:'Brightwood Supply',     units:120, val:154900,  quoted:'today',        share:null},
+  {proj:'Harbor Row',        dealer:'Coastline Interiors',   units:34,  val:291000,  quoted:'today',        share:null},
+  {proj:'The Winslow',       dealer:'Coastline Interiors',   units:12,  val:96400,   quoted:'5 months ago', share:'date', sig:'Asked for week 46', exp:'Waiting on your date'},
+  {proj:'Grove Street',      dealer:'Brightwood Supply',     units:18,  val:71800,   quoted:'4 months ago', share:'price', sig:'Shop drawings started', exp:'Orders due in 3–4 wks'},
+  {proj:'Sutton Place',      dealer:'Fairmount Kitchens',    units:6,   val:48300,   quoted:'3 weeks ago',  share:null}
 ];
 const AGG = [
   {per:'Weeks 38–41', conf:1040000, pipe:118000, units:412},
@@ -741,6 +907,7 @@ const AGG = [
   {per:'Weeks 46–49', conf:212000,  pipe:842000, units:298},
   {per:'Weeks 50–51', conf:44000,   pipe:1771000,units:186}
 ];
+const SHARE = {price:'Shared for a held price', date:'Shared for a firm date'};
 
 const fmtMoney = v => v>=1e6 ? "$"+(v/1e6).toFixed(2)+"M" : "$"+Math.round(v/1000)+"k";
 function renderPipe(){
@@ -748,12 +915,12 @@ function renderPipe(){
   el('p-agg').classList.toggle('on',agg); el('p-det').classList.toggle('on',!agg);
   el('pipe-note').textContent = agg
     ? 'Expected volume across all dealers. No dealer is named.'
-    : 'Dealer activity shows only where the dealer shared it when asking you for a firm ship date.';
-  el('s-shared').innerHTML = PIPE.filter(p=>p.opt).length + ' <small>of ' + PIPE.length + ' quotes</small>';
+    : 'You see whether a job is still alive only where the dealer chose to share it.';
+  el('s-shared').innerHTML = PIPE.filter(p=>p.share).length + ' <small>of ' + PIPE.length + ' quoted projects</small>';
 
   if(agg){
-    el('pipe-head').innerHTML = `<tr><th>Period</th><th style="text-align:right">Confirmed</th>
-      <th style="text-align:right">Weighted pipeline</th><th style="text-align:right">Units</th>
+    el('pipe-head').innerHTML = `<tr><th>Period</th><th style="text-align:right">Booked</th>
+      <th style="text-align:right">Expected from quotes</th><th style="text-align:right">Units</th>
       <th colspan="2">Coverage</th></tr>`;
     el('pipe-rows').innerHTML = AGG.map(a=>{
       const pct = Math.round(a.conf/(a.conf+a.pipe)*100);
@@ -763,18 +930,18 @@ function renderPipe(){
         <td class="money">${a.units}</td>
         <td colspan="2"><div style="background:var(--line-2);border-radius:3px;height:6px;overflow:hidden">
           <div style="width:${pct}%;height:100%;background:${pct<30?'var(--stop)':'var(--accent)'}"></div></div>
-          <div class="muted" style="font-size:11.5px;margin-top:3px">${pct}% confirmed</div></td></tr>`;
+          <div class="muted" style="font-size:11.5px;margin-top:3px">${pct}% booked</div></td></tr>`;
     }).join('');
   } else {
-    el('pipe-head').innerHTML = `<tr><th>Project you quoted</th><th>Dealer</th><th>Units</th>
-      <th style="text-align:right">Quoted value</th><th>Dealer activity</th><th>Status</th></tr>`;
+    el('pipe-head').innerHTML = `<tr><th>Project you quoted</th><th>Dealer</th><th>Apartments</th>
+      <th style="text-align:right">Quoted value</th><th>What the dealer shared</th><th>Status</th></tr>`;
     el('pipe-rows').innerHTML = PIPE.map(p=>`<tr>
         <td><b>${p.proj}</b><div class="muted" style="font-size:12px">Quoted ${p.quoted}</div></td>
         <td class="muted">${p.dealer}</td><td>${p.units}</td>
         <td class="money">${p.val>=1e6 ? "$"+(p.val/1e6).toFixed(2)+"M" : "$"+(p.val/1000).toFixed(1)+"k"}</td>
-        ${p.opt
-          ? `<td class="muted nowrap" style="font-size:12.5px">${p.sig}</td>
-             <td><span class="pill p-${p.st}">${p.lab}</span></td>`
+        ${p.share
+          ? `<td style="font-size:12.5px">${p.sig}<div class="muted" style="font-size:12px">${p.exp}</div></td>
+             <td><span class="pill p-live">${SHARE[p.share]}</span></td>`
           : `<td class="masked" style="font-size:12.5px">—</td>
              <td><span class="pill p-idle">Not shared</span></td>`}
       </tr>`).join('');
@@ -788,21 +955,24 @@ const scrim = el('scrim');
 el('see-dealer').addEventListener('click',()=>scrim.classList.add('on'));
 el('dlg-x').addEventListener('click',()=>scrim.classList.remove('on'));
 scrim.addEventListener('click',e=>{ if(e.target===scrim) scrim.classList.remove('on'); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') scrim.classList.remove('on'); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ scrim.classList.remove('on'); addscrim.classList.remove('on'); } });
 
-function dealerChoice(msg, ok){
-  el('dlg-note').innerHTML = `<b style="color:${ok?'var(--ok)':'var(--ink)'}">${msg}</b>
-    <br>Materialspace never asks you to share this. It only goes out when you ask for a date, and your
-    volumes count toward their factory planning either way — as totals, with no name attached.`;
+function dealerChoice(kind){
+  const b = PIPE.find(p=>p.demo);
+  el('opt-price').classList.toggle('picked',kind==='price');
+  el('opt-date').classList.toggle('picked',kind==='date');
+  if(kind==='price'){ b.share='price'; b.sig='Confirmed alive today'; b.exp='Price held to June 30'; }
+  if(kind==='date'){ b.share='date'; b.sig='Asked for a firm date'; b.exp='Details shown once you commit'; }
+  if(!kind) b.share=null;
+  const msg = kind==='price' ? 'Shared. Smart holds your price, and you’ll be reminded to confirm in four weeks.'
+    : kind==='date' ? 'Shared. Smart will reply with a firm delivery week.'
+    : 'Nothing shared. Your quote stays as it is.';
+  el('dlg-note').innerHTML = `<b style="color:${kind?'var(--ok)':'var(--ink)'}">${msg}</b>
+    <br>Materialspace never asks you to share on a manufacturer's behalf. You choose per project, and you can stop sharing at any time.`;
+  state.pipe='det'; renderPipe();
 }
-el('dlg-share').addEventListener('click',()=>{
-  dealerChoice('Request sent. Smart can now see this job is still going ahead, and will reply with a ship date.', true);
-  const v = PIPE.find(p=>p.proj==='Vernon Court — B'); if(v) v.opt = true; renderPipe();
-});
-el('dlg-agg').addEventListener('click',()=>{
-  dealerChoice('Nothing sent. Week 46 stays subject to capacity.', false);
-  const v = PIPE.find(p=>p.proj==='Vernon Court — B'); if(v) v.opt = false; renderPipe();
-});
+document.querySelectorAll('[data-share]').forEach(bt=>bt.addEventListener('click',()=>dealerChoice(bt.dataset.share)));
+el('dlg-agg').addEventListener('click',()=>dealerChoice(null));
 
 const CAP=100, MAXY=120;
 const LOAD=[{w:38,c:88,p:6},{w:39,c:82,p:11},{w:40,c:79,p:14},{w:41,c:71,p:19},
@@ -810,7 +980,7 @@ const LOAD=[{w:38,c:88,p:6},{w:39,c:82,p:11},{w:40,c:79,p:14},{w:41,c:71,p:19},
             {w:46,c:29,p:52},{w:47,c:22,p:61},{w:48,c:16,p:74},{w:49,c:11,p:88},
             {w:50,c:7,p:96},{w:51,c:4,p:99}];
 el('bars').innerHTML = `<div class="cap-line" style="bottom:${CAP/MAXY*100}%"><span class="cap-tag">Plant capacity</span></div>`+
-  LOAD.map(d=>`<div class="wk" title="W${d.w}: ${d.c} confirmed + ${d.p} pipeline">
+  LOAD.map(d=>`<div class="wk" title="W${d.w}: ${d.c} booked + ${d.p} expected">
     <div class="prob" style="bottom:${d.c/MAXY*100}%;height:${d.p/MAXY*100}%"></div>
     <div class="conf" style="height:${d.c/MAXY*100}%"></div></div>`).join('');
 el('wklabs').innerHTML = LOAD.map(d=>`<div>${d.w}</div>`).join('');
@@ -899,21 +1069,44 @@ document.querySelectorAll('[data-order]').forEach(b=>
 
 function setOrder(id){
   state.order = id; state.sel = null;
+  state.res = state.res || {}; state.resolved = state.res[id] = state.res[id] || {};
   document.querySelectorAll('[data-order]').forEach(b=>b.classList.toggle('on',b.dataset.order===id));
   const o = O();
-  el('q-title').textContent = `${o.id} · ${o.dealer}`;
-  el('q-sub').textContent = `${o.project} · ${o.units} units, ${o.unitTypes} · received ${o.received}`;
+  el('q-title').textContent = `${o.id} · ${o.dealer} · ${o.project}`;
+  el('q-sub').textContent = o.sub;
   el('s-wait').textContent = o.waiting;
-  const b = o.banner;
-  el('order-banner').innerHTML = `<div class="banner" ${b.ok?'style="background:var(--ok-soft);border-color:#bfe3d0"':''}>
-      <div class="dot" style="background:${b.ok?'var(--ok)':'var(--warn)'};margin-top:7px"></div>
-      <div ${b.ok?'style="color:#1c5e40"':''}><b>${b.title}</b>${b.body}
-        <div class="src" ${b.ok?'style="color:var(--ok)"':''}>${b.src}</div></div></div>`;
+  el('s-median').textContent = o.median;
+  el('tax-note').textContent = o.taxRate ? 'incl. '+(o.taxRate*100).toFixed(3)+'% tax' : 'excl. tax';
+  renderBanner();
+  const p = o.pricing;
+  el('pricing').innerHTML = !p ? '' : `<div class="pricing">
+      <div class="step"><span>List price</span><b id="pr-list">—</b></div><span class="op">×</span>
+      <div class="step"><span>${p.discLabel}</span><b>${p.disc}</b></div><span class="op">×</span>
+      <div class="step"><span>${p.bandLabel}</span><b>${p.band}</b></div><span class="op">=</span>
+      <div class="step"><span>Net to dealer</span><b id="pr-net">—</b></div>
+      <div class="who2">Discount from Brightwood's account. Job-size bands set by your sales team (Catalog screen).</div>
+    </div>`;
   el('done-box').innerHTML = '';
   el('send').textContent = state.sent[id] ? 'Sent' : 'Send price to dealer';
   state.filter = o.lines.some(l=>l.status==='exception') ? 'exc' : 'all';
   syncFilter();
   renderDetail();
+}
+function renderBanner(){
+  const o = O(), b = o.banner, done = state.split && state.split[o.id];
+  el('order-banner').innerHTML = done
+    ? `<div class="banner" style="background:var(--ok-soft);border-color:#bfe3d0">
+        <div class="dot" style="background:var(--ok);margin-top:7px"></div>
+        <div style="color:#1c5e40"><b>${b.split}</b>
+        <button class="back" id="unsplit" style="margin-top:8px;font-size:12px;padding:4px 9px">Undo</button></div></div>`
+    : `<div class="banner">
+        <div class="dot" style="background:var(--warn);margin-top:7px"></div>
+        <div><b>${b.title}</b>${b.body}
+          <div class="src">${b.src}</div>
+          <button class="pub" id="do-split" style="margin-top:9px">Split orders by finish</button></div></div>`;
+  const s = el('do-split'), u = el('unsplit');
+  if(s) s.addEventListener('click',()=>{ state.split = state.split||{}; state.split[o.id]=true; renderBanner(); });
+  if(u) u.addEventListener('click',()=>{ state.split[o.id]=false; renderBanner(); });
 }
 
 el('f-exc').addEventListener('click',()=>{state.filter='exc';syncFilter();});
@@ -1046,6 +1239,7 @@ function renderTotals(){
     return a+l.price;
   },0);
   el('q-total').textContent = money(sub*(1+o.taxRate));
+  if(o.pricing && el('pr-net')){ const lst=o.lines.reduce((t,l)=>t+l.qty*l.list,0), extra=sub-lst*o.pricing.disc*o.pricing.band; el('pr-net').innerHTML = money(sub)+(extra>1?' <small style="font:500 11px inherit;color:var(--warn)">includes an estimated line</small>':''); el('pr-list').textContent = money(o.lines.reduce((t,l)=>t+l.qty*l.list,0)); }
 
   el('send').disabled = held>0 || state.sent[o.id];
   el('foot-note').textContent = state.sent[o.id] ? 'Sent.'
@@ -1060,15 +1254,16 @@ el('send').addEventListener('click',()=>{
   const q=Object.values(state.resolved).filter(v=>v.startsWith('Query')).length;
   const a=Object.values(state.resolved).filter(v=>v.startsWith('Quote as allowance')).length;
   const firm=o.lines.length-a-Object.values(state.resolved).filter(v=>v==='Confirm deletion').length;
+  const mins=Math.max(1,Math.round(secs/60));
   el('done-box').innerHTML=`<div class="done"><h3>Price sent to ${o.dealer}</h3>
-    <p>${firm} lines firm${a?', '+a+' as an allowance pending engineering':''}. About
-    ${Math.max(1,Math.round(secs/60))} minute${Math.round(secs/60)===1?'':'s'} of desk time against a
-    6 day median on this account.${q?' '+q+' open question'+(q===1?'':'s')+' went back alongside the price rather than holding it.':''}</p></div>`;
+    <p>${firm+a} lines priced${a?', '+a+' of them as an allowance pending engineering':''}. About
+    ${mins} minute${mins===1?'':'s'} of desk time against a
+    ${o.median} median on this account.${q?' '+q+' open question'+(q===1?'':'s')+' went back alongside the price rather than holding it.':''}</p></div>`;
   el('send').textContent='Sent'; renderTotals();
   el('done-box').scrollIntoView({behavior:'smooth',block:'center'});
 });
 
-setOrder('Q-4471');
+setOrder('Q-4476');
 renderPipe();
 </script>
 </body>
