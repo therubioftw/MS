@@ -67,7 +67,7 @@
   .wf-under .hl{color:var(--accent);font-weight:600}
 
   /* phases timeline */
-  .phases{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--rule);margin-top:calc(var(--s)*10)}
+  .phases{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--rule);margin-top:calc(var(--s)*8.5)}
   .ph{position:relative;padding:calc(var(--s)*3.4) calc(var(--s)*3) 0 0}
   .ph::before{content:"";position:absolute;top:calc(var(--s)*-1);left:0;width:calc(var(--s)*1.8);height:calc(var(--s)*1.8);
     border-radius:50%;background:#c5cad3}
@@ -84,9 +84,10 @@
   .col .w{font-size:calc(var(--s)*2.7);font-weight:620;line-height:1.22;letter-spacing:-.01em}
 
   /* measures */
-  .measure-main{font-size:calc(var(--s)*3.8);font-weight:650;line-height:1.14;letter-spacing:-.02em;max-width:17em}
+  .measure-main{font-size:calc(var(--s)*3.8);font-weight:650;line-height:1.14;letter-spacing:-.02em;max-width:22em}
   .measure-label{font-size:calc(var(--s)*1.9);font-weight:650;color:var(--accent);margin-bottom:calc(var(--s)*1.6)}
-  .measure-row{font-size:calc(var(--s)*2.7);font-weight:600;margin-top:calc(var(--s)*1.2);white-space:nowrap}
+  .measure-row{display:flex;flex-wrap:wrap;gap:calc(var(--s)*1) calc(var(--s)*3.6);font-size:calc(var(--s)*2.5);margin-top:calc(var(--s)*1.2)}
+  .measure-row b{font-weight:600;white-space:nowrap}
   .measure-row i{font-style:normal;color:#b5bbc5;margin:0 calc(var(--s)*1.4)}
   .measure-row span{font-size:calc(var(--s)*2.7);font-weight:600}
 
@@ -103,36 +104,40 @@
 </head>
 <body>
 
+
 <!-- 1 -->
 <section class="slide stmt">
   <p class="eyebrow">Materialspace · Building a product for manufacturers</p>
-  <p class="big">A manufacturer answers every quote request the same day, whatever form it arrives in.</p>
+  <p class="big">A manufacturer prices every quote request the same day, whatever form it arrives in.</p>
   <p class="under">Roy · September 2026</p>
 </section>
 
 <!-- 2 -->
 <section class="slide">
-  <h2 class="t">Manufacturers win jobs by answering first. Two things slow them down.</h2>
-  <div class="body pts c2">
+  <h2 class="t">Quotes are slow for three reasons</h2>
+  <div class="body pts c3">
     <div class="pt"><div class="n">01</div>
-      <div class="it">The price isn't known while quoting</div>
-      <div class="sub">It depends on a separate price book and each dealer's discount.</div></div>
+      <div class="it">A different process for every manufacturer</div>
+      <div class="sub">The Excel file by email, their own template, or their portal.</div></div>
     <div class="pt"><div class="n">02</div>
-      <div class="it">Anything non-standard waits for a person</div>
+      <div class="it">Prices worked out by hand</div>
+      <div class="sub">Price book, modifications, the dealer's discount, and the size of the job.</div></div>
+    <div class="pt"><div class="n">03</div>
+      <div class="it">Non-standard items wait for a person</div>
       <div class="sub">No price <q>until we approve or correct the item.</q> Smart spec book, p.73</div></div>
   </div>
 </section>
 
 <!-- 3 -->
 <section class="slide">
-  <h2 class="t">I built the part where jobs are won</h2>
+  <h2 class="t">I built the quoting part. Orders come next</h2>
   <div class="body" style="margin-top:calc(var(--s)*8)">
     <div class="wf">
-      <div class="seg built"><div class="nm">Quoting</div><div class="st">Built</div></div>
-      <div class="seg next"><div class="nm">Order</div><div class="st">Next: the 24-hour review</div></div>
+      <div class="seg built"><div class="nm">Quote</div><div class="st">Built</div></div>
+      <div class="seg next"><div class="nm">Orders per apartment</div><div class="st">Next</div></div>
       <div class="seg not"><div class="nm">Delivery</div><div class="st">Not built</div></div>
     </div>
-    <p class="fine" style="margin-top:calc(var(--s)*2.6)">Quoting covers request, read, resolve and price. Order steps come from Smart's process, p.71.</p>
+    <p class="fine" style="margin-top:calc(var(--s)*2.6)">Months can pass between the quote and the first order. Orders come after shop drawings, one apartment at a time.</p>
   </div>
 </section>
 
@@ -140,17 +145,18 @@
 <section class="slide stmt">
   <p class="eyebrow">Demo</p>
   <p class="big">Here's the quoting part.</p>
-  <p class="under">Line items from your order. Names and volumes are made up.</p>
+  <p class="under">Two requests: a multifamily job from a Materialspace dealer, and your marked-up order as a PDF.
+  Names and numbers are made up.</p>
   <a class="btn" href="index.html" target="_blank" rel="noopener">Open the prototype ↗</a>
 </section>
 
 <!-- 5 -->
 <section class="slide">
-  <h2 class="t">It asks instead of guessing, because the data is messy</h2>
+  <h2 class="t">It asks instead of guessing</h2>
   <div class="body pts c3">
-    <div class="pt"><div class="n">01</div><div class="it">Handwritten notes can mean two things</div></div>
-    <div class="pt"><div class="n">02</div><div class="it">Some catalog codes read two ways</div></div>
-    <div class="pt"><div class="n">03</div><div class="it">Prices aren't in the catalog at all</div></div>
+    <div class="pt"><div class="n">01</div><div class="it">Modifications the spec book doesn't show</div></div>
+    <div class="pt"><div class="n">02</div><div class="it">Rules, like one finish per order</div></div>
+    <div class="pt"><div class="n">03</div><div class="it">PDFs with handwritten changes</div></div>
   </div>
   <p class="note">Every correction is kept, so the same question is only asked once.</p>
 </section>
@@ -178,9 +184,9 @@
   <h2 class="t">Where I'd start, and what comes after</h2>
   <div class="phases">
     <div class="ph start"><span class="flag">Start here</span><div class="n">0</div><div class="it">Their catalog, with prices connected</div></div>
-    <div class="ph"><div class="n">1</div><div class="it">Quote requests in any form</div></div>
-    <div class="ph"><div class="n">2</div><div class="it">A planning view for the factory</div></div>
-    <div class="ph"><div class="n">3</div><div class="it">Dealer activity per project, if dealers agree</div></div>
+    <div class="ph"><div class="n">1</div><div class="it">Quote requests, in any form</div></div>
+    <div class="ph"><div class="n">2</div><div class="it">Orders checked against the quote</div></div>
+    <div class="ph"><div class="n">3</div><div class="it">Planning, if dealers share</div></div>
   </div>
   <p class="fine" style="margin-top:calc(var(--s)*6)">No timelines yet. I'd size these with engineering.</p>
 </section>
@@ -190,9 +196,9 @@
   <h2 class="t">How I'd know it's working</h2>
   <div class="body">
     <div class="measure-label">The strategy</div>
-    <div class="measure-main">Dealers joining Materialspace through a manufacturer's invitation</div>
+    <div class="measure-main">Dealers joining Materialspace through a manufacturer's request link</div>
     <div class="measure-label" style="margin-top:calc(var(--s)*4.5)">The product</div>
-    <div class="measure-row">Time to quote <i>·</i> Lines priced automatically <i>·</i> Questions per quote</div>
+    <div class="pts c3" style="gap:calc(var(--s)*4)"><div class="pt"><div class="it" style="font-size:calc(var(--s)*2.6)">Time to quote</div></div><div class="pt"><div class="it" style="font-size:calc(var(--s)*2.6)">Lines priced automatically</div></div><div class="pt"><div class="it" style="font-size:calc(var(--s)*2.6)">Time to confirm an order</div></div></div>
   </div>
 </section>
 
@@ -200,7 +206,7 @@
 <section class="slide">
   <h2 class="t">Competition, and what each is missing</h2>
   <div class="body rows comp" style="margin-top:calc(var(--s)*3.6)">
-    <div class="r"><span class="k">Keeping things as they are</span><span class="v">Slow, and lots of retyping</span></div>
+    <div class="r"><span class="k">Keeping things as they are</span><span class="v">A different process for every manufacturer</span></div>
     <div class="r"><span class="k">2020</span><span class="v">Built for design, and disliked</span></div>
     <div class="r"><span class="k">Quoting portals</span><span class="v">Dealers have to come to them</span></div>
     <div class="r"><span class="k">Conexiom</span><span class="v">Doesn't know cabinets</span></div>
@@ -213,12 +219,12 @@
 <section class="slide">
   <h2 class="t">Who wins what</h2>
   <div class="body cols4">
-    <div class="col"><div class="nm">Dealers</div><div class="w">Faster prices, fewer rejected orders</div></div>
+    <div class="col"><div class="nm">Dealers</div><div class="w">Faster prices, one place to send requests</div></div>
     <div class="col"><div class="nm">Manufacturers</div><div class="w">More jobs won, less retyping</div></div>
     <div class="col"><div class="nm">Materialspace</div><div class="w">Confirmed catalogs and new dealers</div></div>
     <div class="col"><div class="nm">Sales reps</div><div class="w">Faster quotes, where they do the quoting</div></div>
   </div>
-  <p class="note">Open question: would dealers mind sharing whether a job is still active?</p>
+  <p class="note">Open question: what would get a dealer to share a project? A held price, or a firm delivery date?</p>
 </section>
 
 <!-- 12 -->
@@ -226,7 +232,7 @@
   <h2 class="t">What could go wrong</h2>
   <div class="body pts c3">
     <div class="pt"><div class="n">01</div><div class="it">Mistakes that look right</div></div>
-    <div class="pt"><div class="n">02</div><div class="it">Dealers feeling bypassed</div></div>
+    <div class="pt"><div class="n">02</div><div class="it">Dealers wary of sharing</div></div>
     <div class="pt"><div class="n">03</div><div class="it">Manufacturers wary of depending on us</div></div>
   </div>
 </section>
@@ -234,8 +240,8 @@
 <!-- 13 -->
 <section class="slide stmt">
   <p class="big">Questions</p>
-  <p class="under">Every line item and page reference comes from the documents you sent. Dealer names and volumes are
-  made up. A written version follows today.</p>
+  <p class="under">Line items, rules and page references come from the documents you sent and your answers. Dealer
+  names and numbers are made up. A written version follows today.</p>
 </section>
 
 <div class="prog" id="prog"></div>
