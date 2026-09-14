@@ -87,6 +87,7 @@
   .toc a{text-decoration:none;color:var(--ink-2);padding:4px 0;display:flex;gap:9px}
   .toc a:hover{color:var(--accent);background:none}
   .toc span{font:600 12px var(--mono);color:var(--ink-3);padding-top:2px}
+  @media (max-width:640px){table{font-size:13px} td,th{padding:9px 8px;hyphens:auto;overflow-wrap:break-word}}
 </style>
 </head>
 <body>
@@ -175,7 +176,8 @@ doesn't hold up the rest of the quote.</p>
 delaying it. Catalog rules stay the manufacturer's rules. What changes is when the dealer finds out about
 them. For example, Smart allows one finish per order (spec book, page 71). If a request mixes two finishes,
 the quote flags it and suggests splitting the job into two orders, one per finish. The dealer learns that
-while pricing, instead of having the order rejected later.</p>
+while pricing, instead of having the order rejected later. And once the manufacturer confirms a rule, dealers on
+Materialspace can see it while they price, before they send anything.</p>
 <p><strong>Only partly covered.</strong> A lot of the friction comes later, at ordering. A multifamily
 project is quoted as one total, but it's ordered apartment by apartment, after shop drawings, by email or
 portal. Checking each of those orders against the approved quote is the next thing I'd build (Phase 2).</p>
@@ -198,8 +200,8 @@ and real SKUs include modifications that the spec book doesn't show. As I unders
 already reads manufacturer catalogs for its dealers and cleans up that data itself. With the manufacturer on
 the platform, they review and correct their own SKUs, rules and modifications, and bring in catalogs
 Materialspace doesn't have yet. Materialspace still does the technical work behind the scenes.</p>
-<p><strong>In the prototype:</strong> the Catalog screen shows how codes are read, which rules apply, where
-things are ambiguous, and what dealers ask for that isn't in the catalog. I don't know how often catalogs or
+<p><strong>In the prototype:</strong> the Catalog screen has three parts. Items and modifications: how codes are read, what's
+ambiguous, and what dealers ask for that isn't in the catalog. Pricing: dealer discounts and job-size bands. Rules: what's checked on every quote, and what's been approved for single dealers. I don't know how often catalogs or
 prices change. They may stay the same for years. That's a question for manufacturers (section 03).</p>
 
 <div class="box b-warn">
@@ -756,6 +758,8 @@ how pricing really works.</p>
 moves from the quoting team to them.</p>
 <p><strong>Manufacturers may not want to do setup work early,</strong> especially if their catalog rarely
 changes.</p>
+<p><strong>Planning depends on an upload.</strong> If the manufacturer stops sending its weekly export of booked
+orders, the planning view goes stale. That would also be a sign it isn't worth enough to them yet.</p>
 
 <h3>Market</h3>
 <p><strong>Dealers could see it as a threat,</strong> if they think it gives manufacturers too much insight
@@ -783,7 +787,7 @@ has.</p>
   <li>The people involved at the manufacturer (quoting, sales, catalog, plant scheduling) are my guess for a
   large manufacturer.</li>
   <li>The $1.4 million example in section 01 uses made-up numbers.</li>
-  <li>The dealer names, volumes, and all numbers in the prototype are made up.</li>
+  <li>The Parkside Lofts request in the prototype, including its SKUs and list prices, is made up, as are all dealer names, volumes and numbers. Only the marked-up PDF comes from your documents.</li>
 </ul>
 
 <h3>What's taken from your answers</h3>

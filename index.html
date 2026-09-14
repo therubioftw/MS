@@ -354,7 +354,7 @@
   <div class="toolbar" style="margin-bottom:14px">
     <div class="seg">
       <button data-order="Q-4476" class="on">Q-4476 · Materialspace</button>
-      <button data-order="Q-4471">Q-4471 · PDF by email</button>
+      <button data-order="Q-4471">Q-4471 · marked-up PDF</button>
     </div>
     <span class="muted" style="font-size:12.5px">Two open requests: a multifamily job from a Materialspace dealer, and a marked-up PDF.</span>
   </div>
@@ -852,7 +852,7 @@ const ORDERS = {
         parsed:{Apartments:'Layout A · 2 per apartment',Type:'Wall cabinet',Dimensions:'30 × 30 × 12'} },
       { n:3, fields:{Layout:'A',SKU:'B36',Mod:'FE-L',Finish:'Brighton / Willow',Qty:'64'}, qty:64, list:728, status:'ok', confidence:1,
         parsed:{Apartments:'Layout A · 1 per apartment',Type:'Base cabinet',Dimensions:'36 × 34.5 × 24',Modification:'FE-L · finished end, left · +$38.00 list'} },
-      { n:4, fields:{Layout:'A',SKU:'T368424B',Mod:'DEPTH 22.5',Finish:'Brighton / Willow',Qty:'64'}, qty:64, list:1480, status:'exception', confidence:0.99,
+      { n:4, fields:{Layout:'A',SKU:'T368424B',Mod:'DEPTH 22.5',Finish:'Brighton / Willow',Qty:'64'}, qty:64, list:1480, status:'exception', confidence:1,
         parsed:{Apartments:'Layout A · 1 per apartment',Type:'Tall cabinet, butt doors',Dimensions:'36 × 84 × 22.5',Modification:'Reduced depth, 24" → 22.5"'},
         issues:[{sev:'high',text:'Depth 22.5" isn\'t allowed. Depth changes in 3" steps only (spec book p.25), so the choices are 21" or 24".'},
                 {sev:'med',text:'Repeats in all 64 layout A apartments.'},
@@ -860,7 +860,7 @@ const ORDERS = {
         actions:['Query dealer','Change to 21" deep','Keep 24" deep'] },
       { n:5, fields:{Layout:'B',SKU:'W3615',Mod:'TIP-ON',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:354, status:'ok', confidence:1,
         parsed:{Apartments:'Layout B · 1 per apartment',Type:'Wall cabinet',Dimensions:'36 × 15 × 12',Modification:'TIP-ON · push-to-open · +$24.00 list'} },
-      { n:6, fields:{Layout:'B',SKU:'SB36',Mod:'ADA, REMOVABLE BOTTOM',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:610, status:'exception', confidence:0.9, allowanceUplift:1.22,
+      { n:6, fields:{Layout:'B',SKU:'SB36',Mod:'ADA, REMOVABLE BOTTOM',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:610, status:'exception', confidence:1, allowanceUplift:1.22,
         parsed:{Apartments:'Layout B · 1 per apartment',Type:'Sink base',Dimensions:'36 × 34.5 × 24',Modification:'ADA, removable bottom panel'},
         issues:[{sev:'high',text:'This modification isn\'t in your price book, so it can\'t be priced automatically.'},
                 {sev:'med',text:'Your ordering guide shows no price for items like this “until we approve or correct the item” (p.73).'}],
@@ -906,7 +906,7 @@ Object.values(ORDERS).forEach(o=>{
 // ---------- inbox ----------
 const CH = {platform:'Materialspace', link:'Request link', email:'Email', upload:'Added by you'};
 const INBOX = [
-  {id:'Q-4468', dealer:'Meridian Cabinet Co.',  proj:'Ridgeway Tower',   ch:'link',     fmt:'Excel', units:260, lines:38, wait:'11d',   st:'warn', lab:'260 apartments · sales deciding price'},
+  {id:'Q-4468', dealer:'Meridian Cabinet Co.',  proj:'Ridgeway Tower',   ch:'link',     fmt:'Excel', units:260, lines:38, wait:'11d',   st:'warn', lab:'Waiting on sales for price'},
   {id:'Q-4470', dealer:'Coastline Interiors',   proj:'The Winslow',      ch:'email',    fmt:'PDF',   units:12,  lines:14, wait:'6d',    st:'warn', lab:'2 need a decision'},
   {id:'Q-4473', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 3', ch:'email',    fmt:'Excel', units:60,  lines:44, wait:'1d',    st:'idle', lab:'Reading file…'},
   {id:'Q-4474', dealer:'Fairmount Kitchens',    proj:'Sutton Place',     ch:'link',     fmt:'Excel', units:6,   lines:11, wait:'1d',    st:'ok',   lab:'Priced — ready to send'},
@@ -1255,7 +1255,7 @@ function renderDetail(){
   const col = confident?'var(--ok)':conf>=75?'var(--warn)':'var(--stop)';
 
   let h=`<div class="dhead"><h3>Line ${l.n}</h3>
-    <span class="conf" style="color:${col}">${l.confidence===1?'Exact match':conf+'% confident'}</span></div><div class="dbody">`;
+    <span class="conf" style="color:${col}">${l.confidence===1?'Read exactly':conf+'% confident'}</span></div><div class="dbody">`;
   h+=`<div class="sec" style="margin-top:0">As received</div>
     <div class="raw" style="background:#fafbfc;border:1px solid var(--line-2);border-radius:7px;padding:10px">${rawHtml(l)}</div>`;
   h+='<div class="sec">Read as</div><dl class="kv">';
