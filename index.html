@@ -15,6 +15,7 @@
     --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box}
+  [hidden]{display:none !important}
   body{margin:0;background:var(--bg);color:var(--ink);
     font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     -webkit-font-smoothing:antialiased}
@@ -61,6 +62,15 @@
   .c-scan,.c-email{background:#f4eefb;color:#6b3fa0}
   .c-link{background:#e6f4f1;color:#0f6b58}
   .c-upload{background:var(--line-2);color:var(--ink-2)}
+  th[data-sort]{cursor:pointer;user-select:none} th[data-sort]:hover{color:var(--ink)}
+  th .arr{color:var(--accent);margin-left:3px}
+  .note2{font-size:12px;color:var(--accent);font-weight:500}
+  .answer{background:var(--accent-soft);border:1px solid #c3d6f5;border-radius:8px;padding:10px 12px;font-size:13px;color:#17408c;margin-bottom:8px}
+  .answer b{display:block;margin-bottom:3px}
+  .scope{font-size:13px;margin-top:10px}
+  .scope label{display:flex;gap:7px;align-items:flex-start;margin:5px 0;cursor:pointer}
+  .howsent{font-size:12.5px;color:var(--ink-3);margin-top:8px;line-height:1.5}
+  .toast{position:fixed;top:64px;right:20px;z-index:50;background:#14181f;color:#fff;border-radius:9px;padding:11px 14px;font-size:13.5px;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;gap:12px;align-items:center}
   .h1row{display:flex;align-items:flex-start;gap:12px}
   .h1row .pub{margin-left:auto;font-size:13px;padding:8px 14px}
   .drop{border:2px dashed #cfd5de;border-radius:9px;padding:22px;text-align:center;color:var(--ink-3);font-size:13px;margin:6px 0 14px}
@@ -300,7 +310,7 @@
   <div class="h1row">
     <div>
       <h1>Inbox</h1>
-      <div class="sub">Requests waiting on a price, however they arrived. Sorted by how long the dealer has been waiting.</div>
+      <div class="sub">Every quote request, however it arrived.</div>
     </div>
     <button class="pub" id="add-req">+ Add request</button>
   </div>
@@ -315,6 +325,8 @@
       <div class="hd"><span class="chan c-link">Request link</span><b id="n-link"></b></div>
       <div class="row"><span>Arrives as</span><b>the dealer's Excel file</b></div>
       <div class="row"><span>Median time to price</span><b>40 min</b></div>
+      <div class="row" style="align-items:center"><span>Your link <code style="font-size:11.5px">…/smart-cabinetry/request</code></span>
+        <button class="pub" id="copy-link" style="font-size:11.5px;padding:3px 9px">Copy link</button></div>
     </div>
     <div class="lane hot">
       <div class="hd"><span class="chan c-email">Email</span><b id="n-email"></b></div>
@@ -323,13 +335,22 @@
     </div>
   </div>
 
+  <div class="toolbar">
+    <div class="seg" id="inbox-tabs">
+      <button data-q="price" class="on">Needs pricing <span class="muted" id="c-price"></span></button>
+      <button data-q="wait">Waiting on others <span class="muted" id="c-wait"></span></button>
+      <button data-q="sent">Sent <span class="muted" id="c-sent"></span></button>
+    </div>
+    <span class="muted" style="font-size:12.5px" id="inbox-note"></span>
+  </div>
+
   <div class="card">
     <table>
       <colgroup><col style="width:84px"><col><col><col style="width:150px">
-        <col style="width:96px"><col style="width:58px"><col style="width:80px"><col style="width:210px"></colgroup>
-      <thead><tr>
-        <th>Quote</th><th>Dealer</th><th>Project</th><th>Arrived by</th><th>Apartments</th>
-        <th>Lines</th><th>Waiting</th><th>Status</th>
+        <col style="width:100px"><col style="width:62px"><col style="width:86px"><col style="width:230px"></colgroup>
+      <thead><tr id="inbox-head">
+        <th data-sort="id">Quote</th><th data-sort="dealer">Dealer</th><th data-sort="proj">Project</th><th data-sort="ch">Arrived by</th>
+        <th data-sort="units">Apartments</th><th data-sort="lines">Lines</th><th data-sort="wm">Waiting</th><th data-sort="lab">Status</th>
       </tr></thead>
       <tbody id="inbox-rows"></tbody>
     </table>
@@ -448,12 +469,9 @@
 
     <div>
       <div class="callout" style="margin-bottom:14px">
-        <h3>Week 47 onward is nearly all unconfirmed</h3>
-        <p>Booked work runs out around week 45. Everything after that is expected from quotes,
-        including a 120-apartment job you priced 239 days ago and haven't heard about since.</p>
-        <p>Materials for each order are bought 12–14 business days before it's built. If that 120-unit job
-        lands, it needs materials and a production slot in those same weeks.</p>
-        <p style="font-size:12px;font-weight:500">From your order process (spec book, page 71).</p>
+        <h3>Ridgeline Commons: no word in 239 days</h3>
+        <p>120 apartments. If it lands, it needs production after week 45, when booked work runs out.</p>
+        <button class="pub" id="follow-up">Follow up with Meridian</button>
       </div>
 
       <div class="card privacy">
@@ -472,8 +490,8 @@
         </div>
         <div class="layer opt">
           <b>Whether a job is still alive</b>
-          Only for projects a dealer chooses to share, in return for something from you. Two ways are being
-          tried: a held price, or a firm delivery date.
+          Only for projects a dealer chooses to share, in return for something from you: a held price or a
+          firm delivery date. One of the two would be picked.
         </div>
         <p style="margin:11px 0 0;color:var(--ink-3)">Not shown: who else a dealer is pricing, their
         margins, which builder the job is for, or jobs they haven't sent you.</p>
@@ -523,7 +541,9 @@
           <div class="issue i-high"><span class="dot"></span><span>
             <b><code style="font-family:var(--mono)">ROS</code> or <code style="font-family:var(--mono)">_ROS</code>?</b>
             One is a roll-out shelf installed on site, the other installed at the factory, at different prices. In
-            three places the spec book's layout makes it unclear which is meant. <b>Holding 1 open quote.</b></span></div>
+            three places the spec book's layout makes it unclear which is meant. <b>Holding 1 open quote.</b>
+            <span id="ros-suggest" style="display:none;margin-top:6px;color:var(--ink)">Suggested by Dana from Parkside Lofts: <b style="display:inline">factory-installed</b>.
+            <button class="pub" style="margin-left:6px;font-size:11.5px;padding:3px 9px">Confirm for all quotes</button></span></span></div>
           <div class="issue i-high"><span class="dot"></span><span>
             <b><code style="font-family:var(--mono)">W241224B</code> can be read two ways.</b> The numbers have no
             separators, so it could be 24 × 12 × 24 with butt doors, or 2412 × 24. Which is right?</span></div>
@@ -669,33 +689,37 @@
 <div class="scrim" id="scrim">
   <div class="dlg">
     <div class="flip">
-      <span>↔</span> <span><b>Dealer's view.</b> What Brightwood sees in Materialspace, not part of the manufacturer product.</span>
+      <span>↔</span> <span><b>Dealer's view, inside Materialspace:</b> Brightwood's Brookfield Yards project, on the quote Smart sent. Not part of the manufacturer product.</span>
       <button class="closex" id="dlg-x">✕</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 22px;background:#f4f5f7;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink-3)">
+      <span>For this discussion:</span>
+      <div class="seg"><button data-opt="price" class="on">Option 1 · held price</button><button data-opt="date">Option 2 · firm date</button></div>
+      <span>Only one would ship.</span>
     </div>
     <div class="dhd">
       <div class="cust"><div class="av" style="background:#dfe4ec">BS</div>
         Brightwood Supply · Ronit A., estimating</div>
       <h2>Share Brookfield Yards with Smart Cabinetry?</h2>
-      <p>Smart priced this job three months ago. If you tell them it's still alive, they offer something back.
-      Pick one, or don't share.</p>
+      <p>Smart priced this job three months ago. If you tell them it's still alive, they offer something back.</p>
     </div>
     <div class="body">
-      <div class="opts">
+      <div class="opts" style="grid-template-columns:1fr">
         <div class="opt" id="opt-price">
           <h4>Hold my price</h4>
           <div class="gv">You get</div>
           <p>Smart's quoted price stays the same until you order, up to June 30.</p>
           <div class="gv">You do</div>
           <p>Confirm every four weeks that the job is still alive. If you don't, the hold ends.</p>
-          <button data-share="price">Share for a held price</button>
+          <button data-share="price">Share with Smart</button>
         </div>
-        <div class="opt" id="opt-date">
+        <div class="opt" id="opt-date" hidden>
           <h4>Get a firm delivery date</h4>
           <div class="gv">You get</div>
           <p>A firm delivery week instead of “subject to capacity”.</p>
           <div class="gv">You do</div>
           <p>Share the job now. Smart sees the details only once it commits to a date.</p>
-          <button data-share="date">Share for a firm date</button>
+          <button data-share="date">Share with Smart</button>
         </div>
       </div>
 
@@ -742,11 +766,6 @@
       <label>File</label>
       <div class="drop" id="add-drop"><b>Drop an Excel file or PDF</b><br>or <a href="#" id="add-pick">choose a file</a></div>
       <div class="dlgacts"><button class="primary" id="add-go">Add to inbox</button></div>
-      <div class="linkbox" style="margin-top:6px">
-        <div><div style="font-weight:600;margin-bottom:2px">Dealers can send requests themselves</div>
-          <code>…/smart-cabinetry/request</code></div>
-        <button class="pub" id="add-copy">Copy link</button>
-      </div>
     </div>
   </div>
 </div>
@@ -857,7 +876,8 @@ const ORDERS = {
         issues:[{sev:'high',text:'Depth 22.5" isn\'t allowed. Depth changes in 3" steps only (spec book p.25), so the choices are 21" or 24".'},
                 {sev:'med',text:'Repeats in all 64 layout A apartments.'},
                 {sev:'med',text:'Once you confirm this rule (Catalog, Rules tab), dealers on Materialspace see it while pricing, before they send.'}],
-        actions:['Query dealer','Change to 21" deep','Keep 24" deep'] },
+        actions:['Query dealer','Change to 21" deep','Keep 24" deep'],
+        answer:{text:'Make it 21" deep, same in all 64.', apply:'Change to 21" deep'} },
       { n:5, fields:{Layout:'B',SKU:'W3615',Mod:'TIP-ON',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:354, status:'ok', confidence:1,
         parsed:{Apartments:'Layout B · 1 per apartment',Type:'Wall cabinet',Dimensions:'36 × 15 × 12',Modification:'TIP-ON · push-to-open · +$24.00 list'} },
       { n:6, fields:{Layout:'B',SKU:'SB36',Mod:'ADA, REMOVABLE BOTTOM',Finish:'Brighton / Willow',Qty:'40'}, qty:40, list:610, status:'exception', confidence:1, allowanceUplift:1.22,
@@ -872,7 +892,8 @@ const ORDERS = {
         readings:[{label:'_ROS · roll-out shelf, installed at the factory',pct:62,delta:'+$96.00 list'},
                   {label:'ROS · roll-out shelf, installed on site',pct:38,delta:'+$41.00 list'}],
         issues:[{sev:'high',text:'“ROS” can mean installed on site or at the factory, at different prices. This is one of the codes waiting for your review on the Catalog screen. Answer it there once, and it’s settled for every quote.'}],
-        actions:['Factory-installed','Site-installed','Query dealer'] },
+        actions:['Factory-installed','Site-installed','Query dealer'],
+        answer:{text:'Factory-installed, please.', apply:'Factory-installed'} },
       { n:9, fields:{Layout:'C',SKU:'B24',Finish:'Tafisa L582',Qty:'16'}, qty:16, list:560, status:'ok', confidence:1,
         parsed:{Apartments:'Layout C · 1 per apartment',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24'} },
       { n:10, fields:{Layout:'C',SKU:'T188424',Finish:'Tafisa L582',Qty:'16'}, qty:16, list:1120, status:'ok', confidence:1,
@@ -887,7 +908,7 @@ const ORDERS = {
 
 
 // ---------- state ----------
-const state = { order:'Q-4476', sel:null, resolved:{}, sent:{}, t0:null, tick:null, filter:'exc', pipe:'agg' };
+const state = { order:'Q-4476', sel:null, resolved:{}, res:{}, scope:{}, sent:{}, t0:null, tick:null, filter:'exc', pipe:'agg' };
 const money = n => '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 const el = id => document.getElementById(id);
 const O = () => ORDERS[state.order];
@@ -904,31 +925,61 @@ Object.values(ORDERS).forEach(o=>{
 
 
 // ---------- inbox ----------
+// q: which tab the request sits in. wm: minutes the dealer has been waiting, for sorting.
 const CH = {platform:'Materialspace', link:'Request link', email:'Email', upload:'Added by you'};
 const INBOX = [
-  {id:'Q-4468', dealer:'Meridian Cabinet Co.',  proj:'Ridgeway Tower',   ch:'link',     fmt:'Excel', units:260, lines:38, wait:'11d',   st:'warn', lab:'Waiting on sales for price'},
-  {id:'Q-4470', dealer:'Coastline Interiors',   proj:'The Winslow',      ch:'email',    fmt:'PDF',   units:12,  lines:14, wait:'6d',    st:'warn', lab:'2 need a decision'},
-  {id:'Q-4473', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 3', ch:'email',    fmt:'Excel', units:60,  lines:44, wait:'1d',    st:'idle', lab:'Reading file…'},
-  {id:'Q-4474', dealer:'Fairmount Kitchens',    proj:'Sutton Place',     ch:'link',     fmt:'Excel', units:6,   lines:11, wait:'1d',    st:'ok',   lab:'Priced — ready to send'},
-  {id:'Q-4475', dealer:'Coastline Interiors',   proj:'Harbor Row',       ch:'email',    fmt:'Excel', units:34,  lines:27, wait:'today', st:'ok',   lab:'Priced — ready to send'},
-  {id:'Q-4476', dealer:'Brightwood Supply',     proj:'Parkside Lofts',   ch:'platform', fmt:'',      units:120, lines:12, wait:'14 min',st:'warn', lab:'3 need a decision', open:true},
-  {id:'Q-4477', dealer:'Brightwood Supply',     proj:'Grove Street',     ch:'platform', fmt:'',      units:18,  lines:15, wait:'5 min', st:'ok',   lab:'Priced — ready to send'}
+  {id:'Q-4468', dealer:'Meridian Cabinet Co.',  proj:'Ridgeway Tower',   ch:'link',     fmt:'Excel', units:260, lines:38, wait:'11d',    wm:15840, q:'wait', st:'warn', lab:'Waiting on sales for price'},
+  {id:'Q-4465', dealer:'Coastline Interiors',   proj:'Seaview Terrace',  ch:'email',    fmt:'Excel', units:40,  lines:22, wait:'9d',     wm:12960, q:'wait', st:'live', lab:'1 question with dealer'},
+  {id:'Q-4470', dealer:'Coastline Interiors',   proj:'The Winslow',      ch:'email',    fmt:'PDF',   units:12,  lines:14, wait:'6d',     wm:8640,  q:'price', st:'warn', lab:'2 need a decision'},
+  {id:'Q-4473', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 3', ch:'email',    fmt:'Excel', units:60,  lines:44, wait:'1d',     wm:1440,  q:'price', st:'idle', lab:'Reading file…'},
+  {id:'Q-4474', dealer:'Fairmount Kitchens',    proj:'Maple Court',      ch:'link',     fmt:'Excel', units:6,   lines:11, wait:'1d',     wm:1380,  q:'price', st:'ok',   lab:'Priced — ready to send'},
+  {id:'Q-4475', dealer:'Coastline Interiors',   proj:'Harbor Row',       ch:'email',    fmt:'Excel', units:34,  lines:27, wait:'today',  wm:300,   q:'price', st:'ok',   lab:'Priced — ready to send'},
+  {id:'Q-4476', dealer:'Brightwood Supply',     proj:'Parkside Lofts',   ch:'platform', fmt:'',      units:120, lines:12, wait:'14 min', wm:14,    q:'price', st:'warn', lab:'3 need a decision', open:true},
+  {id:'Q-4477', dealer:'Brightwood Supply',     proj:'Elm & 4th',        ch:'platform', fmt:'',      units:18,  lines:15, wait:'5 min',  wm:5,     q:'price', st:'ok',   lab:'Priced — ready to send'},
+  {id:'Q-4458', dealer:'Brightwood Supply',     proj:'Brookfield Yards', ch:'platform', fmt:'',      units:64,  lines:26, wait:'—',      wm:0,     q:'sent',  st:'ok',   lab:'Sent Jun 12'},
+  {id:'Q-4462', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 2', ch:'email',    fmt:'Excel', units:48,  lines:31, wait:'—',      wm:0,     q:'sent',  st:'ok',   lab:'Sent Aug 4'}
 ];
+const TABNOTE = {
+  price:'Requests your team needs to price. Longest-waiting first. Click a column to sort.',
+  wait:'Sent with open questions, or waiting on sales or engineering. Answers bring them back to Needs pricing.',
+  sent:'Fully priced and sent.'
+};
+const ist = { tab:'price', key:'wm', dir:-1 };
 function renderInbox(){
-  el('inbox-rows').innerHTML = INBOX.map(r=>`
+  const rows = INBOX.filter(r=>r.q===ist.tab).sort((a,b)=>{
+    const x=a[ist.key], y=b[ist.key];
+    return (typeof x==='number' && typeof y==='number' ? x-y : String(x).localeCompare(String(y))) * ist.dir;
+  });
+  el('inbox-rows').innerHTML = rows.map(r=>`
     <tr class="${r.open?'click':''}" ${r.open?`data-open="${r.id}"`:''} ${r.fresh?'style="background:var(--accent-soft)"':''}>
-      <td><b>${r.id}</b></td><td>${r.dealer}</td><td class="muted">${r.proj}</td>
+      <td><b>${r.id}</b></td><td>${r.dealer}</td>
+      <td class="muted">${r.proj}${r.note?`<div class="note2">${r.note}</div>`:''}</td>
       <td><span class="chan c-${r.ch}">${CH[r.ch]}${r.fmt?' · '+r.fmt:''}</span></td>
       <td>${r.units}</td><td>${r.lines}</td>
-      <td class="${/\d+d/.test(r.wait)&&parseInt(r.wait)>=6?'aged':''}">${r.wait}</td>
-      <td><span class="pill p-${r.st}">${r.lab}</span></td></tr>`).join('');
+      <td class="${r.wm>=8640?'aged':''}">${r.wait}</td>
+      <td><span class="pill p-${r.st}">${r.lab}</span></td></tr>`).join('')
+    || '<tr><td colspan="8" class="empty">Nothing here.</td></tr>';
   document.querySelectorAll('[data-open]').forEach(tr=>
     tr.addEventListener('click',()=>{ setOrder(tr.dataset.open); go('quote'); }));
   for(const c of Object.keys(CH)){
-    const n = INBOX.filter(r=>r.ch===c).length;
-    if(el('n-'+c)) el('n-'+c).textContent = n+' of '+INBOX.length+' requests';
+    const n = INBOX.filter(r=>r.ch===c && r.q!=='sent').length;
+    if(el('n-'+c)) el('n-'+c).textContent = n+' open';
   }
+  ['price','wait','sent'].forEach(t=>el('c-'+t).textContent = INBOX.filter(r=>r.q===t).length);
+  document.querySelectorAll('#inbox-tabs [data-q]').forEach(b=>b.classList.toggle('on',b.dataset.q===ist.tab));
+  el('inbox-note').textContent = TABNOTE[ist.tab];
+  document.querySelectorAll('#inbox-head th').forEach(th=>{
+    const a = th.querySelector('.arr'); if(a) a.remove();
+    if(th.dataset.sort===ist.key) th.insertAdjacentHTML('beforeend',`<span class="arr">${ist.dir<0?'↓':'↑'}</span>`);
+  });
 }
+document.querySelectorAll('#inbox-tabs [data-q]').forEach(b=>b.addEventListener('click',()=>{ ist.tab=b.dataset.q; renderInbox(); }));
+document.querySelectorAll('#inbox-head th[data-sort]').forEach(th=>th.addEventListener('click',()=>{
+  const k = th.dataset.sort;
+  if(ist.key===k) ist.dir*=-1; else { ist.key=k; ist.dir = (k==='wm'||k==='units'||k==='lines') ? -1 : 1; }
+  renderInbox();
+}));
+el('copy-link').addEventListener('click',()=>{ el('copy-link').textContent='Copied'; });
 renderInbox();
 
 // add request
@@ -942,28 +993,28 @@ function bindPick(){
     el('add-drop').innerHTML=`<b>${addFile}</b><br>PDF · 1 page · 340 KB`; });
 }
 bindPick();
-el('add-copy').addEventListener('click',()=>{ el('add-copy').textContent='Copied'; });
 el('add-go').addEventListener('click',()=>{
   if(INBOX.some(r=>r.id==='Q-4471')){ addscrim.classList.remove('on'); return; }
   const dealer = el('add-dealer').value, proj = el('add-proj').value || 'Untitled project';
   const fmt = addFile && !addFile.endsWith('.pdf') ? 'Excel' : 'PDF';
-  const row = {id:'Q-4471', dealer, proj, ch:'upload', fmt, units:'—', lines:'—', wait:'2d', st:'idle', lab:'Reading file…'};
-  INBOX.splice(2,0,row);
+  // the dealer's clock started when they emailed it, two days ago, so it sorts by that
+  const row = {id:'Q-4471', dealer, proj, ch:'upload', fmt, units:'—', lines:'—', wait:'2d', wm:2880, q:'price', st:'idle', lab:'Reading file…', note:'Added just now · emailed to Dana 2 days ago', fresh:true};
+  INBOX.push(row); ist.tab='price';
   renderInbox(); addscrim.classList.remove('on');
   // the prototype always "reads" the sample order, whatever file was picked
-  setTimeout(()=>{ Object.assign(row,{lines:16, st:'warn', lab:'5 need a decision', open:true, fresh:true}); renderInbox(); }, 2500);
+  setTimeout(()=>{ Object.assign(row,{lines:16, st:'warn', lab:'5 need a decision', open:true}); renderInbox(); }, 2500);
 });
 
 // ---------- pipeline ----------
-// share: null = not shared, 'price' = shared for a held price, 'date' = shared for a firm delivery date
+// share: null = not shared. Only one sharing option would ship, so the table doesn't say which one.
 const PIPE = [
   {proj:'Ridgeline Commons', dealer:'Meridian Cabinet Co.',  units:120, val:1410000, quoted:'239 days ago', share:null},
   {proj:'Brookfield Yards',  dealer:'Brightwood Supply',     units:64,  val:602500,  quoted:'3 months ago', share:null, demo:true},
-  {proj:'Larkspur Phase 2',  dealer:'Meridian Cabinet Co.',  units:48,  val:412000,  quoted:'6 weeks ago',  share:'price', sig:'Confirmed alive 6 days ago', exp:'Order expected Nov'},
+  {proj:'Larkspur Phase 2',  dealer:'Meridian Cabinet Co.',  units:48,  val:412000,  quoted:'6 weeks ago',  share:'yes', sig:'Confirmed alive 6 days ago', exp:'Order expected Nov'},
   {proj:'Parkside Lofts',    dealer:'Brightwood Supply',     units:120, val:154900,  quoted:'today',        share:null},
   {proj:'Harbor Row',        dealer:'Coastline Interiors',   units:34,  val:291000,  quoted:'today',        share:null},
-  {proj:'The Winslow',       dealer:'Coastline Interiors',   units:12,  val:96400,   quoted:'5 months ago', share:'date', sig:'Asked for week 46', exp:'Waiting on your date'},
-  {proj:'Grove Street',      dealer:'Brightwood Supply',     units:18,  val:71800,   quoted:'4 months ago', share:'price', sig:'Shop drawings started', exp:'Orders due in 3–4 wks'},
+  {proj:'The Winslow',       dealer:'Coastline Interiors',   units:12,  val:96400,   quoted:'5 months ago', share:'yes', sig:'Confirmed alive 2 weeks ago', exp:'Order expected Oct'},
+  {proj:'Grove Street',      dealer:'Brightwood Supply',     units:18,  val:71800,   quoted:'4 months ago', share:'yes', sig:'Shop drawings started', exp:'Orders due in 3–4 wks'},
   {proj:'Sutton Place',      dealer:'Fairmount Kitchens',    units:6,   val:48300,   quoted:'3 weeks ago',  share:null}
 ];
 const AGG = [
@@ -972,7 +1023,7 @@ const AGG = [
   {per:'Weeks 46–49', conf:212000,  pipe:842000, units:298},
   {per:'Weeks 50–51', conf:44000,   pipe:1771000,units:186}
 ];
-const SHARE = {price:'Shared for a held price', date:'Shared for a firm date'};
+const SHARE = {yes:'Shared by dealer', price:'Shared by dealer', date:'Shared by dealer'};
 
 const fmtMoney = v => v>=1e6 ? "$"+(v/1e6).toFixed(2)+"M" : "$"+Math.round(v/1000)+"k";
 function renderPipe(){
@@ -1021,6 +1072,13 @@ el('see-dealer').addEventListener('click',()=>scrim.classList.add('on'));
 el('dlg-x').addEventListener('click',()=>scrim.classList.remove('on'));
 scrim.addEventListener('click',e=>{ if(e.target===scrim) scrim.classList.remove('on'); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ scrim.classList.remove('on'); addscrim.classList.remove('on'); } });
+
+document.querySelectorAll('[data-opt]').forEach(bt=>bt.addEventListener('click',()=>{
+  document.querySelectorAll('[data-opt]').forEach(x=>x.classList.toggle('on',x===bt));
+  el('opt-price').hidden = bt.dataset.opt!=='price';
+  el('opt-date').hidden = bt.dataset.opt!=='date';
+}));
+el('follow-up').addEventListener('click',()=>{ el('follow-up').textContent='Follow-up sent to Meridian'; el('follow-up').disabled=true; });
 
 function dealerChoice(kind){
   const b = PIPE.find(p=>p.demo);
@@ -1212,13 +1270,17 @@ function syncFilter(){
   renderLines();
 }
 
+// a line's answer from the dealer has arrived but hasn't been applied yet
+const answered = (o,l) => !!(o.answers && o.answers[l.n] && (state.resolved[l.n]||'').startsWith('Query'));
+
 function statusOf(l){
-  const r = state.resolved[l.n];
+  const r = state.resolved[l.n], o = O();
   if(l.status==='ok') return {cls:'ok',lab:'Priced'};
+  if(answered(o,l)) return {cls:'live',lab:'Dealer answered'};
   if(!r) return {cls:'stop',lab:'Needs a decision'};
   if(r==='Confirm deletion') return {cls:'idle',lab:'Removed'};
-  if(r.startsWith('Query')) return {cls:'warn',lab:'Query sent'};
-  if(r.startsWith('Quote as allowance')) return {cls:'warn',lab:'Allowance'};
+  if(r.startsWith('Query')) return {cls:'warn',lab:'Question sent'};
+  if(r.startsWith('Quote as allowance')) return {cls:'warn',lab:'Estimate'};
   if(r.startsWith('Hold quote')) return {cls:'stop',lab:'Holding quote'};
   return {cls:'ok',lab:'Resolved'};
 }
@@ -1248,14 +1310,22 @@ function renderLines(){
   renderTotals();
 }
 
+function howSent(o){
+  return o.channel==='platform'
+    ? `Sent to Ronit A. at ${o.dealer}, inside Materialspace, on this line of the quote.`
+    : `Emailed to ${o.dealer} with a link to answer. No login needed.`;
+}
+
 function renderDetail(){
-  const l = O().lines.find(x=>x.n===state.sel);
+  const o = O(), l = o.lines.find(x=>x.n===state.sel);
   if(!l){ el('detail').innerHTML='<div class="empty">Select a line to see how it was read.</div>'; return; }
   const r=state.resolved[l.n], conf=Math.round(l.confidence*100), confident=l.confidence>=AUTO_ACCEPT;
   const col = confident?'var(--ok)':conf>=75?'var(--warn)':'var(--stop)';
+  const key = o.id+':'+l.n;
 
   let h=`<div class="dhead"><h3>Line ${l.n}</h3>
     <span class="conf" style="color:${col}">${l.confidence===1?'Read exactly':conf+'% confident'}</span></div><div class="dbody">`;
+  const i0 = h.length;
   h+=`<div class="sec" style="margin-top:0">As received</div>
     <div class="raw" style="background:#fafbfc;border:1px solid var(--line-2);border-radius:7px;padding:10px">${rawHtml(l)}</div>`;
   h+='<div class="sec">Read as</div><dl class="kv">';
@@ -1277,17 +1347,34 @@ function renderDetail(){
     l.issues.forEach(i=>h+=`<div class="issue i-${i.sev}"><span class="dot"></span><span>${i.text}</span></div>`);
   }
   if(l.allowance && !r){
-    h+=`<div class="sec">Allowance</div><div class="issue i-med"><span class="dot"></span><span>
-      Priced at <b>${money(l.allowance)}</b> from three comparable custom jobs in the last 18 months.
-      Sending it as an allowance lets the other lines go firm today; engineering confirms within 48 hours.
+    h+=`<div class="sec">Estimate</div><div class="issue i-med"><span class="dot"></span><span>
+      Estimated at <b>${money(l.allowance)}</b> from three comparable custom jobs in the last 18 months.
+      Sending it as an estimate lets the other lines go firm today.
       </span></div>`;
   }
 
+  const i1 = h.length;
   if(l.actions){
-    if(r){
+    if(answered(o,l)){
+      h+=`<div class="sec">Answer</div><div class="answer"><b>${o.dealer} answered</b>“${o.answers[l.n]}”</div>
+        <div class="acts"><button class="primary" data-act="${l.answer.apply}">Apply answer: ${l.answer.apply}</button>
+        <button data-act="Query dealer again">Ask again</button></div>`;
+    } else if(r){
       h+=`<div class="sec">Resolved</div><div class="issue" style="background:var(--ok-soft);color:#1c5e40">
-        <span class="dot" style="background:var(--ok)"></span><span><b>${r}</b></span></div>
-        <div class="acts"><button data-act="__undo">Undo</button></div>`;
+        <span class="dot" style="background:var(--ok)"></span><span><b>${r}</b></span></div>`;
+      if(r.startsWith('Query')) h+=`<div class="howsent">${howSent(o)} The answer comes back to this line, and the quote
+        returns to Needs pricing in your inbox.</div>`;
+      if(r.startsWith('Quote as allowance')) h+=`<div class="howsent">Engineering gets this line and has 48 hours to confirm. If
+        the price changes, the quote comes back to your inbox.</div>`;
+      if(l.readings && !r.startsWith('Query')){
+        const sc = state.scope[key] || 'quote';
+        h+=`<div class="scope"><div class="sec" style="margin-top:12px">Use this answer for</div>
+          <label><input type="radio" name="sc" value="quote" ${sc==='quote'?'checked':''}> This quote only</label>
+          <label><input type="radio" name="sc" value="dealer" ${sc==='dealer'?'checked':''}> Every quote from ${o.dealer}</label>
+          <label><input type="radio" name="sc" value="all" ${sc==='all'?'checked':''}> Every quote. Sent to Catalog for sales operations to confirm.</label></div>`;
+        if(sc==='all') h+=`<div class="howsent" style="color:var(--accent)">Added to Catalog → Items as a suggestion.</div>`;
+      }
+      h+=`<div class="acts"><button data-act="__undo">Undo</button></div>`;
     } else {
       h+='<div class="sec">Resolve</div>';
       const rec = confident ? l.actions[0] : (l.actions.find(a=>a.startsWith('Query'))||null);
@@ -1303,18 +1390,30 @@ function renderDetail(){
       <span>${l.confidence===1?'Arrived structured. Matched and priced on receipt.':'Matched to catalog and priced. No action needed.'}</span></div>`;
   }
   h+='</div>';
+  // once a line is settled or answered, show that first so it's in view without scrolling
+  if(l.actions && (r || answered(o,l))){ const body=h.slice(i1,h.length-6).replace('<div class="sec">','<div class="sec" style="margin-top:0">'); h = h.slice(0,i0) + body + h.slice(i0,i1).replace('style="margin-top:0">As received','>As received') + '</div>'; }
   el('detail').innerHTML=h;
   document.querySelectorAll('[data-act]').forEach(b=>b.addEventListener('click',()=>{
-    if(b.dataset.act==='__undo') delete state.resolved[l.n];
-    else state.resolved[l.n]=b.dataset.act;
+    if(b.dataset.act==='__undo'){ delete state.resolved[l.n]; delete state.scope[key]; if(o.id==='Q-4476' && l.n===8) el('ros-suggest').style.display='none'; }
+    else {
+      state.resolved[l.n]=b.dataset.act;
+      if(o.answers && b.dataset.act!=='Query dealer again') delete o.answers[l.n];
+      if(b.dataset.act==='Query dealer again'){ state.resolved[l.n]='Query dealer'; if(o.answers) delete o.answers[l.n]; }
+    }
     renderLines(); renderDetail();
+  }));
+  document.querySelectorAll('input[name="sc"]').forEach(i=>i.addEventListener('change',()=>{
+    state.scope[key]=i.value;
+    if(o.id==='Q-4476' && l.n===8) el('ros-suggest').style.display = i.value==='all' ? 'block' : 'none';
+    renderDetail();
   }));
 }
 
 function renderTotals(){
   const o=O(), exc=o.lines.filter(l=>l.status==='exception');
-  const held = exc.filter(l=>!state.resolved[l.n] || state.resolved[l.n].startsWith('Hold quote')).length;
-  const open = exc.filter(l=>!state.resolved[l.n]).length;
+  const waitingAnswer = exc.filter(l=>answered(o,l)).length;
+  const held = exc.filter(l=>!state.resolved[l.n] || state.resolved[l.n].startsWith('Hold quote')).length + waitingAnswer;
+  const open = exc.filter(l=>!state.resolved[l.n]).length + waitingAnswer;
   const auto = o.lines.length-exc.length;
 
   el('s-auto').innerHTML = auto+' <small>of '+o.lines.length+' lines</small>';
@@ -1328,27 +1427,65 @@ function renderTotals(){
     return a+l.price;
   },0);
   el('q-total').textContent = money(sub*(1+o.taxRate));
-  if(o.pricing && el('pr-net')){ const lst=o.lines.reduce((t,l)=>t+l.qty*l.list,0), extra=sub-lst*o.pricing.disc*o.pricing.band; el('pr-net').innerHTML = money(sub)+(extra>1?' <small style="font:500 11px inherit;color:var(--warn)">includes an estimated line</small>':''); el('pr-list').textContent = money(o.lines.reduce((t,l)=>t+l.qty*l.list,0)); }
+  if(o.pricing && el('pr-net')){ const lst=o.lines.reduce((t,l)=>t+l.qty*l.list,0), extra=sub-lst*o.pricing.disc*o.pricing.band; el('pr-net').innerHTML = money(sub)+(extra>1?' <small style="font:500 11px inherit;color:var(--warn)">includes an estimated line</small>':''); el('pr-list').textContent = money(lst); }
 
   el('send').disabled = held>0 || state.sent[o.id];
-  el('foot-note').textContent = state.sent[o.id] ? 'Sent.'
+  el('send').textContent = state.sent[o.id] ? 'Sent' : (o.round===2 ? 'Send updated price' : 'Send price to dealer');
+  el('foot-note').textContent = state.sent[o.id] ? 'Sent. Open questions come back to your inbox.'
+    : waitingAnswer ? waitingAnswer+(waitingAnswer===1?' answer':' answers')+' to apply.'
     : held>0 ? held+(held===1?' line is holding the quote.':' lines are holding the quote.')
     : exc.length===0 ? 'Priced on arrival. Nothing to resolve.'
     : 'Every line resolved or covered. Ready to send.';
 }
 
 el('send').addEventListener('click',()=>{
-  const o=O(); state.sent[o.id]=true; clearInterval(state.tick);
+  const o=O(); state.sent[o.id]=true; clearInterval(state.tick); state.tick=null;
   const secs=Math.floor((Date.now()-state.t0)/1000);
-  const q=Object.values(state.resolved).filter(v=>v.startsWith('Query')).length;
-  const a=Object.values(state.resolved).filter(v=>v.startsWith('Quote as allowance')).length;
-  const firm=o.lines.length-a-Object.values(state.resolved).filter(v=>v==='Confirm deletion').length;
+  const vals=Object.values(state.resolved);
+  const q=vals.filter(v=>v.startsWith('Query')).length;
+  const a=vals.filter(v=>v.startsWith('Quote as allowance')).length;
+  const firm=o.lines.length-a-vals.filter(v=>v==='Confirm deletion').length;
   const mins=Math.max(1,Math.round(secs/60));
-  el('done-box').innerHTML=`<div class="done"><h3>Price sent to ${o.dealer}</h3>
-    <p>${firm+a} lines priced${a?', '+a+' of them as an allowance pending engineering':''}. About
+  const second = o.round===2;
+
+  el('done-box').innerHTML=`<div class="done"><h3>${second?'Updated price':'Price'} sent to ${o.dealer}</h3>
+    <p>${second
+      ? `Answers applied. ${a?'Line 6 is still an estimate, with engineering.':''}`
+      : `${firm+a} lines priced${a?', '+a+' of them as an estimate for engineering to confirm':''}. About
     ${mins} minute${mins===1?'':'s'} of desk time against a
-    ${o.median} median on this account.${q?' '+q+' open question'+(q===1?'':'s')+' went back alongside the price rather than holding it.':''}</p></div>`;
-  el('send').textContent='Sent'; renderTotals();
+    ${o.median} median on this account.${q?' '+q+' question'+(q===1?'':'s')+' went to the dealer with the price, instead of holding it.':''}`}</p>
+    <div id="answer-note"></div></div>`;
+  renderTotals();
+
+  // move the request between inbox tabs
+  const row = INBOX.find(r=>r.id===o.id);
+  if(row){
+    const parts=[]; if(q) parts.push(q+(q===1?' question':' questions')+' with dealer'); if(a) parts.push(a+' line with engineering');
+    Object.assign(row, parts.length ? {q:'wait', st:'live', lab:parts.join(' · '), note:'', fresh:false}
+                                    : {q:'sent', st:'ok', lab:'Sent just now', note:'', fresh:false});
+    renderInbox();
+  }
+
+  // the demo dealer answers a few seconds later
+  if(o.id==='Q-4476' && q && !second){
+    setTimeout(()=>{
+      o.answers = {};
+      o.lines.forEach(l=>{ if(l.answer && (state.res[o.id][l.n]||'').startsWith('Query')) o.answers[l.n]=l.answer.text; });
+      o.round = 2; state.sent[o.id] = false;
+      const n = Object.keys(o.answers).length;
+      Object.assign(row,{q:'price', st:'warn', lab:`${o.dealer.split(' ')[0]} answered ${n} question${n===1?'':'s'}`, note:'Answers from Ronit A. just now', fresh:true});
+      renderInbox();
+      const note = el('answer-note');
+      if(note && state.order===o.id) note.innerHTML = `<p style="margin-top:8px"><b>${o.dealer} just answered ${n} question${n===1?'':'s'}.</b>
+        <button class="pub" id="see-answers" style="margin-left:6px">Review answers</button></p>`;
+      const sa = el('see-answers'); if(sa) sa.addEventListener('click',()=>{ setOrder(o.id); window.scrollTo({top:0,behavior:'smooth'}); });
+      const t = document.createElement('div'); t.className='toast';
+      t.innerHTML = `<span><b>${o.dealer}</b> answered ${n} question${n===1?'':'s'} on ${o.id}</span><button class="pub">Review</button>`;
+      document.body.appendChild(t);
+      t.querySelector('button').addEventListener('click',()=>{ t.remove(); setOrder(o.id); go('quote'); });
+      setTimeout(()=>t.remove(), 8000);
+    }, 6000);
+  }
   el('done-box').scrollIntoView({behavior:'smooth',block:'center'});
 });
 
