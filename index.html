@@ -392,7 +392,7 @@
 
   <div class="toolbar">
     <div class="seg">
-      <button id="f-exc" class="on">Need a decision (<span id="f-exc-n">5</span>)</button>
+      <button id="f-exc" class="on">Lines that need a decision (<span id="f-exc-n">5</span>)</button>
       <button id="f-all">All lines</button>
     </div>
     <span class="muted" style="font-size:12.5px" id="filter-note"></span>
@@ -727,6 +727,7 @@
         <div class="col yes"><h4>Sharing shows Smart</h4><ul>
           <li>That this job is still going ahead</li>
           <li>When you expect to order</li>
+          <li>Updates, like shop drawings starting</li>
         </ul></div>
         <div class="col no"><h4>It never shows them</h4><ul>
           <li>Who else you are pricing against them</li>
@@ -763,6 +764,8 @@
       </select>
       <label for="add-proj">Project</label>
       <input id="add-proj" value="Vernon Court">
+      <label for="add-date">Received on</label>
+      <input id="add-date" type="date">
       <label>File</label>
       <div class="drop" id="add-drop"><b>Drop an Excel file or PDF</b><br>or <a href="#" id="add-pick">choose a file</a></div>
       <div class="dlgacts"><button class="primary" id="add-go">Add to inbox</button></div>
@@ -893,7 +896,7 @@ const ORDERS = {
                   {label:'ROS · roll-out shelf, installed on site',pct:38,delta:'+$41.00 list'}],
         issues:[{sev:'high',text:'“ROS” can mean installed on site or at the factory, at different prices. This is one of the codes waiting for your review on the Catalog screen. Answer it there once, and it’s settled for every quote.'}],
         actions:['Factory-installed','Site-installed','Query dealer'],
-        answer:{text:'Factory-installed, please.', apply:'Factory-installed'} },
+        answer:{text:'Factory-installed, just for this job.', apply:'Factory-installed', scope:'quote'} },
       { n:9, fields:{Layout:'C',SKU:'B24',Finish:'Tafisa L582',Qty:'16'}, qty:16, list:560, status:'ok', confidence:1,
         parsed:{Apartments:'Layout C · 1 per apartment',Type:'Base cabinet',Dimensions:'24 × 34.5 × 24'} },
       { n:10, fields:{Layout:'C',SKU:'T188424',Finish:'Tafisa L582',Qty:'16'}, qty:16, list:1120, status:'ok', confidence:1,
@@ -934,7 +937,7 @@ const INBOX = [
   {id:'Q-4473', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 3', ch:'email',    fmt:'Excel', units:60,  lines:44, wait:'1d',     wm:1440,  q:'price', st:'idle', lab:'Reading file…'},
   {id:'Q-4474', dealer:'Fairmount Kitchens',    proj:'Maple Court',      ch:'link',     fmt:'Excel', units:6,   lines:11, wait:'1d',     wm:1380,  q:'price', st:'ok',   lab:'Priced — ready to send'},
   {id:'Q-4475', dealer:'Coastline Interiors',   proj:'Harbor Row',       ch:'email',    fmt:'Excel', units:34,  lines:27, wait:'today',  wm:300,   q:'price', st:'ok',   lab:'Priced — ready to send'},
-  {id:'Q-4476', dealer:'Brightwood Supply',     proj:'Parkside Lofts',   ch:'platform', fmt:'',      units:120, lines:12, wait:'14 min', wm:14,    q:'price', st:'warn', lab:'3 need a decision', open:true},
+  {id:'Q-4476', dealer:'Brightwood Supply',     proj:'Parkside Lofts',   ch:'platform', fmt:'',      units:120, lines:12, wait:'14 min', wm:14,    q:'price', st:'warn', lab:'4 need a decision', open:true},
   {id:'Q-4477', dealer:'Brightwood Supply',     proj:'Elm & 4th',        ch:'platform', fmt:'',      units:18,  lines:15, wait:'5 min',  wm:5,     q:'price', st:'ok',   lab:'Priced — ready to send'},
   {id:'Q-4458', dealer:'Brightwood Supply',     proj:'Brookfield Yards', ch:'platform', fmt:'',      units:64,  lines:26, wait:'—',      wm:0,     q:'sent',  st:'ok',   lab:'Sent Jun 12'},
   {id:'Q-4462', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 2', ch:'email',    fmt:'Excel', units:48,  lines:31, wait:'—',      wm:0,     q:'sent',  st:'ok',   lab:'Sent Aug 4'}
@@ -985,7 +988,7 @@ renderInbox();
 // add request
 const addscrim = el('addscrim');
 let addFile = null;
-el('add-req').addEventListener('click',()=>{ addFile=null; el('add-drop').innerHTML='<b>Drop an Excel file or PDF</b><br>or <a href="#" id="add-pick">choose a file</a>'; bindPick(); addscrim.classList.add('on'); });
+el('add-req').addEventListener('click',()=>{ addFile=null; { const d=new Date(); el('add-date').value = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); } el('add-drop').innerHTML='<b>Drop an Excel file or PDF</b><br>or <a href="#" id="add-pick">choose a file</a>'; bindPick(); addscrim.classList.add('on'); });
 el('add-x').addEventListener('click',()=>addscrim.classList.remove('on'));
 addscrim.addEventListener('click',e=>{ if(e.target===addscrim) addscrim.classList.remove('on'); });
 function bindPick(){
@@ -998,11 +1001,14 @@ el('add-go').addEventListener('click',()=>{
   const dealer = el('add-dealer').value, proj = el('add-proj').value || 'Untitled project';
   const fmt = addFile && !addFile.endsWith('.pdf') ? 'Excel' : 'PDF';
   // the dealer's clock started when they emailed it, two days ago, so it sorts by that
-  const row = {id:'Q-4471', dealer, proj, ch:'upload', fmt, units:'—', lines:'—', wait:'2d', wm:2880, q:'price', st:'idle', lab:'Reading file…', note:'Added just now · emailed to Dana 2 days ago', fresh:true};
+  const got = el('add-date').value ? new Date(el('add-date').value+'T12:00:00') : new Date();
+  const days = Math.max(0, Math.round((new Date().setHours(12,0,0,0) - got.getTime())/86400000));
+  const when = got.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  const row = {id:'Q-4471', dealer, proj, ch:'upload', fmt, units:'—', lines:'—', wait: days ? days+'d' : 'just now', wm: days ? days*1440 : 1, q:'price', st:'idle', lab:'Reading file…', note: days ? 'Added just now · received '+when : 'Added just now', fresh:true};
   INBOX.push(row); ist.tab='price';
   renderInbox(); addscrim.classList.remove('on');
   // the prototype always "reads" the sample order, whatever file was picked
-  setTimeout(()=>{ Object.assign(row,{lines:16, st:'warn', lab:'5 need a decision', open:true}); renderInbox(); }, 2500);
+  setTimeout(()=>{ Object.assign(row,{lines:16, st:'warn', lab:'6 need a decision', open:true}); renderInbox(); }, 2500);
 });
 
 // ---------- pipeline ----------
@@ -1023,7 +1029,7 @@ const AGG = [
   {per:'Weeks 46–49', conf:212000,  pipe:842000, units:298},
   {per:'Weeks 50–51', conf:44000,   pipe:1771000,units:186}
 ];
-const SHARE = {yes:'Shared by dealer', price:'Shared by dealer', date:'Shared by dealer'};
+const SHARE = {yes:'Shared by dealer', price:'Shared by dealer', date:'Shared by dealer', manual:'Added by you'};
 
 const fmtMoney = v => v>=1e6 ? "$"+(v/1e6).toFixed(2)+"M" : "$"+Math.round(v/1000)+"k";
 function renderPipe(){
@@ -1051,16 +1057,29 @@ function renderPipe(){
   } else {
     el('pipe-head').innerHTML = `<tr><th>Project you quoted</th><th>Dealer</th><th>Apartments</th>
       <th style="text-align:right">Quoted value</th><th>What the dealer shared</th><th>Status</th></tr>`;
-    el('pipe-rows').innerHTML = PIPE.map(p=>`<tr>
+    el('pipe-rows').innerHTML = PIPE.map((p,i)=>`<tr>
         <td><b>${p.proj}</b><div class="muted" style="font-size:12px">Quoted ${p.quoted}</div></td>
         <td class="muted">${p.dealer}</td><td>${p.units}</td>
         <td class="money">${p.val>=1e6 ? "$"+(p.val/1e6).toFixed(2)+"M" : "$"+(p.val/1000).toFixed(1)+"k"}</td>
-        ${p.share
+        ${p.share==='date' && !p.committed
+          ? `<td style="font-size:12.5px">Asked for a firm delivery date<div class="muted" style="font-size:12px">Details show once you commit</div>
+               <button class="pub" data-commit="${i}" style="margin-top:5px;font-size:11.5px;padding:3px 9px">Commit to week 48</button></td>
+             <td><span class="pill p-warn">Waiting on you</span></td>`
+          : p.share
           ? `<td style="font-size:12.5px">${p.sig}<div class="muted" style="font-size:12px">${p.exp}</div></td>
-             <td><span class="pill p-live">${SHARE[p.share]}</span></td>`
-          : `<td class="masked" style="font-size:12.5px">—</td>
+             <td><span class="pill ${p.share==='manual'?'p-idle':'p-live'}">${SHARE[p.share]}</span></td>`
+          : `<td class="masked" style="font-size:12.5px">—
+               <div><a href="#" data-manual="${i}" style="font-size:12px;font-style:normal;text-decoration:none">+ Add an update</a></div></td>
              <td><span class="pill p-idle">Not shared</span></td>`}
       </tr>`).join('');
+    document.querySelectorAll('[data-commit]').forEach(bt=>bt.addEventListener('click',()=>{
+      Object.assign(PIPE[+bt.dataset.commit],{committed:true, sig:'Still going ahead · order expected Nov', exp:'You committed to week 48. The dealer sees the date.'});
+      renderPipe();
+    }));
+    document.querySelectorAll('[data-manual]').forEach(bt=>bt.addEventListener('click',e=>{ e.preventDefault();
+      Object.assign(PIPE[+bt.dataset.manual],{share:'manual', sig:'Dealer told you by phone: still going ahead', exp:'Order expected Dec · added by Marcus'});
+      renderPipe();
+    }));
   }
 }
 el('p-agg').addEventListener('click',()=>{state.pipe='agg';renderPipe();});
@@ -1084,8 +1103,8 @@ function dealerChoice(kind){
   const b = PIPE.find(p=>p.demo);
   el('opt-price').classList.toggle('picked',kind==='price');
   el('opt-date').classList.toggle('picked',kind==='date');
-  if(kind==='price'){ b.share='price'; b.sig='Confirmed alive today'; b.exp='Price held to June 30'; }
-  if(kind==='date'){ b.share='date'; b.sig='Asked for a firm date'; b.exp='Details shown once you commit'; }
+  if(kind==='price'){ b.share='price'; b.sig='Confirmed alive today · order expected Jan'; b.exp='You hold the price to June 30. Next check-in in 4 weeks.'; }
+  if(kind==='date'){ b.share='date'; b.committed=false; }
   if(!kind) b.share=null;
   const msg = kind==='price' ? 'Shared. Smart holds your price, and you’ll be reminded to confirm in four weeks.'
     : kind==='date' ? 'Shared. Smart will reply with a firm delivery week.'
@@ -1241,19 +1260,23 @@ function setOrder(id){
 }
 function renderBanner(){
   const o = O(), b = o.banner, done = state.split && state.split[o.id];
+  const doneText = done==='ask' ? 'Asked the dealer to pick one finish. The answer comes back to this quote.' : b.split;
   el('order-banner').innerHTML = done
     ? `<div class="banner" style="background:var(--ok-soft);border-color:#bfe3d0">
         <div class="dot" style="background:var(--ok);margin-top:7px"></div>
-        <div style="color:#1c5e40"><b>${b.split}</b>
-        <button class="back" id="unsplit" style="margin-top:8px;font-size:12px;padding:4px 9px">Undo</button></div></div>`
+        <div style="color:#1c5e40"><b>Whole job · decided</b>${doneText}
+        <div><button class="back" id="unsplit" style="margin-top:8px;font-size:12px;padding:4px 9px">Undo</button></div></div></div>`
     : `<div class="banner">
         <div class="dot" style="background:var(--warn);margin-top:7px"></div>
-        <div><b>${b.title}</b>${b.body}
+        <div><b>Whole job · needs a decision: ${b.title}</b>${b.body}
           <div class="src">${b.src}</div>
-          <button class="pub" id="do-split" style="margin-top:9px">Split orders by finish</button></div></div>`;
-  const s = el('do-split'), u = el('unsplit');
-  if(s) s.addEventListener('click',()=>{ state.split = state.split||{}; state.split[o.id]=true; renderBanner(); });
-  if(u) u.addEventListener('click',()=>{ state.split[o.id]=false; renderBanner(); });
+          <button class="pub" id="do-split" style="margin-top:9px">Split orders by finish</button>
+          <button class="back" id="do-ask" style="margin-top:9px;margin-left:6px;font-size:12.5px">Ask dealer to use one finish</button></div></div>`;
+  const s = el('do-split'), a = el('do-ask'), u = el('unsplit');
+  const set = v => { state.split = state.split||{}; state.split[o.id]=v; renderBanner(); renderTotals(); };
+  if(s) s.addEventListener('click',()=>set('split'));
+  if(a) a.addEventListener('click',()=>set('ask'));
+  if(u) u.addEventListener('click',()=>set(false));
 }
 
 el('f-exc').addEventListener('click',()=>{state.filter='exc';syncFilter();});
@@ -1348,8 +1371,8 @@ function renderDetail(){
   }
   if(l.allowance && !r){
     h+=`<div class="sec">Estimate</div><div class="issue i-med"><span class="dot"></span><span>
-      Estimated at <b>${money(l.allowance)}</b> from three comparable custom jobs in the last 18 months.
-      Sending it as an estimate lets the other lines go firm today.
+      Estimated at <b>${money(l.allowance)}</b>: the line at your normal price (${money(l.price)}), plus ${Math.round((l.allowance/l.price-1)*100)}%, the average your engineering team added for similar custom work on 3 jobs in the last 18 months.
+      It goes to the dealer marked as an estimate, and engineering has 48 hours to confirm the real price.
       </span></div>`;
   }
 
@@ -1357,18 +1380,19 @@ function renderDetail(){
   if(l.actions){
     if(answered(o,l)){
       h+=`<div class="sec">Answer</div><div class="answer"><b>${o.dealer} answered</b>“${o.answers[l.n]}”</div>
-        <div class="acts"><button class="primary" data-act="${l.answer.apply}">Apply answer: ${l.answer.apply}</button>
+        <div class="acts"><button class="primary" data-act="${l.answer.apply.replace(/"/g,'&quot;')}">Apply answer: ${l.answer.apply}</button>
         <button data-act="Query dealer again">Ask again</button></div>`;
     } else if(r){
       h+=`<div class="sec">Resolved</div><div class="issue" style="background:var(--ok-soft);color:#1c5e40">
         <span class="dot" style="background:var(--ok)"></span><span><b>${r}</b></span></div>`;
       if(r.startsWith('Query')) h+=`<div class="howsent">${howSent(o)} The answer comes back to this line, and the quote
         returns to Needs pricing in your inbox.</div>`;
-      if(r.startsWith('Quote as allowance')) h+=`<div class="howsent">Engineering gets this line and has 48 hours to confirm. If
+      if(r.startsWith('Quote as allowance')) h+=`<div class="howsent">Estimated at ${money(l.allowance)}, your normal price plus ${Math.round((l.allowance/l.price-1)*100)}% from similar past jobs. Engineering gets this line and has 48 hours to confirm. If
         the price changes, the quote comes back to your inbox.</div>`;
       if(l.readings && !r.startsWith('Query')){
         const sc = state.scope[key] || 'quote';
-        h+=`<div class="scope"><div class="sec" style="margin-top:12px">Use this answer for</div>
+        const from = state.scopeFrom && state.scopeFrom[key];
+        h+=`<div class="scope"><div class="sec" style="margin-top:12px">Use this answer for</div>${from?`<div class="howsent" style="margin:0 0 4px">Set from the dealer's answer: “${from}” You can change it.</div>`:''}
           <label><input type="radio" name="sc" value="quote" ${sc==='quote'?'checked':''}> This quote only</label>
           <label><input type="radio" name="sc" value="dealer" ${sc==='dealer'?'checked':''}> Every quote from ${o.dealer}</label>
           <label><input type="radio" name="sc" value="all" ${sc==='all'?'checked':''}> Every quote. Sent to Catalog for sales operations to confirm.</label></div>`;
@@ -1381,7 +1405,7 @@ function renderDetail(){
       if(!confident && !l.allowance) h+=`<div class="nudge">No reading clears the ${Math.round(AUTO_ACCEPT*100)}%
         threshold, so nothing here is recommended. Asking costs one message and does not hold up the rest of the quote.</div>`;
       h+='<div class="acts">';
-      l.actions.forEach(a=>h+=`<button class="${a===(l.allowance?l.actions[0]:rec)?'primary':''}" data-act="${a}">${a}</button>`);
+      l.actions.forEach(a=>h+=`<button class="${a===(l.allowance?l.actions[0]:rec)?'primary':''}" data-act="${a.replace(/"/g,'&quot;')}">${a}</button>`);
       h+='</div>';
     }
   } else {
@@ -1396,6 +1420,7 @@ function renderDetail(){
   document.querySelectorAll('[data-act]').forEach(b=>b.addEventListener('click',()=>{
     if(b.dataset.act==='__undo'){ delete state.resolved[l.n]; delete state.scope[key]; if(o.id==='Q-4476' && l.n===8) el('ros-suggest').style.display='none'; }
     else {
+      if(answered(o,l) && l.answer.scope && b.dataset.act!=='Query dealer again'){ state.scope[key]=l.answer.scope; state.scopeFrom=state.scopeFrom||{}; state.scopeFrom[key]=o.answers[l.n]; }
       state.resolved[l.n]=b.dataset.act;
       if(o.answers && b.dataset.act!=='Query dealer again') delete o.answers[l.n];
       if(b.dataset.act==='Query dealer again'){ state.resolved[l.n]='Query dealer'; if(o.answers) delete o.answers[l.n]; }
@@ -1411,15 +1436,18 @@ function renderDetail(){
 
 function renderTotals(){
   const o=O(), exc=o.lines.filter(l=>l.status==='exception');
-  const waitingAnswer = exc.filter(l=>answered(o,l)).length;
-  const held = exc.filter(l=>!state.resolved[l.n] || state.resolved[l.n].startsWith('Hold quote')).length + waitingAnswer;
-  const open = exc.filter(l=>!state.resolved[l.n]).length + waitingAnswer;
+  const answerLines = exc.filter(l=>answered(o,l)).map(l=>l.n);
+  const openLines = exc.filter(l=>!state.resolved[l.n]).map(l=>l.n);
+  const holdLines = exc.filter(l=>(state.resolved[l.n]||'').startsWith('Hold quote')).map(l=>l.n);
+  const jobOpen = !!o.banner && !o.banner.ok && !(state.split && state.split[o.id]);
+  const lineOpen = openLines.length + answerLines.length;
   const auto = o.lines.length-exc.length;
 
   el('s-auto').innerHTML = auto+' <small>of '+o.lines.length+' lines</small>';
-  el('s-exc').innerHTML = open===0 ? '<span style="color:var(--ok)">0</span>'
-    : '<span style="color:var(--stop)">'+open+'</span>';
-  el('f-exc-n').textContent = open;
+  const total = lineOpen + (jobOpen?1:0);
+  el('s-exc').innerHTML = total===0 ? '<span style="color:var(--ok)">0</span>'
+    : '<span style="color:var(--stop)">'+total+'</span> <small>'+[lineOpen?lineOpen+(lineOpen===1?' line':' lines'):'', jobOpen?'whole job':''].filter(Boolean).join(' + ')+'</small>';
+  el('f-exc-n').textContent = lineOpen;
 
   const sub = o.lines.reduce((a,l)=>{
     if(state.resolved[l.n]==='Confirm deletion') return a;
@@ -1429,13 +1457,18 @@ function renderTotals(){
   el('q-total').textContent = money(sub*(1+o.taxRate));
   if(o.pricing && el('pr-net')){ const lst=o.lines.reduce((t,l)=>t+l.qty*l.list,0), extra=sub-lst*o.pricing.disc*o.pricing.band; el('pr-net').innerHTML = money(sub)+(extra>1?' <small style="font:500 11px inherit;color:var(--warn)">includes an estimated line</small>':''); el('pr-list').textContent = money(lst); }
 
-  el('send').disabled = held>0 || state.sent[o.id];
+  // say exactly what is still blocking the send
+  const why = [];
+  if(jobOpen) why.push('the whole-job finish decision (yellow box)');
+  if(openLines.length) why.push((openLines.length===1?'line ':'lines ')+openLines.join(', '));
+  if(answerLines.length) why.push('the dealer\'s answer on '+(answerLines.length===1?'line ':'lines ')+answerLines.join(', '));
+  if(holdLines.length) why.push((holdLines.length===1?'line ':'lines ')+holdLines.join(', ')+' held for engineering');
+  el('send').disabled = why.length>0 || state.sent[o.id];
   el('send').textContent = state.sent[o.id] ? 'Sent' : (o.round===2 ? 'Send updated price' : 'Send price to dealer');
   el('foot-note').textContent = state.sent[o.id] ? 'Sent. Open questions come back to your inbox.'
-    : waitingAnswer ? waitingAnswer+(waitingAnswer===1?' answer':' answers')+' to apply.'
-    : held>0 ? held+(held===1?' line is holding the quote.':' lines are holding the quote.')
+    : why.length ? 'Still waiting on: '+why.join('; ')+'.'
     : exc.length===0 ? 'Priced on arrival. Nothing to resolve.'
-    : 'Every line resolved or covered. Ready to send.';
+    : 'Everything decided. Ready to send.';
 }
 
 el('send').addEventListener('click',()=>{
