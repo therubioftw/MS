@@ -64,6 +64,9 @@
   .c-upload{background:var(--line-2);color:var(--ink-2)}
   th[data-sort]{cursor:pointer;user-select:none} th[data-sort]:hover{color:var(--ink)}
   th .arr{color:var(--accent);margin-left:3px}
+  #inbox-rows td:first-child b{white-space:nowrap} tr.unread td{font-weight:650;color:var(--ink)} tr.unread td:first-child b::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:1px}
+  .pill .spin{display:inline-block;width:9px;height:9px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp 0.8s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
   .note2{font-size:12px;color:var(--accent);font-weight:500}
   .answer{background:var(--accent-soft);border:1px solid #c3d6f5;border-radius:8px;padding:10px 12px;font-size:13px;color:#17408c;margin-bottom:8px}
   .answer b{display:block;margin-bottom:3px}
@@ -346,7 +349,7 @@
 
   <div class="card">
     <table>
-      <colgroup><col style="width:84px"><col><col><col style="width:150px">
+      <colgroup><col style="width:100px"><col><col><col style="width:150px">
         <col style="width:100px"><col style="width:62px"><col style="width:86px"><col style="width:230px"></colgroup>
       <thead><tr id="inbox-head">
         <th data-sort="id">Quote</th><th data-sort="dealer">Dealer</th><th data-sort="proj">Project</th><th data-sort="ch">Arrived by</th>
@@ -934,11 +937,11 @@ const INBOX = [
   {id:'Q-4468', dealer:'Meridian Cabinet Co.',  proj:'Ridgeway Tower',   ch:'link',     fmt:'Excel', units:260, lines:38, wait:'11d',    wm:15840, q:'wait', st:'warn', lab:'Waiting on sales for price'},
   {id:'Q-4465', dealer:'Coastline Interiors',   proj:'Seaview Terrace',  ch:'email',    fmt:'Excel', units:40,  lines:22, wait:'9d',     wm:12960, q:'wait', st:'live', lab:'1 question with dealer'},
   {id:'Q-4470', dealer:'Coastline Interiors',   proj:'The Winslow',      ch:'email',    fmt:'PDF',   units:12,  lines:14, wait:'6d',     wm:8640,  q:'price', st:'warn', lab:'2 need a decision'},
-  {id:'Q-4473', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 3', ch:'email',    fmt:'Excel', units:60,  lines:44, wait:'1d',     wm:1440,  q:'price', st:'idle', lab:'Reading file…'},
+  {id:'Q-4473', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 3', ch:'email',    fmt:'Excel', units:60,  lines:44, wait:'1d',     wm:1440,  q:'price', st:'idle', lab:'<span class="spin"></span> Reading file…'},
   {id:'Q-4474', dealer:'Fairmount Kitchens',    proj:'Maple Court',      ch:'link',     fmt:'Excel', units:6,   lines:11, wait:'1d',     wm:1380,  q:'price', st:'ok',   lab:'Priced — ready to send'},
   {id:'Q-4475', dealer:'Coastline Interiors',   proj:'Harbor Row',       ch:'email',    fmt:'Excel', units:34,  lines:27, wait:'today',  wm:300,   q:'price', st:'ok',   lab:'Priced — ready to send'},
   {id:'Q-4476', dealer:'Brightwood Supply',     proj:'Parkside Lofts',   ch:'platform', fmt:'',      units:120, lines:12, wait:'14 min', wm:14,    q:'price', st:'warn', lab:'4 need a decision', open:true},
-  {id:'Q-4477', dealer:'Brightwood Supply',     proj:'Elm & 4th',        ch:'platform', fmt:'',      units:18,  lines:15, wait:'5 min',  wm:5,     q:'price', st:'ok',   lab:'Priced — ready to send'},
+  {id:'Q-4477', dealer:'Brightwood Supply',     proj:'Elm & 4th',        ch:'platform', fmt:'',      units:18,  lines:15, wait:'5 min',  wm:5,     q:'price', st:'ok',   lab:'Priced — ready to send', unread:true},
   {id:'Q-4458', dealer:'Brightwood Supply',     proj:'Brookfield Yards', ch:'platform', fmt:'',      units:64,  lines:26, wait:'—',      wm:0,     q:'sent',  st:'ok',   lab:'Sent Jun 12'},
   {id:'Q-4462', dealer:'Meridian Cabinet Co.',  proj:'Larkspur Phase 2', ch:'email',    fmt:'Excel', units:48,  lines:31, wait:'—',      wm:0,     q:'sent',  st:'ok',   lab:'Sent Aug 4'}
 ];
@@ -954,7 +957,7 @@ function renderInbox(){
     return (typeof x==='number' && typeof y==='number' ? x-y : String(x).localeCompare(String(y))) * ist.dir;
   });
   el('inbox-rows').innerHTML = rows.map(r=>`
-    <tr class="${r.open?'click':''}" ${r.open?`data-open="${r.id}"`:''} ${r.fresh?'style="background:var(--accent-soft)"':''}>
+    <tr class="${r.open?'click':''} ${r.unread?'unread':''}" ${r.open?`data-open="${r.id}"`:''} ${r.fresh?'style="background:var(--accent-soft)"':''}>
       <td><b>${r.id}</b></td><td>${r.dealer}</td>
       <td class="muted">${r.proj}${r.note?`<div class="note2">${r.note}</div>`:''}</td>
       <td><span class="chan c-${r.ch}">${CH[r.ch]}${r.fmt?' · '+r.fmt:''}</span></td>
@@ -963,7 +966,7 @@ function renderInbox(){
       <td><span class="pill p-${r.st}">${r.lab}</span></td></tr>`).join('')
     || '<tr><td colspan="8" class="empty">Nothing here.</td></tr>';
   document.querySelectorAll('[data-open]').forEach(tr=>
-    tr.addEventListener('click',()=>{ setOrder(tr.dataset.open); go('quote'); }));
+    tr.addEventListener('click',()=>{ const row=INBOX.find(x=>x.id===tr.dataset.open); if(row){ row.unread=false; row.fresh=false; } setOrder(tr.dataset.open); go('quote'); }));
   for(const c of Object.keys(CH)){
     const n = INBOX.filter(r=>r.ch===c && r.q!=='sent').length;
     if(el('n-'+c)) el('n-'+c).textContent = n+' open';
@@ -1004,11 +1007,13 @@ el('add-go').addEventListener('click',()=>{
   const got = el('add-date').value ? new Date(el('add-date').value+'T12:00:00') : new Date();
   const days = Math.max(0, Math.round((new Date().setHours(12,0,0,0) - got.getTime())/86400000));
   const when = got.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-  const row = {id:'Q-4471', dealer, proj, ch:'upload', fmt, units:'—', lines:'—', wait: days ? days+'d' : 'just now', wm: days ? days*1440 : 1, q:'price', st:'idle', lab:'Reading file…', note: days ? 'Added just now · received '+when : 'Added just now', fresh:true};
+  const row = {id:'Q-4471', dealer, proj, ch:'upload', fmt, units:'—', lines:'—', wait: days ? days+'d' : 'just now', wm: days ? days*1440 : 1, q:'price', st:'idle', lab:'<span class="spin"></span> Reading file…', note: days ? 'Added just now · received '+when : 'Added just now', fresh:true};
   INBOX.push(row); ist.tab='price';
   renderInbox(); addscrim.classList.remove('on');
   // the prototype always "reads" the sample order, whatever file was picked
-  setTimeout(()=>{ Object.assign(row,{lines:16, st:'warn', lab:'6 need a decision', open:true}); renderInbox(); }, 2500);
+  // reading takes a few seconds, then the request shows up unread, like a new email
+  setTimeout(()=>{ row.lab='<span class="spin"></span> Reading 16 lines…'; renderInbox(); }, 2500);
+  setTimeout(()=>{ Object.assign(row,{lines:16, st:'warn', lab:'6 need a decision', open:true, unread:true}); renderInbox(); }, 6000);
 });
 
 // ---------- pipeline ----------
@@ -1506,7 +1511,7 @@ el('send').addEventListener('click',()=>{
       o.lines.forEach(l=>{ if(l.answer && (state.res[o.id][l.n]||'').startsWith('Query')) o.answers[l.n]=l.answer.text; });
       o.round = 2; state.sent[o.id] = false;
       const n = Object.keys(o.answers).length;
-      Object.assign(row,{q:'price', st:'warn', lab:`${o.dealer.split(' ')[0]} answered ${n} question${n===1?'':'s'}`, note:'Answers from Ronit A. just now', fresh:true});
+      Object.assign(row,{q:'price', st:'warn', lab:`${o.dealer.split(' ')[0]} answered ${n} question${n===1?'':'s'}`, note:'Answers from Ronit A. just now', fresh:true, unread:true});
       renderInbox();
       const note = el('answer-note');
       if(note && state.order===o.id) note.innerHTML = `<p style="margin-top:8px"><b>${o.dealer} just answered ${n} question${n===1?'':'s'}.</b>
